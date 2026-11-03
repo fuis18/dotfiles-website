@@ -1,0 +1,218 @@
+---
+import { labelOf, locales } from '@/i18n/config';
+import { t } from '@/i18n/utils';
+import { getLangFromPath, localizePath } from '@/i18n/routing';
+
+const currentPath = Astro.url.pathname;
+const currentLang = getLangFromPath(currentPath);
+
+const options = locales.map((code) => ({
+  code,
+  label: labelOf(code),
+  href: localizePath(currentPath, code),
+  active: code === currentLang,
+}));
+---
+
+<div class="lang-switcher">
+  <button
+    type="button"
+    class="lang-toggle"
+    aria-label={t(currentLang, 'lang.switchLabel')}
+    aria-expanded="false"
+    aria-haspopup="true"
+  >
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="12" cy="12" r="10" />
+      <path d="M2 12h20" />
+      <path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+    </svg>
+    <span class="lang-label">{labelOf(currentLang)}</span>
+  </button>
+  <div class="lang-dropdown" role="menu">
+    {
+      options.map((option) => (
+        <a
+          href={option.href}
+          class:list={['lang-option', { active: option.active }]}
+          role="menuitem"
+          data-lang={option.code}
+          aria-current={option.active ? 'true' : undefined}
+        >
+          {option.label}
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  let documentSignals: AbortController | null = null;
+
+  function setupLangSwitcher(): void {
+    documentSignals?.abort();
+    const controller = new AbortController();
+    documentSignals = controller;
+    const { signal } = controller;
+
+    document.querySelectorAll<HTMLDivElement>('.lang-switcher').forEach((switcher) => {
+      const toggle = switcher.querySelector<HTMLButtonElement>('.lang-toggle');
+      const dropdown = switcher.querySelector<HTMLDivElement>('.lang-dropdown');
+      if (!toggle || !dropdown) return;
+
+      const options = Array.from(dropdown.querySelectorAll<HTMLAnchorElement>('.lang-option'));
+
+      const setOpen = (open: boolean, focusFirst = false): void => {
+        dropdown.classList.toggle('open', open);
+        toggle.setAttribute('aria-expanded', String(open));
+        if (open && focusFirst) options[0]?.focus();
+      };
+
+      const isOpen = (): boolean => dropdown.classList.contains('open');
+
+      toggle.addEventListener('click', (event) => {
+        event.stopPropagation();
+        setOpen(!isOpen());
+      });
+
+      toggle.addEventListener('keydown', (event) => {
+        if (event.key === 'ArrowDown') {
+          event.preventDefault();
+          setOpen(true, true);
+        }
+      });
+
+      document.addEventListener(
+        'click',
+        (event) => {
+          if (!switcher.contains(event.target as Node)) setOpen(false);
+        },
+        { signal },
+      );
+
+      document.addEventListener(
+        'keydown',
+        (event) => {
+          if (!isOpen()) return;
+          if (event.key === 'Escape') {
+            setOpen(false);
+            toggle.focus();
+          }
+        },
+        { signal },
+      );
+
+      dropdown.addEventListener('keydown', (event) => {
+        const currentIndex = options.findIndex((option) => option === document.activeElement);
+
+        if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          const delta = event.key === 'ArrowDown' ? 1 : -1;
+          const next = options[(currentIndex + delta + options.length) % options.length];
+          next?.focus();
+        } else if (event.key === 'Home') {
+          event.preventDefault();
+          options[0]?.focus();
+        } else if (event.key === 'End') {
+          event.preventDefault();
+          options[options.length - 1]?.focus();
+        } else if (event.key === 'Tab') {
+          setOpen(false);
+        }
+      });
+
+      options.forEach((option) => {
+        option.addEventListener('click', () => {
+          const lang = option.getAttribute('data-lang');
+          if (!lang) return;
+          try {
+            localStorage.setItem('lang', lang);
+          } catch {
+          }
+          document.cookie = `lang=${lang};path=/;max-age=31536000`;
+        });
+      });
+    });
+  }
+
+  document.addEventListener('astro:page-load', setupLangSwitcher);
+</script>
+
+<style>
+  .lang-switcher {
+    position: relative;
+  }
+
+  .lang-toggle {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.35rem 0.6rem;
+    background: transparent;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.4rem;
+    color: var(--color-text-dim);
+    font-family: var(--font-infra);
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .lang-toggle:hover,
+  .lang-toggle[aria-expanded='true'] {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+    background: var(--color-accent-dim);
+  }
+
+  .lang-toggle svg {
+    width: 1rem;
+    height: 1rem;
+  }
+
+  .lang-label {
+    line-height: 1;
+  }
+
+  .lang-dropdown {
+    position: absolute;
+    top: calc(100% + 0.4rem);
+    right: 0;
+    min-width: 5rem;
+    padding: 0.25rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.4rem;
+    display: none;
+    max-height: min(60vh, 280px);
+    overflow-y: auto;
+    z-index: 20;
+  }
+
+  .lang-dropdown.open {
+    display: block;
+  }
+
+  .lang-option {
+    display: block;
+    width: 100%;
+    padding: 0.3rem 0.6rem;
+    border-radius: 0.3rem;
+    color: var(--color-text-dim);
+    font-family: var(--font-infra);
+    font-size: 0.875rem;
+    text-align: center;
+    transition: color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .lang-option:hover {
+    background: var(--color-surface);
+    color: var(--color-accent);
+    text-decoration: none;
+  }
+
+  .lang-option.active {
+    color: var(--color-accent);
+    background: var(--color-accent-dim);
+  }
+</style>

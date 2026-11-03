@@ -1,0 +1,24 @@
+import { defaultLocale, locales, type Locale } from "./config";
+
+const langPattern = () => new RegExp(`/(${locales.join("|")})/`);
+
+export function getBase(): string {
+  const base = import.meta.env.BASE_URL;
+  return base.endsWith("/") ? base : `${base}/`;
+}
+
+export function getLangFromPath(pathname: string): Locale {
+  const match = pathname.match(langPattern());
+  return (match?.[1] as Locale) ?? defaultLocale;
+}
+
+export function localizePath(pathname: string, toLang: string): string {
+  const pattern = langPattern();
+  if (pattern.test(pathname)) return pathname.replace(pattern, `/${toLang}/`);
+
+  const base = getBase();
+  const withoutBase = pathname.startsWith(base)
+    ? pathname.slice(base.length)
+    : pathname.replace(/^\//, "");
+  return `${base}${toLang}/${withoutBase}`;
+}

@@ -1,0 +1,62 @@
+---
+import { defaultLocale, locales } from '@/i18n/config';
+
+const base = import.meta.env.BASE_URL.endsWith('/')
+  ? import.meta.env.BASE_URL
+  : `${import.meta.env.BASE_URL}/`;
+
+const supportedLocales: string[] = [...locales];
+---
+
+<!DOCTYPE html>
+<html lang={defaultLocale}>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Redirecting...</title>
+    <style>
+      body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        margin: 0;
+        background: #1e1e2e;
+        font-family: monospace;
+      }
+
+      p {
+        color: #a6adc8;
+      }
+    </style>
+  </head>
+  <body>
+    <p>Redirecting...</p>
+    <script define:vars={{ base, supportedLocales, defaultLocale }}>
+      function getPreferredLocale() {
+        try {
+          const stored = localStorage.getItem('lang');
+          if (stored && supportedLocales.includes(stored)) return stored;
+        } catch (error) {
+        }
+
+        const cookieMatch = document.cookie.match(
+          new RegExp(`(?:^|;\\s*)lang=(${supportedLocales.join('|')})`)
+        );
+        if (cookieMatch && supportedLocales.includes(cookieMatch[1])) return cookieMatch[1];
+
+        const browserLang = navigator.language.slice(0, 2);
+        if (supportedLocales.includes(browserLang)) return browserLang;
+
+        return defaultLocale;
+      }
+
+      const lang = getPreferredLocale();
+      try {
+        localStorage.setItem('lang', lang);
+      } catch (error) {
+      }
+      window.location.replace(`${base}${lang}/`);
+    </script>
+  </body>
+</html>

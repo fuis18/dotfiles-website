@@ -1,0 +1,56 @@
+export const ui = {
+  es: {
+    'site.title': 'Dotfiles',
+    'site.description':
+      'Configuraciones, dotfiles y utilidades de mi entorno minimalista: window managers, shells, red y más.',
+    'nav.home': 'inicio',
+    'nav.search': 'buscar',
+    'search.placeholder': 'buscar configuraciones…',
+    'search.shortcutHint': 'presiona',
+    'search.noResults': 'sin resultados',
+    'search.resultsCount': 'coincidencias',
+    'category.all': 'todas',
+    'category.apps': 'apps',
+    'category.apps.desc': 'Aplicaciones del ecosistema GTK y AGS',
+    'category.iso': 'iso',
+    'category.iso.desc': 'Configuraciones de la ISO: archlinux, chroot, cachyos, boruint, systemd y s6',
+    'category.utilities': 'utilities',
+    'category.utilities.desc': 'Utilidades del sistema: hyprland, niri, dbus, red y mounts',
+    'card.tags': 'tags',
+    'detail.back': 'volver',
+    'detail.tags': 'tags',
+    'detail.updated': 'actualizado',
+    'detail.fallbackNotice':
+      'Esta entrada aún no tiene traducción; se muestra la versión original.',
+    'lang.switchLabel': 'Cambiar idioma',
+    'theme.toggleLabel': 'Cambiar tema',
+  },
+  en: {
+    'site.title': 'Dotfiles',
+    'site.description':
+      'Configs, dotfiles and utilities from my minimalist environment: window managers, shells, networking and more.',
+    'nav.home': 'home',
+    'nav.search': 'search',
+    'search.placeholder': 'search configs…',
+    'search.shortcutHint': 'press',
+    'search.noResults': 'no results',
+    'search.resultsCount': 'matches',
+    'category.all': 'all',
+    'category.apps': 'apps',
+    'category.apps.desc': 'GTK ecosystem and AGS applications',
+    'category.iso': 'iso',
+    'category.iso.desc': 'ISO setup: archlinux, chroot, cachyos, boruint, systemd and s6',
+    'category.utilities': 'utilities',
+    'category.utilities.desc': 'System utilities: hyprland, niri, dbus, networking and mounts',
+    'card.tags': 'tags',
+    'detail.back': 'back',
+    'detail.tags': 'tags',
+    'detail.updated': 'updated',
+    'detail.fallbackNotice':
+      'This entry is not translated yet; showing the original version.',
+    'lang.switchLabel': 'Switch language',
+    'theme.toggleLabel': 'Switch theme',
+  },
+} as const;
+
+export type TranslationKey = keyof (typeof ui)['en'];

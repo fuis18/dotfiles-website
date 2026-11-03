@@ -1,0 +1,212 @@
+---
+import { categories } from '@/data/categories';
+import { t } from '@/i18n/utils';
+import type { TranslationKey } from '@/i18n/ui';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<div class="search">
+  <div class="search-input-wrap">
+    <svg class="search-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <circle cx="11" cy="11" r="8" />
+      <path d="m21 21-4.3-4.3" />
+    </svg>
+    <label class="sr-only" for="search-input">{t(lang, 'nav.search')}</label>
+    <input
+      type="search"
+      id="search-input"
+      class="search-input"
+      placeholder={t(lang, 'search.placeholder')}
+      autocomplete="off"
+      spellcheck="false"
+    />
+    <span class="kbd search-kbd" aria-hidden="true">/</span>
+  </div>
+  <div class="chips" role="group" aria-label={t(lang, 'nav.search')}>
+    <button type="button" class="chip active" data-filter="all">{t(lang, 'category.all')}</button>
+    {categories.map(({ id }) => (
+      <button type="button" class="chip" data-filter={id}>{t(lang, `category.${id}` as TranslationKey)}</button>
+    ))}
+  </div>
+  {false && (
+  <p class="search-status" id="search-status" role="status" aria-live="polite" data-count-label={t(lang, 'search.resultsCount')}></p>
+  )}
+</div>
+
+<style>
+  .search {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .search-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+
+  .search-icon {
+    position: absolute;
+    left: 0.9rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-text-faint);
+    pointer-events: none;
+  }
+
+  .search-input {
+    width: 100%;
+    padding: 0.65rem 3rem 0.65rem 2.5rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.5rem;
+    color: var(--color-text);
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  }
+
+  .search-input::placeholder {
+    color: var(--color-text-faint);
+  }
+
+  .search-input:focus {
+    outline: none;
+    border-color: var(--color-accent);
+    box-shadow: 0 0 0 3px var(--color-accent-dim);
+  }
+
+  .search-input::-webkit-search-cancel-button {
+    filter: grayscale(1) opacity(0.5);
+  }
+
+  .search-kbd {
+    position: absolute;
+    right: 0.8rem;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+  }
+
+  .chip {
+    padding: 0.25rem 0.75rem;
+    background: transparent;
+    border: 1px solid var(--color-border-strong);
+    border-radius: 999px;
+    color: var(--color-text-dim);
+    font-family: var(--font-title);
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
+  }
+
+  .chip:hover {
+    color: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .chip.active {
+    color: var(--color-on-accent);
+    background: var(--color-accent);
+    border-color: var(--color-accent);
+  }
+
+  .search-status {
+    min-height: 1.2rem;
+    margin: 0;
+    font-family: var(--font-title);
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+  }
+</style>
+
+<script>
+  let shortcutHandler: ((event: KeyboardEvent) => void) | null = null;
+
+  function setupSearch(): void {
+    const input = document.getElementById('search-input') as HTMLInputElement | null;
+    const status = document.getElementById('search-status');
+    if (!input) return;
+
+    const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
+    const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-category-section]'));
+    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]'));
+    let activeFilter = 'all';
+
+    const normalize = (value: string): string =>
+      value.toLowerCase().normalize('NFD').replace(/\p{Diacritic}/gu, '');
+
+    const apply = (): void => {
+      const query = normalize(input.value.trim());
+      let visible = 0;
+
+      for (const card of cards) {
+        const haystack = normalize(
+          `${card.dataset.title ?? ''} ${card.dataset.description ?? ''} ${card.dataset.tags ?? ''}`
+        );
+        const matchesQuery = query === '' || haystack.includes(query);
+        const matchesCategory = activeFilter === 'all' || card.dataset.category === activeFilter;
+        const show = matchesQuery && matchesCategory;
+        card.hidden = !show;
+        if (show) visible += 1;
+      }
+
+      for (const section of sections) {
+        const hasVisible = Array.from(section.querySelectorAll<HTMLElement>('.card')).some(
+          (card) => !card.hidden
+        );
+        section.hidden = !hasVisible;
+      }
+
+      if (status) {
+        const isFiltering = query !== '' || activeFilter !== 'all';
+        const label = status.dataset.countLabel ?? '';
+        status.textContent = isFiltering ? `${visible} ${label}` : '';
+      }
+    };
+
+    input.addEventListener('input', apply);
+
+    input.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        input.value = '';
+        apply();
+      }
+    });
+
+    for (const chip of chips) {
+      chip.addEventListener('click', () => {
+        activeFilter = chip.dataset.filter ?? 'all';
+        for (const other of chips) other.classList.toggle('active', other === chip);
+        apply();
+      });
+    }
+
+    if (shortcutHandler) document.removeEventListener('keydown', shortcutHandler);
+    shortcutHandler = (event: KeyboardEvent) => {
+      const target = event.target as HTMLElement | null;
+      const isTyping =
+        target?.tagName === 'INPUT' || target?.tagName === 'TEXTAREA' || target?.isContentEditable;
+      if (event.key === '/' && !isTyping) {
+        const current = document.getElementById('search-input') as HTMLInputElement | null;
+        if (current) {
+          event.preventDefault();
+          current.focus();
+        }
+      }
+    };
+    document.addEventListener('keydown', shortcutHandler);
+  }
+
+  document.addEventListener('astro:page-load', setupSearch);
+</script>

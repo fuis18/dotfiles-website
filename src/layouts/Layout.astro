@@ -1,0 +1,33 @@
+---
+import "@/styles/catppuccin.css"
+import "@/styles/global.css";
+
+import Head from "./Head.astro";
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+import Header from "@/components/Header.astro";
+import Footer from "@/components/Footer.astro";
+
+interface Props {
+  lang: Locale;
+  title: string;
+  description?: string;
+}
+
+const { lang, title, description = t(lang, 'site.description') } = Astro.props;
+---
+
+<!DOCTYPE html>
+<html lang={lang} class="dark">
+  <head>
+    <Head title={title} description={description} lang={lang} />
+  </head>
+  <body>
+    <Header lang={lang} />
+    <main class="container">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>

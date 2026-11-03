@@ -1,0 +1,162 @@
+---
+import { getCollection, render, type CollectionEntry } from 'astro:content';
+import Layout from '@/layouts/Layout.astro';
+import { defaultLocale, locales, type Locale } from '@/i18n/config';
+import { homeHref, parseEntryId, t } from '@/i18n/utils';
+import { resolveLang } from '@/lib/routes';
+
+interface Props {
+  entry: CollectionEntry<'entries'>;
+  fallback: boolean;
+}
+
+export async function getStaticPaths() {
+  const entries = await getCollection('entries');
+
+  const bySlug = new Map<string, Partial<Record<Locale, CollectionEntry<'entries'>>>>();
+  for (const entry of entries) {
+    const { lang, slug } = parseEntryId(entry.id);
+    const group = bySlug.get(slug) ?? {};
+    group[lang] = entry;
+    bySlug.set(slug, group);
+  }
+
+  const paths: GetStaticPathsItem[] = [];
+  for (const [slug, group] of bySlug) {
+    for (const lang of locales) {
+      const entry = group[lang] ?? group[defaultLocale];
+      if (!entry) continue;
+      paths.push({
+        params: { lang, slug },
+        props: { entry, fallback: !group[lang] },
+      });
+    }
+  }
+  return paths;
+}
+
+type GetStaticPathsItem = {
+  params: { lang: Locale; slug: string };
+  props: Props;
+};
+
+const lang = resolveLang(Astro.params);
+const { entry, fallback } = Astro.props;
+const { Content } = await render(entry);
+
+const category = entry.data.category;
+const categoryLabel = t(lang, `category.${category}`);
+const categoryAnchor = `${homeHref(lang)}#cat-${category}`;
+---
+
+<Layout lang={lang} title={entry.data.title} description={entry.data.description}>
+  <article class="detail">
+    <a class="back-link" href={categoryAnchor}>← {t(lang, 'detail.back')}</a>
+
+    {fallback && (
+      <p class="fallback-notice" role="note">{t(lang, 'detail.fallbackNotice')}</p>
+    )}
+
+    <header class="detail-head">
+      <h1 class="detail-title">{entry.data.title}</h1>
+      <a class="category-pill" href={categoryAnchor}>{categoryLabel}</a>
+    </header>
+
+    {entry.data.tags.length > 0 && (
+      <div class="tags">
+        <span class="tags-label">{t(lang, 'detail.tags')}</span>
+        <ul class="tag-list">
+          {entry.data.tags.map((tag) => <li class="tag">{tag}</li>)}
+        </ul>
+      </div>
+    )}
+
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+</Layout>
+
+<style>
+  .detail {
+    display: grid;
+    gap: 1.25rem;
+    justify-content: center;
+  }
+
+  .back-link {
+    justify-self: start;
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+  }
+
+  .back-link:hover {
+    color: var(--color-accent);
+  }
+
+  .fallback-notice {
+    margin: 0;
+    padding: 0.6rem 1rem;
+    border-left: 3px solid var(--color-accent);
+    background: var(--color-accent-dim);
+    border-radius: 0 0.4rem 0.4rem 0;
+    font-size: 0.875rem;
+    color: var(--color-text-dim);
+  }
+
+  .detail-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .detail-title {
+    margin: 0;
+    font-size: 1.8rem;
+  }
+
+  .category-pill {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    background: var(--color-accent-dim);
+    padding: 0.05rem 0.5rem;
+    border-radius: 999px;
+  }
+
+  .category-pill:hover {
+    text-decoration: none;
+  }
+
+  .tags {
+    display: flex;
+    align-items: baseline;
+    gap: 0.5rem;
+  }
+
+  .tags-label {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--color-text-faint);
+  }
+
+  .tag-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .tag {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+    background: var(--color-surface);
+    padding: 0.05rem 0.45rem;
+    border-radius: 0.3rem;
+    border: 1px solid transparent;
+  }
+</style>

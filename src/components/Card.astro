@@ -1,0 +1,103 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  description: string;
+  category: string;
+  tags: string[];
+}
+
+const { href, title, description, category, tags } = Astro.props;
+---
+
+<a
+  class="card"
+  href={href}
+  data-title={title}
+  data-description={description}
+  data-category={category}
+  data-tags={tags.join(' ')}
+>
+  <div class="card-head">
+    <h3 class="card-title">{title}</h3>
+    <span class="card-cat">{category}</span>
+  </div>
+  <p class="card-desc">{description}</p>
+  {tags.length > 0 && (
+    <ul class="card-tags">
+      {tags.map((tag) => <li class="card-tag">{tag}</li>)}
+    </ul>
+  )}
+</a>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    padding: 1rem 1.1rem;
+    background: var(--color-bg-alt);
+    border: 1px solid var(--color-border);
+    border-radius: 0.6rem;
+    color: var(--color-text);
+    transition: border-color 0.15s ease, background-color 0.15s ease, transform 0.15s ease;
+  }
+
+  .card:hover {
+    border-color: var(--color-accent);
+    background: var(--color-bg);
+    transform: translateY(-2px);
+    text-decoration: none;
+  }
+
+  .card-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 0.75rem;
+  }
+
+  .card:hover .card-title {
+    color: var(--color-accent);
+  }
+
+  .card-cat {
+    flex-shrink: 0;
+    font-size: 0.75rem;
+    color: var(--color-accent);
+    background: var(--color-accent-dim);
+    padding: 0.05rem 0.5rem;
+    border-radius: 999px;
+    font-family: var(--font-infra);
+  }
+
+  .card-desc {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.5;
+    color: var(--color-text-dim);
+  }
+
+  .card-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    list-style: none;
+    margin: 0.25rem 0 0;
+    padding: 0;
+  }
+
+  .card-tag {
+    font-family: var(--font-body);
+    font-size: 0.75rem;
+    color: var(--color-text-dim);
+    background: var(--color-surface);
+    padding: 0.1rem 0.4rem;
+    border-radius: 0.3rem;
+    border: 1px solid transparent;
+  }
+
+  .card:hover .card-tag {
+    border-color: var(--color-border-strong);
+  }
+</style>

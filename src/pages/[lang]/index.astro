@@ -1,0 +1,29 @@
+---
+import Layout from '@/layouts/Layout.astro';
+import SearchBar from '@/components/SearchBar.astro';
+import Categories from '@/components/Categories.astro';
+import Card from '@/components/Card.astro';
+
+import { localeStaticPaths, resolveLang } from '@/lib/routes';
+import { getSections } from '@/lib/content';
+import { t } from '@/i18n/utils';
+
+export function getStaticPaths() {
+  return localeStaticPaths();
+}
+
+const lang = resolveLang(Astro.params);
+const title = t(lang, 'site.title');
+const description = t(lang, 'site.description');
+const sections = await getSections(lang);
+---
+
+<Layout lang={lang} title={title} description={description}>
+  <SearchBar lang={lang} />
+
+  {sections.map((section) => (
+    <Categories id={section.id} title={section.title} description={section.description}>
+      {section.cards.map((card) => <Card {...card} />)}
+    </Categories>
+  ))}
+</Layout>

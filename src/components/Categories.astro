@@ -1,0 +1,44 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+}
+
+const { id, title, description } = Astro.props;
+---
+
+<section class="category" data-category-section={id} id={`cat-${id}`}>
+  <div class="category-head">
+    <h2 class="category-title">
+      <span class="category-marker">#</span>{title}
+    </h2>
+    <p class="category-desc">{description}</p>
+  </div>
+  <div class="grid">
+    <slot />
+  </div>
+</section>
+
+<style>
+  .category-head {
+    margin-bottom: 1rem;
+  }
+
+  .category-marker {
+    color: var(--color-accent);
+    margin-right: 0.4rem;
+  }
+
+  .category-desc {
+    margin: 0.2rem 0 0;
+    font-size: 0.875rem;
+    color: var(--color-text-muted);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(16rem, 1fr));
+    gap: 1rem;
+  }
+</style>
