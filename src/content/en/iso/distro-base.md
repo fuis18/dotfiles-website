@@ -5,7 +5,7 @@ category: iso
 tags: ["cachyos", "archlinux", "artix", "obarun"]
 ---
 
-I believe that offering a system that works "out of the box" (ready to use) is a big step toward getting more people into Linux, but it should not be our slogan. But as different people we have preferences, and as humanity and natural persons we also deserve our work tool to improve; for that we must evolve our system, and therefore understand how to improve it. That is why this guide aims not only to point out the best technology, but also to explain what problem each distribution solved.
+I believe that offering a system that works "out of the box" (ready to use) is a big step toward getting more people into Linux, but it should not be our slogan. But as different people we have preferences, and as humanity and natural persons we also deserve our work tool to improve; for that we must evolve our system, and therefore understand how to improve it.
 
 ## ArchLinux
 
@@ -21,13 +21,13 @@ In Linux's early days, distributions came preconfigured: a few people decided wh
 
 A rolling release means an update can break something; that is why the [Mounts](./mounts.md) section recommends Btrfs with snapshots so you can roll back.
 
-| Fact                | Details                                                                           |
-| ------------------- | --------------------------------------------------------------------------------- |
-| First release       | 2002                                                                              |
-| Authors             | Judd Vinet (creator); Aaron Griffin led the project from October 1, 2007          |
-| Documentation       | <https://wiki.archlinux.org/title/Installation_guide>                             |
-| Source              | <https://gitlab.archlinux.org/archlinux>                                          |
-| Website             | <https://archlinux.org>                                                           |
+| Fact          | Details                                                                  |
+| ------------- | ------------------------------------------------------------------------ |
+| First release | 2002                                                                     |
+| Authors       | Judd Vinet (creator); Aaron Griffin led the project from October 1, 2007 |
+| Documentation | <https://wiki.archlinux.org/title/Installation_guide>                    |
+| Source        | <https://gitlab.archlinux.org/archlinux>                                 |
+| Website       | <https://archlinux.org>                                                  |
 
 **Installation.**
 
@@ -58,14 +58,14 @@ Arch gave control back to the user, but it did so with generic binaries: almost 
 
 It is still Arch underneath (same `pacman`, same AUR), so you do not lose the ecosystem. But with its repositories added for your hardware and its kernel.
 
-| Fact                | Details                                                                 |
-| ------------------- | ----------------------------------------------------------------------- |
-| First release       | 2021 (stable releases since late 2022)                                  |
-| Authors             | Peter Jung (`ptr1337`) and Vladislav Nepogodin (`vnepogodin`), founders |
-| License             | Free software (GPL and others)                                          |
-| Documentation       | <https://wiki.cachyos.org>                                              |
-| GitHub              | <https://github.com/CachyOS>                                            |
-| Website             | <https://cachyos.org>                                                   |
+| Fact          | Details                                                                 |
+| ------------- | ----------------------------------------------------------------------- |
+| First release | 2021 (stable releases since late 2022)                                  |
+| Authors       | Peter Jung (`ptr1337`) and Vladislav Nepogodin (`vnepogodin`), founders |
+| License       | Free software (GPL and others)                                          |
+| Documentation | <https://wiki.cachyos.org>                                              |
+| GitHub        | <https://github.com/CachyOS>                                            |
+| Website       | <https://cachyos.org>                                                   |
 
 **Installation.**
 
@@ -87,14 +87,14 @@ CachyOS optimized the system, but it inherited from Arch a decision that cannot 
 
 It is the pragmatic option: you keep almost the entire Arch ecosystem and regain init freedom. The drawback is that some packages assume `systemd` and require alternatives, which is addressed in [PID](./pid.md).
 
-| Fact              | Details                                                                         |
-| ----------------- | ------------------------------------------------------------------------------- |
-| Created           | 2017, merger of the Arch OpenRC and Manjaro OpenRC projects (started in 2012)   |
-| Authors           | Artix team (core team and developers)                                          |
-| Available inits   | OpenRC, runit, s6, dinit                                                        |
-| Documentation     | <https://wiki.artixlinux.org>                                                   |
-| Source            | <https://gitea.artixlinux.org/artix>                                            |
-| Website           | <https://artixlinux.org>                                                        |
+| Fact            | Details                                                                       |
+| --------------- | ----------------------------------------------------------------------------- |
+| Created         | 2017, merger of the Arch OpenRC and Manjaro OpenRC projects (started in 2012) |
+| Authors         | Artix team (core team and developers)                                         |
+| Available inits | OpenRC, runit, s6, dinit                                                      |
+| Documentation   | <https://wiki.artixlinux.org>                                                 |
+| Source          | <https://gitea.artixlinux.org/artix>                                          |
+| Website         | <https://artixlinux.org>                                                      |
 
 **Installation.** Boot the ISO of your chosen init and, instead of `pacstrap`, use `basestrap`:
 
@@ -113,14 +113,14 @@ Obarun is based on Arch and replaces `systemd` with `s6` (Skarnet's supervision 
 
 It is the base closest to the ideal of transparency this documentation pursues, but the least conventional: its own team describes it as not intended for beginners and its community is smaller. It closes the thread toward [PID](./pid.md), where `s6` and `66` are explained in detail.
 
-| Fact          | Details                                                                                 |
-| ------------- | --------------------------------------------------------------------------------------- |
-| Origin        | Project based on Arch, active since at least 2015; `s6`/`66` as the base since ~2017    |
-| Author        | Eric Vidal                                                                              |
-| Name          | From _OpenBox Arch RUNit_, although today it uses `s6` instead of `runit`                |
-| Documentation | <https://wiki.obarun.org>                                                               |
-| Source        | <https://git.obarun.org/Obarun> (`66` tool: <https://git.obarun.org/Obarun/66>)          |
-| Website       | <https://web.obarun.org>                                                                |
+| Fact          | Details                                                                              |
+| ------------- | ------------------------------------------------------------------------------------ |
+| Origin        | Project based on Arch, active since at least 2015; `s6`/`66` as the base since ~2017 |
+| Author        | Eric Vidal                                                                           |
+| Name          | From _OpenBox Arch RUNit_, although today it uses `s6` instead of `runit`            |
+| Documentation | <https://wiki.obarun.org>                                                            |
+| Source        | <https://git.obarun.org/Obarun> (`66` tool: <https://git.obarun.org/Obarun/66>)      |
+| Website       | <https://web.obarun.org>                                                             |
 
 **Installation.** Download the ISO from <https://web.obarun.org>, boot the live USB and follow the included installer. After the first boot, update the system:
 

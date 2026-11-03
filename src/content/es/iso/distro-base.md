@@ -5,7 +5,7 @@ category: iso
 tags: ["cachyos", "archlinux", "artix", "obarun"]
 ---
 
-Considero que ofrecer un sistema que funcione «out of the box» (listo para usar) es un gran paso para que más personas entren a Linux, pero no debería ser nuestro eslogan. Pero como personas distintas tenemos preferencias, pero como humanidad y personas naturales también merecemos que nuestra herramienta de trabajo mejore, para ello debemos de evolucionar nuestro sistema, por ende entender como mejorarlo. Por eso esta guía pretende no solo indicar la mejor tecnología, sino también explicar qué problema resolvió cada distribución.
+Considero que ofrecer un sistema que funcione «out of the box» (listo para usar) es un gran paso para que más personas entren a Linux, pero no debería ser nuestro eslogan. Pero como personas distintas tenemos preferencias, pero como humanidad y personas naturales también merecemos que nuestra herramienta de trabajo mejore, para ello debemos de evolucionar nuestro sistema, por ende entender como mejorarlo.
 
 ## ArchLinux
 
