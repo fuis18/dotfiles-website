@@ -17,10 +17,6 @@ Un error común es pensar que hay que instalar todo junto. En Linux conviven var
 | Cliente DHCP                    | dhcpcd / cliente integrado      |
 | Kernel                          | nl80211, drivers                |
 
-La recomendación de esta guía es empezar por abajo hacia arriba. Comienza con **iwd + dhcpcd** si solo necesitas Wi‑Fi y Ethernet básica. Sube a **NetworkManager** solo cuando necesites VPN, módem móvil o perfiles que cambian frecuentemente de red. Todo lo demás son front-ends opcionales (Impala, nmtui) para interactuar con estas herramientas.
-
-Casi todas las piezas hablan por [D-Bus](./dbus.md), así que conviene haberlo leído antes.
-
 ## iwd: el daemon de Wi‑Fi
 
 Durante años el protocolo Wi‑Fi en Linux lo manejó `wpa_supplicant`, un demonio que intenta abstraer todos los sistemas operativos y todas las extensiones inalámbricas, incluidas muchas que nadie usa. El resultado es grande, difícil de configurar y poco comunicativo: no recuerda nada entre conexiones, expone muy poca información y se ofrece al espacio de usuario de varias formas distintas. Ante ello, un equipo de Intel liderado por Marcel Holtmann (mantenedor de BlueZ) y Denis Kenzior desarrolló **iwd** (_iNet Wireless Daemon_) para reemplazarlo. Declaró estables sus interfaces D-Bus con la versión 1.0, en el Open Source Summit Europe de 2018.

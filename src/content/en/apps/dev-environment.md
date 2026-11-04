@@ -21,11 +21,11 @@ Its main features:
 
 The cost is that of any version manager: Node lives in your user directory, so system scripts do not see it, and global `npm` tools are installed per Node version and have to be reinstalled when you switch.
 
-| Fact                 | Detail                                |
-| -------------------- | ------------------------------------- |
-| Origin               | Around 2019                           |
+| Fact                 | Detail                                 |
+| -------------------- | -------------------------------------- |
+| Origin               | Around 2019                            |
 | Author               | Gal Schlezinger (Schniz) and community |
-| Language and license | Rust; MIT                             |
+| Language and license | Rust; MIT                              |
 | Documentation        | <https://github.com/Schniz/fnm#readme> |
 | Code                 | <https://github.com/Schniz/fnm>        |
 
@@ -64,14 +64,14 @@ With Rust the same happens, with higher stakes: the language publishes a stable 
 
 The cost is the same as with fnm: the compiler lives in `~/.rustup` and `~/.cargo`, outside `pacman`'s control, and each toolchain takes hundreds of megabytes. It also means that Arch packages that build Rust (for example from the AUR) use their own compiler, not rustup's.
 
-| Fact                 | Detail                                                                         |
-| -------------------- | ------------------------------------------------------------------------------ |
-| Origin               | Official Rust project; successor to `multirust`; version 1.0 in 2016           |
-| Authors              | Rust team (rust-lang) and contributors                                         |
-| License              | MIT or Apache-2.0                                                              |
-| Documentation        | <https://rust-lang.github.io/rustup/> and <https://wiki.archlinux.org/title/Rust> |
-| Code                 | <https://github.com/rust-lang/rustup>                                          |
-| Website              | <https://rustup.rs>                                                            |
+| Fact          | Detail                                                                            |
+| ------------- | --------------------------------------------------------------------------------- |
+| Origin        | Official Rust project; successor to `multirust`; version 1.0 in 2016              |
+| Authors       | Rust team (rust-lang) and contributors                                            |
+| License       | MIT or Apache-2.0                                                                 |
+| Documentation | <https://rust-lang.github.io/rustup/> and <https://wiki.archlinux.org/title/Rust> |
+| Code          | <https://github.com/rust-lang/rustup>                                             |
+| Website       | <https://rustup.rs>                                                               |
 
 **Installation.** Install rustup, pick the stable toolchain and add the components your editor uses:
 
@@ -103,7 +103,7 @@ components = ["rust-analyzer", "clippy", "rustfmt"]
 
 ## The evolution of editors: from Sublime Text to Zed
 
-With the languages managed, the next step is the editor. But not all editors are alike: each one answered a problem of its era. This section traces the historical evolution from 2008 to 2026, showing how each generation solved the previous one's limitations.
+With the languages managed, the next step is the editor. But not all editors are alike: each one answered a problem of its era.
 
 ### Sublime Text (2008–2012): speed when everything was slow
 
@@ -165,16 +165,16 @@ The practical benefit: Zed is **fast where VS Code gets slow**, especially in la
 
 The trade-off: youth. Version 1.0 in 2026, but it still lacks some of VS Code's mature features: limited built-in debugging, fewer third-party extensions, ecosystem-specific integrations (Azure, .NET) unavailable.
 
-| Fact                 | Detail                                                |
-| -------------------- | ----------------------------------------------------- |
-| Origin               | 2024 (Atom creators: Joshua Moore and Nick Coldwell) |
-| Version 1.0          | April 2026                                           |
-| Engine               | Rust (no Electron)                                   |
-| Funding              | $32M from Sequoia Capital (2025)                     |
-| Platforms            | Linux, macOS, Windows                                |
-| License              | Apache-2.0                                           |
-| Documentation        | <https://zed.dev>                                    |
-| Code                 | <https://github.com/zed-industries/zed>              |
+| Fact          | Detail                                               |
+| ------------- | ---------------------------------------------------- |
+| Origin        | 2024 (Atom creators: Joshua Moore and Nick Coldwell) |
+| Version 1.0   | April 2026                                           |
+| Engine        | Rust (no Electron)                                   |
+| Funding       | $32M from Sequoia Capital (2025)                     |
+| Platforms     | Linux, macOS, Windows                                |
+| License       | Apache-2.0                                           |
+| Documentation | <https://zed.dev>                                    |
+| Code          | <https://github.com/zed-industries/zed>              |
 
 **Zed installation:**
 
@@ -191,13 +191,13 @@ sudo pacman -S zed
 
 ### Editor comparison table
 
-| Editor           | Year          | Architecture        | Performance | Maturity             | Ideal for                              |
-| ---------------- | ------------- | ------------------- | ----------- | -------------------- | -------------------------------------- |
-| **Sublime Text** | 2008          | C++ + Python        | Excellent   | High                 | Those who value speed and simplicity   |
-| **VS Code**      | 2015          | Electron (Chromium) | Good        | Very High            | Complete ecosystem, maximum extension  |
-| **Neovim**       | 2014 (v0.1+)  | C + LuaJIT          | Excellent   | High                 | Total control, pure terminal           |
-| **LazyVim**      | 2023          | Neovim + Lua        | Excellent   | Medium-High          | Pre-configured Neovim                  |
-| **Zed**          | 2024          | Rust + GPU          | Excellent   | Young (1.0 in 2026)  | Performance, collaboration, teams      |
+| Editor           | Year         | Architecture        | Performance | Maturity            | Ideal for                             |
+| ---------------- | ------------ | ------------------- | ----------- | ------------------- | ------------------------------------- |
+| **Sublime Text** | 2008         | C++ + Python        | Excellent   | High                | Those who value speed and simplicity  |
+| **VS Code**      | 2015         | Electron (Chromium) | Good        | Very High           | Complete ecosystem, maximum extension |
+| **Neovim**       | 2014 (v0.1+) | C + LuaJIT          | Excellent   | High                | Total control, pure terminal          |
+| **LazyVim**      | 2023         | Neovim + Lua        | Excellent   | Medium-High         | Pre-configured Neovim                 |
+| **Zed**          | 2024         | Rust + GPU          | Excellent   | Young (1.0 in 2026) | Performance, collaboration, teams     |
 
 ## Modern Software Ecosystem
 
@@ -209,13 +209,13 @@ The modern development stack is vast. A single page cannot cover all the discipl
 
 This reference covers five main disciplines:
 
-| Discipline                       | What does it cover?                          | Key tools                                     |
-| -------------------------------- | -------------------------------------------- | --------------------------------------------- |
-| **Dev** (Development)            | Web, backend, mobile and desktop apps        | Node, Rust, Python, Go, React, Flutter, Electron |
-| **Sec** (Security)               | Networks, systems and supply chain           | Burp Suite, Metasploit, OWASP, sigstore, cosign |
-| **Ops** (Infrastructure)         | Systems, containers, orchestration           | Docker, Kubernetes, Terraform, Ansible, Prometheus |
-| **AI** (Artificial Intelligence) | Models, training, inference                  | PyTorch, TensorFlow, Hugging Face, ONNX, LangChain |
-| **Games** (Video games)          | Engines, graphics, physics, audio            | Unity, Unreal Engine, Godot, SDL, Vulkan, FMOD |
+| Discipline                       | What does it cover?                   | Key tools                                          |
+| -------------------------------- | ------------------------------------- | -------------------------------------------------- |
+| **Dev** (Development)            | Web, backend, mobile and desktop apps | Node, Rust, Python, Go, React, Flutter, Electron   |
+| **Sec** (Security)               | Networks, systems and supply chain    | Burp Suite, Metasploit, OWASP, sigstore, cosign    |
+| **Ops** (Infrastructure)         | Systems, containers, orchestration    | Docker, Kubernetes, Terraform, Ansible, Prometheus |
+| **AI** (Artificial Intelligence) | Models, training, inference           | PyTorch, TensorFlow, Hugging Face, ONNX, LangChain |
+| **Games** (Video games)          | Engines, graphics, physics, audio     | Unity, Unreal Engine, Godot, SDL, Vulkan, FMOD     |
 
 **What it's for:**
 

@@ -9,8 +9,6 @@ On a multiuser system, some actions must be reserved to a single actor: creating
 
 In the Unix/Linux ecosystem there are two dominant tools for this: **sudo** and **doas**. The first is the most widespread, with decades of history and a huge module ecosystem. The second was born at OpenBSD with an opposite philosophy: keep the code as minimal as possible and trust its complexity less. Both solve the same problem, but with different philosophies.
 
-This section explains both, their practical differences, and when to choose each one. Since they affect the system's daily operation, they go in **Utilities** alongside [dbus](./dbus.md), [network](./network.md), and other management tools.
-
 ## sudo: the widespread standard
 
 **sudo** (_superuser do_) appeared in the early 1990s, created by Bob Coggeshall and Chuck Allen, and today it is maintained by a community team that releases new versions regularly. Its model is permissive: by default it asks for your password and logs every use in detailed logs.
@@ -25,15 +23,15 @@ This section explains both, their practical differences, and when to choose each
 
 The downside is its complexity: `/etc/sudoers` can become hard to maintain, and syntax errors can leave the system without root access if you do not validate with `visudo` first.
 
-| Fact            | Detail                                        |
-| --------------- | --------------------------------------------- |
-| Origin          | Early 1990s (Coggeshall and Allen)            |
-| Maintenance     | Community team (The Sudo Project)             |
-| First version   | 1985                                          |
-| Latest stable   | 1.9.15 (January 2025)                         |
-| Documentation   | <https://www.sudo.ws/docs/>                   |
-| Code            | <https://github.com/sudo-project/sudo>        |
-| License         | ISC                                           |
+| Fact          | Detail                                 |
+| ------------- | -------------------------------------- |
+| Origin        | Early 1990s (Coggeshall and Allen)     |
+| Maintenance   | Community team (The Sudo Project)      |
+| First version | 1985                                   |
+| Latest stable | 1.9.15 (January 2025)                  |
+| Documentation | <https://www.sudo.ws/docs/>            |
+| Code          | <https://github.com/sudo-project/sudo> |
+| License       | ISC                                    |
 
 ### Installation on Arch
 
@@ -111,14 +109,14 @@ The premise is simple: **smaller attack surface**. While `sudo` has thousands of
 
 The limitations are the same: less flexibility than `sudo`, no extensible modules, no LDAP integration, no native advanced logging.
 
-| Fact             | Detail                                                    |
-| ---------------- | ---------------------------------------------------------- |
-| Origin           | OpenBSD 5.7, May 2015                                     |
-| Author           | Theo de Raadt                                             |
-| Lines of code    | ≈700                                                      |
-| Documentation    | <https://man.openbsd.org/doas>                            |
-| Code             | <https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/sbin/doas/> |
-| License          | ISC                                                       |
+| Fact          | Detail                                                     |
+| ------------- | ---------------------------------------------------------- |
+| Origin        | OpenBSD 5.7, May 2015                                      |
+| Author        | Theo de Raadt                                              |
+| Lines of code | ≈700                                                       |
+| Documentation | <https://man.openbsd.org/doas>                             |
+| Code          | <https://cvsweb.openbsd.org/cgi-bin/cvsweb/src/sbin/doas/> |
+| License       | ISC                                                        |
 
 ### Installation on Arch
 
@@ -155,15 +153,15 @@ doas ls /root  # Execution test
 
 ### Syntax differences between sudo and doas
 
-| Feature               | sudo                   | doas                                     |
-| --------------------- | ---------------------- | ---------------------------------------- |
-| Config file           | `/etc/sudoers`         | `/etc/doas.conf`                         |
-| Safe editor           | `visudo`               | Any editor (no native validation)        |
-| Ask for password      | `NOPASSWD:`            | `nopass`                                 |
-| Persist credentials   | `timestamp_timeout`    | `persist`                                |
-| Specify user          | `as username`          | `as username`                            |
-| Restrict command      | `cmd /path/to/command` | `cmd /path/to/command`                   |
-| Groups                | `%groupname`           | `:groupname`                             |
+| Feature             | sudo                   | doas                              |
+| ------------------- | ---------------------- | --------------------------------- |
+| Config file         | `/etc/sudoers`         | `/etc/doas.conf`                  |
+| Safe editor         | `visudo`               | Any editor (no native validation) |
+| Ask for password    | `NOPASSWD:`            | `nopass`                          |
+| Persist credentials | `timestamp_timeout`    | `persist`                         |
+| Specify user        | `as username`          | `as username`                     |
+| Restrict command    | `cmd /path/to/command` | `cmd /path/to/command`            |
+| Groups              | `%groupname`           | `:groupname`                      |
 
 **Note:** `doas.conf` has no automatic validation. If you make a syntax error, the file simply will not work. Make backups before editing.
 
@@ -185,15 +183,15 @@ Both tools require conscious configuration. Common mistakes:
 
 ## Head-to-head comparison
 
-| Aspect         | sudo                          | doas                            |
-| -------------- | ----------------------------- | ------------------------------- |
-| Maturity       | 30+ years, widely used        | ~10 years, niche                |
-| Complexity     | High (complex syntax)         | Low (simple flat file)          |
-| Flexibility    | Very high (LDAP, PAM, modules) | Low (works for the basics)     |
-| Auditing       | Hard (large codebase)         | Easy (<700 lines)               |
-| Performance    | Slightly slower               | Very fast                       |
-| Logging        | Detailed, integrated          | Basic, requires external syslog |
-| Availability   | All distributions             | OpenBSD, Arch, some Linux       |
+| Aspect       | sudo                           | doas                            |
+| ------------ | ------------------------------ | ------------------------------- |
+| Maturity     | 30+ years, widely used         | ~10 years, niche                |
+| Complexity   | High (complex syntax)          | Low (simple flat file)          |
+| Flexibility  | Very high (LDAP, PAM, modules) | Low (works for the basics)      |
+| Auditing     | Hard (large codebase)          | Easy (<700 lines)               |
+| Performance  | Slightly slower                | Very fast                       |
+| Logging      | Detailed, integrated           | Basic, requires external syslog |
+| Availability | All distributions              | OpenBSD, Arch, some Linux       |
 
 ## Installation on Artix and Obarun
 

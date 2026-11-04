@@ -5,7 +5,7 @@ category: utilities
 tags: ["hyprland", "niri", "wayland"]
 ---
 
-After the [greeter](./greeter.md) comes the desktop, and on Wayland the window manager is also the compositor: the program that draws the screen, manages the keyboard and mouse, and decides where each window goes. There is no separate graphics server, so this choice defines how the whole system feels. This guide keeps two installed, with opposite philosophies, and lets [ReGreet](./greeter.md) let you choose which one to start.
+After the [greeter](./greeter.md) comes the desktop, and on Wayland the window manager is also the compositor: the program that draws the screen, manages the keyboard and mouse, and decides where each window goes. There is no separate graphics server, so this choice defines how the whole system feels.
 
 ## Hyprland
 
@@ -22,15 +22,15 @@ Up to version 0.54, configuration used its own format (`hyprlang`, in `hyprland.
 
 That rate of change is also its main cost: Hyprland is still on 0.x versions and has changed its configuration format more than once, so an update can break your configuration and it is worth reading each version's release notes. It is the compositor with the most customization, and the one that asks the most maintenance of you.
 
-| Fact                | Detail                                                                         |
-| ------------------- | ------------------------------------------------------------------------------- |
-| First release       | May 27, 2022 (v0.1.0beta)                                                      |
-| Author              | Vaxry (Vaxerski) and community                                                  |
-| Language and license | C++; BSD-3-Clause                                                              |
-| Latest version      | 0.56.2 (August 5, 2026) as checked; Lua since 0.55 (May 2026)                  |
-| Documentation       | <https://wiki.hypr.land> and <https://wiki.archlinux.org/title/Hyprland>        |
-| Code                | <https://github.com/hyprwm/Hyprland>                                           |
-| Website             | <https://hypr.land>                                                            |
+| Fact                 | Detail                                                                   |
+| -------------------- | ------------------------------------------------------------------------ |
+| First release        | May 27, 2022 (v0.1.0beta)                                                |
+| Author               | Vaxry (Vaxerski) and community                                           |
+| Language and license | C++; BSD-3-Clause                                                        |
+| Latest version       | 0.56.2 (August 5, 2026) as checked; Lua since 0.55 (May 2026)            |
+| Documentation        | <https://wiki.hypr.land> and <https://wiki.archlinux.org/title/Hyprland> |
+| Code                 | <https://github.com/hyprwm/Hyprland>                                     |
+| Website              | <https://hypr.land>                                                      |
 
 **Installation.** Install it and start it from a tty (never with `sudo`), or pick it in the greeter:
 
@@ -62,17 +62,17 @@ Niri starts from a different idea, taken from PaperWM (a GNOME extension): windo
 
 Its pace is more measured and predictable: since 2025 it numbers its versions by date (25.02, 25.05, 25.08…), and 26.04 (April 2026) added blur effects and optional configuration files with `include`. The cost is that the scrollable-columns model is a different way of working and takes getting used to, and that it has fewer visual effects than Hyprland.
 
-| Fact                | Hyprland                             | Niri                                                                       |
-| ------------------- | ------------------------------------ | -------------------------------------------------------------------------- |
-| Window model        | Dynamic tiling (they rearrange)      | Scrollable tiling (columns on an infinite strip)                           |
-| First release       | May 27, 2022                         | In development since 2023                                                  |
-| Author              | Vaxry (Vaxerski)                     | Ivan Molodetskikh (YaLTeR)                                                 |
-| Language            | C++                                  | Rust (Smithay)                                                             |
-| Configuration       | Lua (since 0.55); previously `hyprlang` | KDL                                                                     |
-| License             | BSD-3-Clause                         | GPL-3.0                                                                    |
-| Latest version      | 0.56.2 (August 2026)                 | 26.04 (April 2026)                                                         |
-| Documentation       | <https://wiki.hypr.land>             | <https://yalter.github.io/niri/> and <https://wiki.archlinux.org/title/Niri> |
-| Code                | <https://github.com/hyprwm/Hyprland> | <https://github.com/niri-wm/niri>                                          |
+| Fact           | Hyprland                                | Niri                                                                         |
+| -------------- | --------------------------------------- | ---------------------------------------------------------------------------- |
+| Window model   | Dynamic tiling (they rearrange)         | Scrollable tiling (columns on an infinite strip)                             |
+| First release  | May 27, 2022                            | In development since 2023                                                    |
+| Author         | Vaxry (Vaxerski)                        | Ivan Molodetskikh (YaLTeR)                                                   |
+| Language       | C++                                     | Rust (Smithay)                                                               |
+| Configuration  | Lua (since 0.55); previously `hyprlang` | KDL                                                                          |
+| License        | BSD-3-Clause                            | GPL-3.0                                                                      |
+| Latest version | 0.56.2 (August 2026)                    | 26.04 (April 2026)                                                           |
+| Documentation  | <https://wiki.hypr.land>                | <https://yalter.github.io/niri/> and <https://wiki.archlinux.org/title/Niri> |
+| Code           | <https://github.com/hyprwm/Hyprland>    | <https://github.com/niri-wm/niri>                                            |
 
 **Installation.**
 

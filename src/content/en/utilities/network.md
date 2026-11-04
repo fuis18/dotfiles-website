@@ -9,17 +9,13 @@ Connecting a machine to the Internet seems like a single action, but it is actua
 
 A common mistake is to think you have to install everything together. On Linux several layers coexist and you can build your stack by choosing one tool per layer without overlapping them:
 
-| Layer                            | Technology                      |
-| -------------------------------- | ------------------------------- |
-| User tools                       | iwctl / impala / nmtui / nmcli  |
-| Connection manager (policy)      | NetworkManager / ConnMan        |
-| Link-layer daemon                | iwd (Wi-Fi) / kernel (ethernet) |
-| DHCP client                      | dhcpcd / built-in client        |
-| Kernel                           | nl80211, drivers                |
-
-This guide's recommendation is to start from the bottom up. Begin with **iwd + dhcpcd** if you only need Wi-Fi and basic Ethernet. Move up to **NetworkManager** only when you need a VPN, a mobile modem, or profiles that frequently change networks. Everything else are optional front-ends (Impala, nmtui) for interacting with these tools.
-
-Almost all the pieces talk over [D-Bus](./dbus.md), so it is worth reading that first.
+| Layer                       | Technology                      |
+| --------------------------- | ------------------------------- |
+| User tools                  | iwctl / impala / nmtui / nmcli  |
+| Connection manager (policy) | NetworkManager / ConnMan        |
+| Link-layer daemon           | iwd (Wi-Fi) / kernel (ethernet) |
+| DHCP client                 | dhcpcd / built-in client        |
+| Kernel                      | nl80211, drivers                |
 
 ## iwd: the Wi-Fi daemon
 
@@ -34,14 +30,14 @@ Its design aims for the minimum of resources:
 
 iwd solves Wi-Fi, but only Wi-Fi. If tomorrow you need a VPN, mobile connections, or bridges between interfaces, you will need something higher up.
 
-| Fact          | Detail                                                                |
-| ------------- | --------------------------------------------------------------------- |
-| Origin        | Intel (development since 2013; version 1.0 in 2018)                   |
-| Authors       | Marcel Holtmann, Denis Kenzior, Andrew Zaborowski, and others         |
-| Coverage      | Wi-Fi (and 802.1X on wired with its helper daemon)                    |
-| Dependencies  | Only kernel and libc                                                  |
+| Fact          | Detail                                                                   |
+| ------------- | ------------------------------------------------------------------------ |
+| Origin        | Intel (development since 2013; version 1.0 in 2018)                      |
+| Authors       | Marcel Holtmann, Denis Kenzior, Andrew Zaborowski, and others            |
+| Coverage      | Wi-Fi (and 802.1X on wired with its helper daemon)                       |
+| Dependencies  | Only kernel and libc                                                     |
 | Documentation | <https://iwd.wiki.kernel.org> and <https://wiki.archlinux.org/title/Iwd> |
-| Code          | <https://git.kernel.org/pub/scm/network/wireless/iwd.git>             |
+| Code          | <https://git.kernel.org/pub/scm/network/wireless/iwd.git>                |
 
 **Minimal installation (standalone Wi-Fi).** This is the lightest stack: just iwd doing everything, with no managers on top. It is used on servers, minimal machines, or when you know your network is not going to change.
 
@@ -132,13 +128,13 @@ With the Wi-Fi link established, an IP address is still missing, which is obtain
 
 As a rule, **you must choose a single owner of the IP address per interface**: iwd's client, dhcpcd, or NetworkManager. If you use dhcpcd with iwd, leave `EnableNetworkConfiguration` disabled in iwd.
 
-| Fact          | Detail                                                                                |
-| ------------- | ------------------------------------------------------------------------------------- |
-| Origin        | Phystech (Yoichi Hariguchi and Sergei Viznyuk); maintained by Roy Marples since 2004   |
-| Milestones    | dhcpcd 4 (2008) in NetBSD's base; DHCPv6 in 2012                                       |
-| License       | BSD-2-Clause                                                                          |
+| Fact          | Detail                                                                                   |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| Origin        | Phystech (Yoichi Hariguchi and Sergei Viznyuk); maintained by Roy Marples since 2004     |
+| Milestones    | dhcpcd 4 (2008) in NetBSD's base; DHCPv6 in 2012                                         |
+| License       | BSD-2-Clause                                                                             |
 | Documentation | <https://roy.marples.name/projects/dhcpcd> and <https://wiki.archlinux.org/title/Dhcpcd> |
-| Code          | <https://github.com/NetworkConfiguration/dhcpcd>                                      |
+| Code          | <https://github.com/NetworkConfiguration/dhcpcd>                                         |
 
 **Installation.**
 
@@ -176,13 +172,13 @@ Knot Resolver, developed by CZ.NIC (the `.cz` domain registry), is a full resolv
 
 For the system to use it, `/etc/resolv.conf` must point at it, and that is what `openresolv` does: a `resolv.conf` manager that, if you give it fixed servers, puts them in place of the ones DHCP delivers.
 
-| Fact          | Detail                                                                                  |
-| ------------- | --------------------------------------------------------------------------------------- |
-| Origin        | CZ.NIC Labs; version 6 with _manager_ and YAML configuration (6.2.0 in February 2026)   |
-| License       | GPL-3.0-or-later                                                                        |
-| Documentation | <https://www.knot-resolver.cz/documentation/latest/>                                    |
+| Fact          | Detail                                                                                   |
+| ------------- | ---------------------------------------------------------------------------------------- |
+| Origin        | CZ.NIC Labs; version 6 with _manager_ and YAML configuration (6.2.0 in February 2026)    |
+| License       | GPL-3.0-or-later                                                                         |
+| Documentation | <https://www.knot-resolver.cz/documentation/latest/>                                     |
 | Code          | <https://gitlab.nic.cz/knot/knot-resolver> and <https://github.com/CZ-NIC/knot-resolver> |
-| openresolv    | <https://wiki.archlinux.org/title/Openresolv>                                           |
+| openresolv    | <https://wiki.archlinux.org/title/Openresolv>                                            |
 
 **Installation.** If you already ran the installation's `pacstrap`, all that is left is to enable the service and point `resolv.conf` at the local resolver with `openresolv`:
 
@@ -217,14 +213,14 @@ NextDNS solves both. It was founded in May 2019 in Delaware by Romain Cointepas 
 
 The way to tie it to the previous piece is to let Knot Resolver forward its queries to NextDNS over TLS. That way you keep the local cache and DNSSEC validation, and add encryption and filtering. It is worth knowing that this shifts the trust: your internet provider stops seeing your queries, but NextDNS starts seeing them. If you would rather nobody see them, the recursive resolver from the previous section without forwarding is the alternative, at the cost of having neither encryption nor filtering.
 
-| Fact               | Detail                                                          |
-| ------------------ | ---------------------------------------------------------------- |
-| Foundation         | May 2019, Delaware (NextDNS Inc.)                                |
-| Founders           | Romain Cointepas and Olivier Poitrey (Dailymotion executives)    |
-| Protocols          | DNS over TLS (DoT) and over HTTPS (DoH)                          |
-| Documentation      | <https://help.nextdns.io>                                        |
-| Website and panel  | <https://nextdns.io> and <https://my.nextdns.io>                 |
-| Client (optional)  | <https://github.com/nextdns/nextdns> (MIT license)               |
+| Fact              | Detail                                                        |
+| ----------------- | ------------------------------------------------------------- |
+| Foundation        | May 2019, Delaware (NextDNS Inc.)                             |
+| Founders          | Romain Cointepas and Olivier Poitrey (Dailymotion executives) |
+| Protocols         | DNS over TLS (DoT) and over HTTPS (DoH)                       |
+| Documentation     | <https://help.nextdns.io>                                     |
+| Website and panel | <https://nextdns.io> and <https://my.nextdns.io>              |
+| Client (optional) | <https://github.com/nextdns/nextdns> (MIT license)            |
 
 **Installation.** Create a profile at <https://my.nextdns.io>, copy your identifier (`abc123` in the example), and add the encrypted forwarding to `/etc/knot-resolver/config.yaml`. The addresses and the exact name are in the _Setup_ tab of your panel; confirm them there before applying them:
 
@@ -249,14 +245,14 @@ To check that your queries now go through NextDNS, open <https://test.nextdns.io
 
 ## Summary of possible combinations
 
-| Use case                   | Recommended stack                                  | Notes                                                      |
-| -------------------------- | -------------------------------------------------- | ---------------------------------------------------------- |
-| Server / fixed machine     | `iwd` + `dhcpcd`                                   | iwd only handles the link; dhcpcd the IP                   |
-| Extreme minimalism         | `iwd` standalone (`EnableNetworkConfiguration=true`) | iwd does everything: link + DHCP + DNS                    |
-| Home laptop                | `iwd` + `NetworkManager`                           | NM takes control; iwd is only the Wi-Fi backend            |
-| Friendly terminal UI       | `impala` + `iwd`                                   | Do not use NetworkManager; Impala is a frontend over iwd   |
-| Embedded / IoT             | `ConnMan` or `systemd-networkd`                    | Fewer dependencies than NM, ideal for embedded systems     |
-| Full graphical environment | `NetworkManager` + DE applet                       | The standard on desktops: KDE Plasma, GNOME, XFCE         |
+| Use case                   | Recommended stack                                    | Notes                                                    |
+| -------------------------- | ---------------------------------------------------- | -------------------------------------------------------- |
+| Server / fixed machine     | `iwd` + `dhcpcd`                                     | iwd only handles the link; dhcpcd the IP                 |
+| Extreme minimalism         | `iwd` standalone (`EnableNetworkConfiguration=true`) | iwd does everything: link + DHCP + DNS                   |
+| Home laptop                | `iwd` + `NetworkManager`                             | NM takes control; iwd is only the Wi-Fi backend          |
+| Friendly terminal UI       | `impala` + `iwd`                                     | Do not use NetworkManager; Impala is a frontend over iwd |
+| Embedded / IoT             | `ConnMan` or `systemd-networkd`                      | Fewer dependencies than NM, ideal for embedded systems   |
+| Full graphical environment | `NetworkManager` + DE applet                         | The standard on desktops: KDE Plasma, GNOME, XFCE        |
 
 Final rules:
 

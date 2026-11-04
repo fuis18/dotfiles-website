@@ -5,7 +5,7 @@ category: utilities
 tags: ["kitty", "ghostty", "zsh", "fish", "nushell", "uutils", "starship"]
 ---
 
-The terminal is where you will spend the most time, and it is made up of four stacked layers: what you see on each line (the prompt), the window it is drawn in (the terminal emulator), the interpreter that understands what you type (the shell), and the basic programs that run underneath (`ls`, `cp`, `rm`). This page walks through those layers from top to bottom, and on each one explains what problem the chosen technology solved.
+The terminal is where you will spend the most time, and it is made up of four stacked layers: what you see on each line (the prompt), the window it is drawn in (the terminal emulator), the interpreter that understands what you type (the shell), and the basic programs that run underneath (`ls`, `cp`, `rm`).
 
 ## Kitty vs Ghostty
 
@@ -15,17 +15,17 @@ Ghostty starts from the same base (GPU, modern protocols, including Kitty's imag
 
 The choice depends on what you prioritize. Ghostty fits better with this guide's GTK ecosystem and works well out of the box. Kitty remains the best option if you want scripting and remote control of the terminal, or if you already depend on its _kittens_.
 
-| Fact                | Kitty                                  | Ghostty                                                 |
-| ------------------- | -------------------------------------- | ------------------------------------------------------- |
-| First release       | 2017                                   | 1.0 on December 26, 2024 (repository since 2022)        |
-| Author              | Kovid Goyal                            | Mitchell Hashimoto and community                        |
-| Language            | C, Python, and Go                      | Zig (GTK4 on Linux)                                     |
-| Interface           | Its own (does not use the system toolkit) | Native: GTK4 + libadwaita                             |
-| Images              | Its own graphics protocol              | Compatible with Kitty's protocol                        |
-| Extensibility       | _Kittens_, remote control, scripting   | Simple configuration; `libghostty` to integrate it      |
-| License             | GPL-3.0                                | MIT                                                     |
-| Documentation       | <https://sw.kovidgoyal.net/kitty/>     | <https://ghostty.org/docs>                              |
-| Code                | <https://github.com/kovidgoyal/kitty>  | <https://github.com/ghostty-org/ghostty>                |
+| Fact          | Kitty                                     | Ghostty                                            |
+| ------------- | ----------------------------------------- | -------------------------------------------------- |
+| First release | 2017                                      | 1.0 on December 26, 2024 (repository since 2022)   |
+| Author        | Kovid Goyal                               | Mitchell Hashimoto and community                   |
+| Language      | C, Python, and Go                         | Zig (GTK4 on Linux)                                |
+| Interface     | Its own (does not use the system toolkit) | Native: GTK4 + libadwaita                          |
+| Images        | Its own graphics protocol                 | Compatible with Kitty's protocol                   |
+| Extensibility | _Kittens_, remote control, scripting      | Simple configuration; `libghostty` to integrate it |
+| License       | GPL-3.0                                   | MIT                                                |
+| Documentation | <https://sw.kovidgoyal.net/kitty/>        | <https://ghostty.org/docs>                         |
+| Code          | <https://github.com/kovidgoyal/kitty>     | <https://github.com/ghostty-org/ghostty>           |
 
 **Installation.**
 
@@ -58,15 +58,15 @@ bash is the default shell almost everywhere and the language of most system scri
 
 This guide's recommendation is fish as the interactive shell, and keeping bash or sh for system scripts. To avoid breaking anything, instead of changing your login shell with `chsh`, have your terminal run it: that way startup scripts and external tools keep using bash. Nushell is reserved for when you work with data (JSON, CSV, command output); zsh, for whoever needs bash compatibility and its plugins.
 
-| Fact                | zsh                                | fish                                       | Nushell                                  |
-| ------------------- | ---------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| First release       | 1990                               | 2005                                       | 2019                                     |
-| Author              | Paul Falstad                       | Axel Liljencrantz                          | Jonathan Turner, Yehuda Katz, and community |
-| Language            | C                                  | Rust (since 4.0, February 2025)            | Rust                                     |
-| bash-compatible     | Mostly                             | No                                         | No                                       |
-| Pipelines           | Text                               | Text                                       | Structured data                          |
-| Documentation       | <https://zsh.sourceforge.io/Doc/>  | <https://fishshell.com/docs/current/>      | <https://www.nushell.sh/book/>           |
-| Code                | <https://github.com/zsh-users/zsh> | <https://github.com/fish-shell/fish-shell> | <https://github.com/nushell/nushell>     |
+| Fact            | zsh                                | fish                                       | Nushell                                     |
+| --------------- | ---------------------------------- | ------------------------------------------ | ------------------------------------------- |
+| First release   | 1990                               | 2005                                       | 2019                                        |
+| Author          | Paul Falstad                       | Axel Liljencrantz                          | Jonathan Turner, Yehuda Katz, and community |
+| Language        | C                                  | Rust (since 4.0, February 2025)            | Rust                                        |
+| bash-compatible | Mostly                             | No                                         | No                                          |
+| Pipelines       | Text                               | Text                                       | Structured data                             |
+| Documentation   | <https://zsh.sourceforge.io/Doc/>  | <https://fishshell.com/docs/current/>      | <https://www.nushell.sh/book/>              |
+| Code            | <https://github.com/zsh-users/zsh> | <https://github.com/fish-shell/fish-shell> | <https://github.com/nushell/nushell>        |
 
 **Installation.**
 
@@ -104,15 +104,15 @@ What is still missing is full compatibility: its comparison against the GNU test
 
 One Arch peculiarity: the official package installs a single binary, `uu-coreutils`, and prefixed links (`uu-ls`, `uu-cp`…), without replacing GNU. This allows both to coexist, and to use them as the default commands in your shell, unprefixed links are created in a directory placed earlier in the `PATH`.
 
-| Fact                | Detail                                                                            |
-| ------------------- | --------------------------------------------------------------------------------- |
-| Origin              | 2013                                                                              |
-| Author              | Jordi Boggiano and community                                                      |
-| Language and license | Rust; MIT                                                                         |
-| Adoption            | Default in Ubuntu since 25.10; also in AerynOS and Redox OS                       |
-| Compatibility       | Around 95% of the GNU coreutils tests (version 0.8.0, April 2026)                 |
-| Documentation       | <https://uutils.github.io/coreutils/docs/>                                        |
-| Code                | <https://github.com/uutils/coreutils>                                             |
+| Fact                 | Detail                                                            |
+| -------------------- | ----------------------------------------------------------------- |
+| Origin               | 2013                                                              |
+| Author               | Jordi Boggiano and community                                      |
+| Language and license | Rust; MIT                                                         |
+| Adoption             | Default in Ubuntu since 25.10; also in AerynOS and Redox OS       |
+| Compatibility        | Around 95% of the GNU coreutils tests (version 0.8.0, April 2026) |
+| Documentation        | <https://uutils.github.io/coreutils/docs/>                        |
+| Code                 | <https://github.com/uutils/coreutils>                             |
 
 **Installation.** Install the package and try the utilities with their prefix:
 
@@ -149,13 +149,13 @@ In response, Matan Kushner created Starship in 2019: a minimal, fast, customizab
 - **Ready-made presets** to get started without writing configuration from scratch.
 - **Requires an icon font** (_Nerd Font_) to display the symbols.
 
-| Fact                | Detail                                |
-| ------------------- | -------------------------------------- |
-| First release       | 2019                                   |
-| Author              | Matan Kushner and community            |
+| Fact                 | Detail                                 |
+| -------------------- | -------------------------------------- |
+| First release        | 2019                                   |
+| Author               | Matan Kushner and community            |
 | Language and license | Rust; ISC                              |
-| Documentation       | <https://starship.rs>                  |
-| Code                | <https://github.com/starship/starship> |
+| Documentation        | <https://starship.rs>                  |
+| Code                 | <https://github.com/starship/starship> |
 
 **Installation.** Install the prompt and an icon font, apply a preset, and enable it in your shell:
 

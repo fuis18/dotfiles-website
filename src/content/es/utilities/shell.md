@@ -5,7 +5,7 @@ category: utilities
 tags: ["kitty", "ghostty", "zsh", "fish", "nushell", "uutils", "starship"]
 ---
 
-La terminal es donde pasarás más tiempo, y se compone de cuatro capas que se apilan: lo que ves en cada línea (el prompt), la ventana donde se dibuja (el emulador de terminal), el intérprete que entiende lo que escribes (el shell) y los programas básicos que se ejecutan por debajo (`ls`, `cp`, `rm`). Esta página recorre esas capas de arriba abajo, y en cada una explica qué problema resolvió la tecnología elegida.
+La terminal es donde pasarás más tiempo, y se compone de cuatro capas que se apilan: lo que ves en cada línea (el prompt), la ventana donde se dibuja (el emulador de terminal), el intérprete que entiende lo que escribes (el shell) y los programas básicos que se ejecutan por debajo (`ls`, `cp`, `rm`).
 
 ## Kitty vs Ghostty
 

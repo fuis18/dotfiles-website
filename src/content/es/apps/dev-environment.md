@@ -103,7 +103,7 @@ components = ["rust-analyzer", "clippy", "rustfmt"]
 
 ## La evolución de los editores: de Sublime Text a Zed
 
-Con los lenguajes gestionados, el siguiente paso es el editor. Pero no todos los editores son iguales: cada uno respondió a un problema de su época. Esta sección recorre la evolución histórica desde 2008 hasta 2026, mostrando cómo cada generación solucionó las limitaciones de la anterior.
+Con los lenguajes gestionados, el siguiente paso es el editor. Pero no todos los editores son iguales: cada uno respondió a un problema de su época.
 
 ### Sublime Text (2008–2012): velocidad cuando todo era lento
 

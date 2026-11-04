@@ -5,7 +5,7 @@ category: utilities
 tags: ["hyprland", "niri", "wayland"]
 ---
 
-Después del [greeter](./greeter.md) viene el escritorio, y en Wayland el gestor de ventanas es además la compositora: el programa que dibuja la pantalla, gestiona el teclado y el ratón, y decide dónde va cada ventana. No hay un servidor gráfico aparte, así que esta elección define cómo se siente todo el sistema. Esta guía mantiene instalados dos, con filosofías opuestas, y deja que [ReGreet](./greeter.md) te permita elegir cuál iniciar.
+Después del [greeter](./greeter.md) viene el escritorio, y en Wayland el gestor de ventanas es además la compositora: el programa que dibuja la pantalla, gestiona el teclado y el ratón, y decide dónde va cada ventana. No hay un servidor gráfico aparte, así que esta elección define cómo se siente todo el sistema.
 
 ## Hyprland
 

@@ -5,7 +5,7 @@ category: iso
 tags: ["ext4", "btrfs", "snapshots", "partitions"]
 ---
 
-The filesystem is the hardest decision to change once the system is installed, and the one that defines whether a bad update is a scare or a mere inconvenience. In a rolling release distribution like those in [Distro Base](./distro-base.md), where every update can break something, it is not enough for the disk to store the data: it must also allow rolling back. This page walks through how we got there and how to get it all mounted.
+The filesystem is the hardest decision to change once the system is installed, and the one that defines whether a bad update is a scare or a mere inconvenience. In a rolling release distribution like those in [Distro Base](./distro-base.md), where every update can break something, it is not enough for the disk to store the data: it must also allow rolling back.
 
 ## ext4
 
@@ -20,13 +20,13 @@ Its main improvements are:
 
 It remains the simplest and most proven choice: it is the default in Debian and Ubuntu, and it has decades of testing behind it. But Ts'o himself said in 2008 that ext4 used old technology and was a transitional solution, and that Btrfs was the best direction for its scalability, reliability and ease of administration. The thing is, ext4 does not create snapshots nor verify the content of your files with checksums (only the metadata): if an update leaves the system broken, the only way out is restoring a backup or repairing by hand. That is where the next section starts.
 
-| Fact                | Details                                                                                                         |
-| ------------------- | --------------------------------------------------------------------------------------------------------------- |
-| First release       | Preliminary version in Linux 2.6.19 (October 2006); stable in Linux 2.6.28 (December 2008)                       |
-| Authors             | Team led by Theodore Ts'o, with Mingming Cao, Andreas Dilger, Alex Zhuravlev, Dave Kleikamp and Eric Sandeen      |
-| License             | GPL-2.0 (kernel)                                                                                                |
-| Documentation       | <https://docs.kernel.org/filesystems/ext4/index.html> and <https://wiki.archlinux.org/title/Ext4>                |
-| Tools               | `e2fsprogs`: <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git>                                              |
+| Fact          | Details                                                                                                      |
+| ------------- | ------------------------------------------------------------------------------------------------------------ |
+| First release | Preliminary version in Linux 2.6.19 (October 2006); stable in Linux 2.6.28 (December 2008)                   |
+| Authors       | Team led by Theodore Ts'o, with Mingming Cao, Andreas Dilger, Alex Zhuravlev, Dave Kleikamp and Eric Sandeen |
+| License       | GPL-2.0 (kernel)                                                                                             |
+| Documentation | <https://docs.kernel.org/filesystems/ext4/index.html> and <https://wiki.archlinux.org/title/Ext4>            |
+| Tools         | `e2fsprogs`: <https://git.kernel.org/pub/scm/fs/ext2/e2fsprogs.git>                                          |
 
 **Installation.** It comes in the kernel and the tools are already in Arch's base. To format a partition:
 
@@ -55,15 +55,15 @@ Keep in mind that:
 - RAID 5/6 still carries warnings in the official documentation; do not use it for important data.
 - Free space is calculated differently from other systems: use `btrfs filesystem usage /` instead of relying only on `df`.
 
-| Fact                | Details                                                                                                             |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------- |
-| First release       | Announced on the kernel mailing list in July 2007; included in Linux 2.6.29 (March 2009); stable format in 2013     |
-| Author              | Chris Mason (Oracle) and contributors from SUSE, Meta, Fujitsu, Red Hat and others                                  |
-| License             | GPL-2.0 (kernel)                                                                                                   |
-| Documentation       | <https://btrfs.readthedocs.io> and <https://wiki.archlinux.org/title/Btrfs>                                         |
-| Source              | <https://github.com/kdave/btrfs-progs>                                                                             |
-| Snapper             | <http://snapper.io> and <https://github.com/openSUSE/snapper>                                                      |
-| snap-pac            | <https://github.com/wesbarnett/snap-pac>                                                                           |
+| Fact          | Details                                                                                                         |
+| ------------- | --------------------------------------------------------------------------------------------------------------- |
+| First release | Announced on the kernel mailing list in July 2007; included in Linux 2.6.29 (March 2009); stable format in 2013 |
+| Author        | Chris Mason (Oracle) and contributors from SUSE, Meta, Fujitsu, Red Hat and others                              |
+| License       | GPL-2.0 (kernel)                                                                                                |
+| Documentation | <https://btrfs.readthedocs.io> and <https://wiki.archlinux.org/title/Btrfs>                                     |
+| Source        | <https://github.com/kdave/btrfs-progs>                                                                          |
+| Snapper       | <http://snapper.io> and <https://github.com/openSUSE/snapper>                                                   |
+| snap-pac      | <https://github.com/wesbarnett/snap-pac>                                                                        |
 
 **Installation.** `btrfs-progs` is installed with the base (`pacstrap`) and Snapper once inside the `arch-chroot` (see the next section):
 
@@ -103,23 +103,23 @@ The scheme is a GPT table with three partitions (on an NVMe disk the names will 
 
 Inside the Btrfs partition these subvolumes are created:
 
-| Subvolume   | Mount         | Why separate it                                              |
-| ----------- | ------------- | ------------------------------------------------------------ |
-| `@`         | `/`           | The system; this is what gets reverted                        |
-| `@home`     | `/home`       | Your files do not roll back with the system                   |
-| `@snapshots` | `/.snapshots` | Where Snapper stores the snapshots                            |
-| `@log`      | `/var/log`    | You keep the logs to diagnose why something failed            |
-| `@cache`    | `/var/cache`  | Keeps downloaded packages from bloating the snapshots         |
+| Subvolume    | Mount         | Why separate it                                       |
+| ------------ | ------------- | ----------------------------------------------------- |
+| `@`          | `/`           | The system; this is what gets reverted                |
+| `@home`      | `/home`       | Your files do not roll back with the system           |
+| `@snapshots` | `/.snapshots` | Where Snapper stores the snapshots                    |
+| `@log`       | `/var/log`    | You keep the logs to diagnose why something failed    |
+| `@cache`     | `/var/cache`  | Keeps downloaded packages from bloating the snapshots |
 
 In addition, `~/.cache` is created as an independent subvolume inside `@home`, so that application cache does not end up in your files' snapshots either. The 4 GiB swap partition remains as a fallback: zram is configured with higher priority (150) and is used first, as detailed in [Components Optimization](./components-optimization.md).
 
 The ESP is mounted on `/boot` and `systemd-boot` is used, which means the kernel and initramfs live on the ESP (FAT32) and not inside `@`'s snapshots. After reverting `@`, the kernel in `/boot` may not match the restored modules in `/usr/lib/modules`; the ArchWiki describes a `pacman` hook that copies `/boot` into the snapshot on every transaction to prevent this.
 
-| Fact          | Details                                                                                                   |
-| ------------- | --------------------------------------------------------------------------------------------------------- |
+| Fact          | Details                                                                                                     |
+| ------------- | ----------------------------------------------------------------------------------------------------------- |
 | Documentation | <https://wiki.archlinux.org/title/Partitioning> and <https://wiki.archlinux.org/title/EFI_system_partition> |
-| Snapper       | <https://wiki.archlinux.org/title/Snapper>                                                                |
-| Tools         | `cfdisk` (`util-linux`), `mkfs.fat` (`dosfstools`), `mkfs.btrfs` (`btrfs-progs`)                          |
+| Snapper       | <https://wiki.archlinux.org/title/Snapper>                                                                  |
+| Tools         | `cfdisk` (`util-linux`), `mkfs.fat` (`dosfstools`), `mkfs.btrfs` (`btrfs-progs`)                            |
 
 **Installation.** From the live USB (see [Install Media](./install-media.md)). These commands wipe the disk; replace `/dev/sda` with your own. First create the table with `cfdisk` and format:
 
