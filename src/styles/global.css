@@ -192,6 +192,10 @@ main {
   max-width: 64rem;
   line-height: 1.7;
   overflow-wrap: break-word;
+  /* As a grid item, min-width:auto would floor this at the content's
+     min-content (tables/code), expanding the page instead of letting
+     the scroll containers inside do their job. */
+  min-width: 0;
 }
 
 .prose > :first-child {
@@ -271,14 +275,9 @@ main {
   border-collapse: collapse;
   margin: 1.2rem 0;
   font-size: 0.95rem;
-}
-
-@media (max-width: 480px) {
-  /* Let wide tables scroll inside the prose instead of pushing the page. */
-  .prose table {
-    display: block;
-    overflow-x: auto;
-  }
+  /* Scroll wide tables inside the prose instead of pushing the page. */
+  display: block;
+  overflow-x: auto;
 }
 
 .prose th,
