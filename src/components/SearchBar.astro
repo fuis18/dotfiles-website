@@ -92,6 +92,13 @@ const { lang } = Astro.props;
     right: 0.8rem;
   }
 
+  /* The "/" shortcut only exists on keyboards. */
+  @media (hover: none), (pointer: coarse) {
+    .search-kbd {
+      display: none;
+    }
+  }
+
   .chips {
     display: flex;
     flex-wrap: wrap;

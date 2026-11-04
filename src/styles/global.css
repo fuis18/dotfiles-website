@@ -95,6 +95,11 @@
   box-sizing: border-box;
 }
 
+html {
+  /* Keep anchor targets (#cat-*) clear of the sticky header. */
+  scroll-padding-top: 4.5rem;
+}
+
 body {
   min-height: 100vh;
   min-height: 100dvh;
@@ -143,7 +148,13 @@ a:hover {
   width: 100%;
   max-width: 72rem;
   margin-inline: auto;
-  padding-inline: 1.5rem;
+  padding-inline: 1rem;
+}
+
+@media (min-width: 480px) {
+  .container {
+    padding-inline: 1.5rem;
+  }
 }
 
 main {
@@ -180,6 +191,7 @@ main {
 .prose {
   max-width: 64rem;
   line-height: 1.7;
+  overflow-wrap: break-word;
 }
 
 .prose > :first-child {
@@ -187,8 +199,14 @@ main {
 }
 
 .prose h1 {
-  font-size: 1.8rem;
+  font-size: 1.45rem;
   margin: 2rem 0 1rem;
+}
+
+@media (min-width: 480px) {
+  .prose h1 {
+    font-size: 1.8rem;
+  }
 }
 
 .prose h2 {
@@ -255,6 +273,14 @@ main {
   font-size: 0.95rem;
 }
 
+@media (max-width: 480px) {
+  /* Let wide tables scroll inside the prose instead of pushing the page. */
+  .prose table {
+    display: block;
+    overflow-x: auto;
+  }
+}
+
 .prose th,
 .prose td {
   border: 1px solid var(--color-border);
@@ -299,4 +325,21 @@ main {
   padding: 0;
   font-size: inherit;
   color: inherit;
+}
+
+/* ============================================================
+   Touch targets — bump interactive elements on coarse pointers
+   ============================================================ */
+@media (pointer: coarse) {
+  .icon-btn,
+  .lang-toggle,
+  .chip,
+  .lang-option {
+    min-height: 2.75rem; /* 44px */
+  }
+
+  .icon-btn,
+  .lang-toggle {
+    min-width: 2.75rem;
+  }
 }

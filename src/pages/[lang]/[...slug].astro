@@ -106,14 +106,21 @@ const categoryAnchor = `${homeHref(lang)}#cat-${category}`;
 
   .detail-head {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
     justify-content: space-between;
-    gap: 0.75rem;
+    gap: 0.5rem 1rem;
   }
 
   .detail-title {
     margin: 0;
-    font-size: 1.8rem;
+    font-size: 1.45rem;
+  }
+
+  @media (min-width: 480px) {
+    .detail-title {
+      font-size: 1.8rem;
+    }
   }
 
   .category-pill {
