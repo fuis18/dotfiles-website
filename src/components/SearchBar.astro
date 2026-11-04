@@ -1,7 +1,5 @@
 ---
-import { categories } from '@/data/categories';
 import { t } from '@/i18n/utils';
-import type { TranslationKey } from '@/i18n/ui';
 import type { Locale } from '@/i18n/config';
 
 interface Props {
@@ -27,12 +25,6 @@ const { lang } = Astro.props;
       spellcheck="false"
     />
     <span class="kbd search-kbd" aria-hidden="true">/</span>
-  </div>
-  <div class="chips" role="group" aria-label={t(lang, 'nav.search')}>
-    <button type="button" class="chip active" data-filter="all">{t(lang, 'category.all')}</button>
-    {categories.map(({ id }) => (
-      <button type="button" class="chip" data-filter={id}>{t(lang, `category.${id}` as TranslationKey)}</button>
-    ))}
   </div>
   {false && (
   <p class="search-status" id="search-status" role="status" aria-live="polite" data-count-label={t(lang, 'search.resultsCount')}></p>
@@ -104,30 +96,6 @@ const { lang } = Astro.props;
     flex-wrap: wrap;
     gap: 0.5rem;
   }
-
-  .chip {
-    padding: 0.25rem 0.75rem;
-    background: transparent;
-    border: 1px solid var(--color-border-strong);
-    border-radius: 999px;
-    color: var(--color-text-dim);
-    font-family: var(--font-title);
-    font-size: 0.78rem;
-    cursor: pointer;
-    transition: color 0.15s ease, border-color 0.15s ease, background-color 0.15s ease;
-  }
-
-  .chip:hover {
-    color: var(--color-accent);
-    border-color: var(--color-accent);
-  }
-
-  .chip.active {
-    color: var(--color-on-accent);
-    background: var(--color-accent);
-    border-color: var(--color-accent);
-  }
-
   .search-status {
     min-height: 1.2rem;
     margin: 0;
@@ -147,7 +115,6 @@ const { lang } = Astro.props;
 
     const cards = Array.from(document.querySelectorAll<HTMLElement>('.card'));
     const sections = Array.from(document.querySelectorAll<HTMLElement>('[data-category-section]'));
-    const chips = Array.from(document.querySelectorAll<HTMLButtonElement>('.chip[data-filter]'));
     let activeFilter = 'all';
 
     const normalize = (value: string): string =>
@@ -190,14 +157,6 @@ const { lang } = Astro.props;
         apply();
       }
     });
-
-    for (const chip of chips) {
-      chip.addEventListener('click', () => {
-        activeFilter = chip.dataset.filter ?? 'all';
-        for (const other of chips) other.classList.toggle('active', other === chip);
-        apply();
-      });
-    }
 
     if (shortcutHandler) document.removeEventListener('keydown', shortcutHandler);
     shortcutHandler = (event: KeyboardEvent) => {
