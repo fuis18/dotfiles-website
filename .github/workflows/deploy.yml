@@ -7,23 +7,20 @@ on:
 permissions:
   contents: read
   pages: write
-  # Required by actions/deploy-pages to mint the OIDC token.
   id-token: write
 
-# Never cancel a deployment mid-flight; queue consecutive runs instead.
 concurrency:
   group: pages
   cancel-in-progress: false
 
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
 
     steps:
       - name: Checkout repository
         uses: actions/checkout@v7
 
-      # Keep in sync with devEngines.packageManager in package.json.
       - name: Setup pnpm
         uses: pnpm/action-setup@v6
         with:
@@ -32,7 +29,7 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v7
         with:
-          node-version: 24
+          node-version: 22
           cache: pnpm
 
       - name: Install dependencies
