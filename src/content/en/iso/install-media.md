@@ -5,7 +5,7 @@ category: iso
 tags: ["usb-live", "chroot", "tty"]
 ---
 
-A "next, next" graphical installer is convenient, but it hands you a system you do not know the contents of. Installing by hand, step by step, is what teaches you which pieces make it up and, above all, how to repair it when it fails. That is why this guide installs from three chained environments: the **live USB** gives you a running Linux to prepare the disks, the **chroot** lets you enter the freshly copied system to configure it, and everything happens on the **tty**, the simplest interface there is.
+A "next, next" graphical installer is convenient, but it hands you a system you do not know the contents of. Installing by hand, step by step, is what teaches you which pieces make it up and, above all, how to repair it when it fails.
 
 ## Live USB
 
@@ -63,13 +63,13 @@ pacman -Sy archlinux-keyring
 
 From here on the disk is partitioned and mounted (see [Mounts](./mounts.md)), and only then do you move on to the next step.
 
-| Fact          | Details                                                             |
-| ------------- | ------------------------------------------------------------------- |
+| Fact          | Details                                                                |
+| ------------- | ---------------------------------------------------------------------- |
 | Origin        | ISO generated with `archiso`; Arch publishes a new version every month |
-| Authors       | Arch Linux team (`archiso`)                                         |
-| Documentation | <https://wiki.archlinux.org/title/Installation_guide>               |
-| Source        | <https://gitlab.archlinux.org/archlinux/archiso>                    |
-| Download      | <https://archlinux.org/download/>                                   |
+| Authors       | Arch Linux team (`archiso`)                                            |
+| Documentation | <https://wiki.archlinux.org/title/Installation_guide>                  |
+| Source        | <https://gitlab.archlinux.org/archlinux/archiso>                       |
+| Download      | <https://archlinux.org/download/>                                      |
 
 ## chroot
 
@@ -193,13 +193,13 @@ reboot
 
 If something fails and you need to get back in, boot the live USB again, mount the disks as before and repeat `arch-chroot /mnt`: the system does not break by entering and leaving.
 
-| Fact              | Details                                                                                                             |
-| ----------------- | ------------------------------------------------------------------------------------------------------------------- |
-| Origin            | `chroot`: Unix V7 (1979), added to BSD by Bill Joy on March 18, 1982                                                |
-| Tool              | `arch-chroot` and `pacstrap` are part of `arch-install-scripts`                                                     |
-| Documentation     | <https://wiki.archlinux.org/title/Chroot> and <https://wiki.archlinux.org/title/Installation_guide>                 |
-| Source            | <https://gitlab.archlinux.org/archlinux/arch-install-scripts>                                                      |
-| Artix equivalent  | `basestrap` instead of `pacstrap` and `artix-chroot` instead of `arch-chroot` (see [Distro Base](./distro-base.md)) |
+| Fact             | Details                                                                                                             |
+| ---------------- | ------------------------------------------------------------------------------------------------------------------- |
+| Origin           | `chroot`: Unix V7 (1979), added to BSD by Bill Joy on March 18, 1982                                                |
+| Tool             | `arch-chroot` and `pacstrap` are part of `arch-install-scripts`                                                     |
+| Documentation    | <https://wiki.archlinux.org/title/Chroot> and <https://wiki.archlinux.org/title/Installation_guide>                 |
+| Source           | <https://gitlab.archlinux.org/archlinux/arch-install-scripts>                                                       |
+| Artix equivalent | `basestrap` instead of `pacstrap` and `artix-chroot` instead of `arch-chroot` (see [Distro Base](./distro-base.md)) |
 
 **Installation.** The tools already come on the ISO. On an installed Arch they are obtained with:
 
@@ -235,10 +235,10 @@ FONT=ter-132b
 EOF
 ```
 
-| Fact          | Details                                                                                                                     |
-| ------------- | --------------------------------------------------------------------------------------------------------------------------- |
-| Origin        | Virtual consoles of the Linux kernel, heirs to the teletypes (_teletypewriter_)                                             |
-| Tools         | `loadkeys`, `setfont`, `chvt` (`kbd` package) and `agetty` (`util-linux`)                                                   |
+| Fact          | Details                                                                                                                      |
+| ------------- | ---------------------------------------------------------------------------------------------------------------------------- |
+| Origin        | Virtual consoles of the Linux kernel, heirs to the teletypes (_teletypewriter_)                                              |
+| Tools         | `loadkeys`, `setfont`, `chvt` (`kbd` package) and `agetty` (`util-linux`)                                                    |
 | Documentation | <https://wiki.archlinux.org/title/Linux_console> and <https://wiki.archlinux.org/title/Linux_console/Keyboard_configuration> |
 
 **Installation.** `kbd` and the Terminus fonts already come on the ISO. On the installed system, the font is added with:

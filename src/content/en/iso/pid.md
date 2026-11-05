@@ -5,7 +5,7 @@ category: iso
 tags: ["systemd", "s6", "66", "init"]
 ---
 
-PID 1 is the first process the kernel starts and the parent of all the others: it brings up the services, restarts them if they fall and shuts the system down in order. It is the piece that shapes the rest of the guide the most, because boot, user services, logs and even the desktop session all depend on it. That is why here it is not enough to know which init to use: you have to understand what problem each one solved and what cost it brought with it.
+PID 1 is the first process the kernel starts and the parent of all the others: it brings up the services, restarts them if they fall and shuts the system down in order. It is the piece that shapes the rest of the guide the most, because boot, user services, logs and even the desktop session all depend on it.
 
 ## Systemd
 
@@ -18,15 +18,15 @@ In Linux's early days the init was `SysV`: a collection of shell scripts run one
 
 It is the default init on Arch and CachyOS (see [Distro Base](./distro-base.md)) and the one most packages assume, including many from the AUR and complete desktop environments. That makes it the option with the least friction.
 
-| Fact                | Details                                                                         |
-| ------------------- | ------------------------------------------------------------------------------- |
-| First release       | April 2010 (announcement), version 1 in May 2010                                |
-| Authors             | Lennart Poettering and Kay Sievers (Red Hat), with community collaboration      |
-| Adoption milestones | Fedora 15 enabled it by default in May 2011; Arch Linux, in October 2012        |
-| License             | LGPL-2.1+                                                                       |
-| Documentation       | <https://systemd.io> and <https://wiki.archlinux.org/title/Systemd>             |
-| Source              | <https://github.com/systemd/systemd>                                            |
-| Foundational text   | <https://0pointer.net/blog/projects/systemd.html>                               |
+| Fact                | Details                                                                    |
+| ------------------- | -------------------------------------------------------------------------- |
+| First release       | April 2010 (announcement), version 1 in May 2010                           |
+| Authors             | Lennart Poettering and Kay Sievers (Red Hat), with community collaboration |
+| Adoption milestones | Fedora 15 enabled it by default in May 2011; Arch Linux, in October 2012   |
+| License             | LGPL-2.1+                                                                  |
+| Documentation       | <https://systemd.io> and <https://wiki.archlinux.org/title/Systemd>        |
+| Source              | <https://github.com/systemd/systemd>                                       |
+| Foundational text   | <https://0pointer.net/blog/projects/systemd.html>                          |
 
 **Installation.** It already comes included in Arch and CachyOS. If you need to install or update it:
 
@@ -66,14 +66,14 @@ It solved `SysV`'s problems, but it grew a lot in return. Besides being PID 1 it
 
 It is the technical base of Artix (as one of its init options) and of Obarun. On Artix, services are installed as `<service>-s6` packages, and `elogind` replaces what `logind` used to provide.
 
-| Fact                | Details                                                                                      |
-| ------------------- | -------------------------------------------------------------------------------------------- |
-| First release       | Around 2011; `s6-rc` was announced in September 2015                                         |
-| Author              | Laurent Bercot (skarnet.org)                                                                 |
-| License             | ISC                                                                                          |
-| Documentation       | <https://skarnet.org/software/s6/> and <https://skarnet.org/software/s6-rc/>                  |
-| Source              | <https://github.com/skarnet/s6> (mirror; original repository at `git://git.skarnet.org/s6`)  |
-| Community           | `supervision` mailing list at <https://skarnet.org/lists/supervision/>                       |
+| Fact          | Details                                                                                     |
+| ------------- | ------------------------------------------------------------------------------------------- |
+| First release | Around 2011; `s6-rc` was announced in September 2015                                        |
+| Author        | Laurent Bercot (skarnet.org)                                                                |
+| License       | ISC                                                                                         |
+| Documentation | <https://skarnet.org/software/s6/> and <https://skarnet.org/software/s6-rc/>                |
+| Source        | <https://github.com/skarnet/s6> (mirror; original repository at `git://git.skarnet.org/s6`) |
+| Community     | `supervision` mailing list at <https://skarnet.org/lists/supervision/>                      |
 
 On Artix, install the `s6` base when creating the system (see [Distro Base](./distro-base.md)):
 
@@ -117,14 +117,14 @@ It is the point where `s6`'s robust supervision and the comfort of a declarative
 - Series 0.8 (2024) required a manual system migration (removing `/etc/66`, `/var/lib/66` and `~/.66`), so it is worth reading each version's release notes before updating.
 - Official alternative on the way: skarnet published `s6-frontend` 0.1.0.0 in July 2026, its own frontend for `s6-rc`. It is worth following closely, because it could compete with `66` as a convenience layer on top of `s6`.
 
-| Fact                | Details                                                                               |
-| ------------------- | ------------------------------------------------------------------------------------- |
-| First release       | Presented on skarnet's `supervision` list in April 2019; version 0.8 in 2024           |
-| Author              | Eric Vidal (Obarun project)                                                           |
-| License             | ISC                                                                                   |
-| Documentation       | <https://wiki.obarun.org> and <https://web.obarun.org/software>                       |
-| Source              | <https://git.obarun.org/Obarun/66>                                                    |
-| News                | <https://news.obarun.org>                                                             |
+| Fact          | Details                                                                      |
+| ------------- | ---------------------------------------------------------------------------- |
+| First release | Presented on skarnet's `supervision` list in April 2019; version 0.8 in 2024 |
+| Author        | Eric Vidal (Obarun project)                                                  |
+| License       | ISC                                                                          |
+| Documentation | <https://wiki.obarun.org> and <https://web.obarun.org/software>              |
+| Source        | <https://git.obarun.org/Obarun/66>                                           |
+| News          | <https://news.obarun.org>                                                    |
 
 The most direct way is Obarun, which already includes it: download the ISO from <https://web.obarun.org> (see [Distro Base](./distro-base.md)). On an existing Obarun system, the tools are installed with `pacman`:
 

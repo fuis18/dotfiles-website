@@ -7,8 +7,6 @@ tags: ["fnm", "rustup", "zed", "lazyvim", "neovim", "vscode", "sublime-text"]
 
 With `pacman` (see [Package Management](./package-management.md)) you install one version of each language, tied to the system's update cadence. That works for running programs, but not for development: one project needs Node 20, another Node 24, one requires a specific version of Rust and another the nightly build. The solution is to manage languages per user, outside the system, with a version manager for each, and reserve `pacman` for the system.
 
-This page walks through the version managers for Node and Rust, and then traces the historical evolution of code editors from 2008 to 2026, from Sublime Text to Zed, passing through VS Code and Neovim. At the end you will find a reference to the complete ecosystem of modern software organized by discipline.
-
 ## fnm: version manager for Node.js
 
 Node.js is the typical case: the version in the distribution's repository is usually one or two releases behind, and there is only one at a time. The classic manager, `nvm`, is a set of shell scripts, which is why it is slow to load every time you open a terminal, and it does not work natively in fish (see [Shell](./shell.md)). **fnm** (_Fast Node Manager_) rewrites it as a single Rust binary, created by Gal Schlezinger (Schniz) around 2019, with the same goal and much more speed.

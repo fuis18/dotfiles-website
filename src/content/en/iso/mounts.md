@@ -5,7 +5,7 @@ category: iso
 tags: ["ext4", "btrfs", "snapshots", "partitions"]
 ---
 
-The filesystem is the hardest decision to change once the system is installed, and the one that defines whether a bad update is a scare or a mere inconvenience. In a rolling release distribution like those in [Distro Base](./distro-base.md), where every update can break something, it is not enough for the disk to store the data: it must also allow rolling back.
+The filesystem is the hardest decision to change once the system is installed, and the one that defines whether a bad update is a scare or a mere inconvenience.
 
 ## ext4
 

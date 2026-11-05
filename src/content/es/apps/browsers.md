@@ -5,7 +5,7 @@ category: apps
 tags: ["tor", "brave", "zen-browser", "helium", "epiphany", "mullvad"]
 ---
 
-El navegador es la aplicación que más usas y la que más sabe de ti, así que elegirlo es una decisión de privacidad antes que de apariencia. Esta página recorre seis navegadores en orden creciente de exigencia: primero los que mejoran el uso diario, después uno integrado en el escritorio y, al final, los pensados para un modelo de amenaza más serio. Además cubren tres motores distintos (Gecko, Blink y WebKit), algo importante porque cuando casi todos usan el mismo motor, el que lo controla decide cómo evoluciona la web.
+El navegador es la aplicación que más usas y la que más sabe de ti, así que elegirlo es una decisión de privacidad antes que de apariencia.
 
 ## Chrome y Firefox: los dos polos
 

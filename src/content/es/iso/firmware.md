@@ -5,7 +5,7 @@ category: iso
 tags: ["uefi", "bios", "gpt", "esp", "secure-boot"]
 ---
 
-Antes de que exista un gestor de arranque, un kernel o un sistema de archivos, hay un programa grabado en un chip de la placa madre que se ejecuta al pulsar el botón de encendido. Ese programa es el firmware, y es el responsable de comprobar que el hardware responde, encontrar algo arrancable y cederle el control. Durante casi treinta años cumplió esa tarea con el BIOS; desde mediados de los 2000 lo hace con UEFI. La diferencia entre ambos es si necesitas una partición especial para arrancar y si el arranque puede protegerse con firmas.
+Antes de que exista un gestor de arranque, un kernel o un sistema de archivos, hay un programa grabado en un chip de la placa madre que se ejecuta al pulsar el botón de encendido. Ese programa es el firmware, y es el responsable de comprobar que el hardware responde, encontrar algo arrancable y cederle el control. Durante casi treinta años cumplió esa tarea con el BIOS; desde mediados de los 2000 lo hace con UEFI.
 
 ## BIOS: el firmware original
 

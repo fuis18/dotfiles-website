@@ -7,8 +7,6 @@ tags: ["sudo", "doas", "privileges", "security"]
 
 En un sistema multiusuario, hay acciones que deben reservar a un único actor: crear cuentas, modificar rutas de red, reinstalar paquetes. Permitirlas a cualquiera rompe el modelo de seguridad; negárselas por completo hace el sistema inutilizable. La solución es la **elevación temporal**: ejecutar una operación específica como root mientras el resto del trabajo sigue en el contexto normal del usuario.
 
-En el ecosistema Unix/Linux hay dos herramientas dominantes para esto: **sudo** y **doas**. La primera es la más extendida, con décadas de historia y un ecosistema de módulos enorme. La segunda nació de OpenBSD con una filosofía opuesta: hacer el código mínimo posible y confiar menos en su complejidad. Ambas resuelven el mismo problema, pero con filosofías distintas.
-
 ## sudo: el estándar extendido
 
 **sudo** (_superuser do_) apareció a principios de los años 90, creado por Bob Coggeshall y Chuck Allen, y hoy está mantenido por un equipo comunitario que publica versiones nuevas regularmente. Su modelo es permisivo: por defecto pide tu contraseña y registra cada uso en logs detallados.

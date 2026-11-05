@@ -5,7 +5,7 @@ category: iso
 tags: ["systemd", "s6", "66", "init"]
 ---
 
-El PID 1 es el primer proceso que arranca el kernel y el padre de todos los demás: levanta los servicios, los reinicia si caen y apaga el sistema en orden. Es la pieza que más condiciona el resto de la guía, porque de él dependen el arranque, los servicios de usuario, los registros y hasta la sesión de escritorio. Por eso aquí no basta con saber qué init usar: hay que entender qué problema resolvió cada uno y qué costo trajo consigo.
+El PID 1 es el primer proceso que arranca el kernel y el padre de todos los demás: levanta los servicios, los reinicia si caen y apaga el sistema en orden. Es la pieza que más condiciona el resto de la guía, porque de él dependen el arranque, los servicios de usuario, los registros y hasta la sesión de escritorio.
 
 ## Systemd
 

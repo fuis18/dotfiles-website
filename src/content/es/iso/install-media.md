@@ -5,7 +5,7 @@ category: iso
 tags: ["usb-live", "chroot", "tty"]
 ---
 
-Un instalador gráfico de «siguiente, siguiente» es cómodo, pero te entrega un sistema que no sabes de qué está hecho. Instalar a mano, paso a paso, es lo que te enseña qué piezas lo componen y, sobre todo, cómo repararlo cuando falla. Por eso esta guía instala desde tres entornos encadenados: el **USB live** te da un Linux funcionando para preparar los discos, el **chroot** te permite entrar en el sistema recién copiado para configurarlo, y todo ocurre en la **tty**, la interfaz más simple que existe.
+Un instalador gráfico de «siguiente, siguiente» es cómodo, pero te entrega un sistema que no sabes de qué está hecho. Instalar a mano, paso a paso, es lo que te enseña qué piezas lo componen y, sobre todo, cómo repararlo cuando falla.
 
 ## USB live
 

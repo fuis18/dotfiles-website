@@ -5,7 +5,7 @@ category: iso
 tags: ["cachyos", "archlinux", "artix", "obarun"]
 ---
 
-I believe that offering a system that works "out of the box" (ready to use) is a big step toward getting more people into Linux, but it should not be our slogan. But as different people we have preferences, and as humanity and natural persons we also deserve our work tool to improve; for that we must evolve our system, and therefore understand how to improve it.
+I believe that offering a system that works "out of the box" (ready to use) is a big step toward getting more people into Linux, but it should not be our slogan. As different people we have preferences, and as humanity and natural persons we also deserve our work tool to improve; for that we must evolve our system, and therefore understand how to improve it.
 
 ## ArchLinux
 

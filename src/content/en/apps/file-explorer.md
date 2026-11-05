@@ -5,7 +5,7 @@ category: apps
 tags: ["yazi", "nautilus", "spacedrive"]
 ---
 
-Navigating files is the most repeated task on any system, and there are two traditional ways to do it: the terminal, fast but blind (`ls` does not show you the image or the PDF), and the graphical file explorer, comfortable but slow and mouse-dependent. This page picks three tools that attack that trade-off from different ends: a terminal explorer with previews, the standard GTK graphical explorer, and an experiment that tries to stop your files from depending on the device they are on.
+Navigating files is the most repeated task on any system, and there are two traditional ways to do it: the terminal, fast but blind (`ls` does not show you the image or the PDF), and the graphical file explorer, comfortable but slow and mouse-dependent.
 
 ## Yazi
 
@@ -20,13 +20,13 @@ Its main features are:
 
 The cost is stability: the project itself describes it as a public beta that can be used daily, with frequent breaking changes, so it is worth reading the release notes for each version.
 
-| Fact                 | Detail                                                                 |
-| -------------------- | ---------------------------------------------------------------------- |
-| First release        | 2023 (version 0.2.4 in March 2024; date-based numbering since 2025)   |
-| Author               | sxyazi and community                                                   |
-| Language and license | Rust (with Lua plugins); MIT                                          |
-| Documentation        | <https://yazi-rs.github.io>                                            |
-| Code                 | <https://github.com/sxyazi/yazi>                                       |
+| Fact                 | Detail                                                              |
+| -------------------- | ------------------------------------------------------------------- |
+| First release        | 2023 (version 0.2.4 in March 2024; date-based numbering since 2025) |
+| Author               | sxyazi and community                                                |
+| Language and license | Rust (with Lua plugins); MIT                                        |
+| Documentation        | <https://yazi-rs.github.io>                                         |
+| Code                 | <https://github.com/sxyazi/yazi>                                    |
 
 **Installation.** Yazi and the optional tools that enable previews:
 
@@ -73,12 +73,12 @@ Since GNOME 43 it is built with GTK4 and libadwaita (see [Ecosystem](./ecosystem
 
 On Hyprland or Niri it does not ship with all of its components by default: you have to add GVfs and the archive and preview utilities.
 
-| Fact                | Detail                                                                                          |
-| ------------------- | ----------------------------------------------------------------------------------------------- |
-| Origin              | Eazel (a company founded in 1999); Nautilus 1.0 in 2001; today, the GNOME project             |
-| Toolkit and license | GTK4 + libadwaita (since GNOME 43); GPL                                                       |
+| Fact                | Detail                                                                                             |
+| ------------------- | -------------------------------------------------------------------------------------------------- |
+| Origin              | Eazel (a company founded in 1999); Nautilus 1.0 in 2001; today, the GNOME project                  |
+| Toolkit and license | GTK4 + libadwaita (since GNOME 43); GPL                                                            |
 | Documentation       | <https://help.gnome.org/users/nautilus/stable/> and <https://wiki.archlinux.org/title/GNOME/Files> |
-| Code                | <https://gitlab.gnome.org/GNOME/nautilus>                                                      |
+| Code                | <https://gitlab.gnome.org/GNOME/nautilus>                                                          |
 
 **Installation.** Nautilus plus the components that complete it: GVfs for drives, MTP and network, archive support and previews:
 
@@ -100,13 +100,13 @@ It is an ambitious, young project. Version 2, from December 2025, is a complete 
 
 It is important to be clear about its status: it went through years of alpha and rewrites, and what it offers today is a promise more than a replacement for Nautilus or Yazi.
 
-| Fact                 | Detail                                                                               |
-| -------------------- | ------------------------------------------------------------------------------------ |
-| Origin               | Jamie Pine's project; in alpha in 2024; version 2 (rewrite) in December 2025        |
-| Technology           | Rust core (SQLite); desktop with Tauri and React; WASM extensions                   |
-| License              | Open source (check the repository for the current license of each part)             |
-| Documentation        | <https://spacedrive.com>                                                             |
-| Code                 | <https://github.com/spacedriveapp/spacedrive>                                        |
+| Fact          | Detail                                                                       |
+| ------------- | ---------------------------------------------------------------------------- |
+| Origin        | Jamie Pine's project; in alpha in 2024; version 2 (rewrite) in December 2025 |
+| Technology    | Rust core (SQLite); desktop with Tauri and React; WASM extensions            |
+| License       | Open source (check the repository for the current license of each part)      |
+| Documentation | <https://spacedrive.com>                                                     |
+| Code          | <https://github.com/spacedriveapp/spacedrive>                                |
 
 **Installation.** There is no official package in the Arch repositories. The Linux versions are downloaded from the downloads page at <https://spacedrive.com> or from the releases published in the repository; check there, because the project changes quickly:
 

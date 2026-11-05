@@ -5,7 +5,7 @@ category: apps
 tags: ["tor", "brave", "zen-browser", "helium", "epiphany", "mullvad"]
 ---
 
-The browser is the app you use the most and the one that knows the most about you, so picking one is a privacy decision before it is an aesthetic one. This page walks through six browsers in order of increasing demands: first the ones that improve daily use, then one integrated into the desktop and, at the end, those designed for a more serious threat model. They also cover three different engines (Gecko, Blink and WebKit), which matters because when almost everyone uses the same engine, whoever controls it decides how the web evolves.
+The browser is the app you use the most and the one that knows the most about you, so picking one is a privacy decision before it is an aesthetic one.
 
 ## Chrome and Firefox: the two poles
 
@@ -25,15 +25,15 @@ It is developed by the Tor Project, a nonprofit that has maintained the Tor netw
 
 It is not a daily driver: it is a tool for real anonymity when the threat justifies it, and it works best when left unmodified. Not even it protects you from your own mistakes, such as logging in with your personal account.
 
-| Fact          | Detail                                                     |
-| ------------- | ---------------------------------------------------------- |
-| First release | Tor Browser Bundle, around 2011                           |
-| Authors       | Tor Project (nonprofit)                                   |
-| Base          | Firefox ESR; NoScript included                            |
-| Network       | Tor network (several nodes)                               |
-| Speed         | Slower                                                    |
-| License       | MPL-2.0                                                   |
-| Documentation | <https://support.torproject.org>                          |
+| Fact          | Detail                                                       |
+| ------------- | ------------------------------------------------------------ |
+| First release | Tor Browser Bundle, around 2011                              |
+| Authors       | Tor Project (nonprofit)                                      |
+| Base          | Firefox ESR; NoScript included                               |
+| Network       | Tor network (several nodes)                                  |
+| Speed         | Slower                                                       |
+| License       | MPL-2.0                                                      |
+| Documentation | <https://support.torproject.org>                             |
 | Code          | <https://gitlab.torproject.org/tpo/applications/tor-browser> |
 
 **Installation.** There is an official installer in the repositories that downloads it and verifies its signature for you:
@@ -49,13 +49,13 @@ The opposite problem from Tor: not extreme anonymity, but Chromium's everyday te
 
 Its proposal is to block ads and trackers by default, with no extension or setup, and to fund the web through a rewards system (Basic Attention Token, BAT) shared between users and sites. It is a controversial model: some see it as monetizing browsing without selling data, others criticize putting cryptocurrencies and affiliate programs into a browser. Technically it is a hardened Chromium, without Google's telemetry but with Chrome Web Store extension compatibility. It is the practical choice when you need Blink every day with privacy by default, without going through uBlock Origin and manual tweaks.
 
-| Fact               | Detail                                                   |
-| ------------------ | -------------------------------------------------------- |
-| First release      | January 20, 2016 (beta); 1.0 on November 13, 2019       |
-| Authors            | Brendan Eich and Brian Bondy                            |
-| Engine and license | Blink (based on Chromium); MPL-2.0                       |
-| Documentation      | <https://support.brave.com>                              |
-| Code               | <https://github.com/brave/brave-core>                    |
+| Fact               | Detail                                            |
+| ------------------ | ------------------------------------------------- |
+| First release      | January 20, 2016 (beta); 1.0 on November 13, 2019 |
+| Authors            | Brendan Eich and Brian Bondy                      |
+| Engine and license | Blink (based on Chromium); MPL-2.0                |
+| Documentation      | <https://support.brave.com>                       |
+| Code               | <https://github.com/brave/brave-core>             |
 
 **Installation.** From the AUR:
 
@@ -76,13 +76,13 @@ Its key features:
 
 Its limitation is the ecosystem: far fewer extensions than Firefox or Chromium, and WebKitGTK has weaker compatibility with some complex sites. It is a good choice for light use or for web apps, and a bad one for daily work with extensions.
 
-| Fact               | Detail                                                                         |
-| ------------------ | ------------------------------------------------------------------------------ |
-| Origin             | 2002, fork of Galeon; the GNOME project's browser                              |
-| Engine and toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                          |
-| License            | GPL-3.0 or later                                                              |
+| Fact               | Detail                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| Origin             | 2002, fork of Galeon; the GNOME project's browser                                  |
+| Engine and toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                              |
+| License            | GPL-3.0 or later                                                                   |
 | Documentation      | <https://wiki.gnome.org/Apps/Web> and <https://wiki.archlinux.org/title/GNOME/Web> |
-| Code               | <https://gitlab.gnome.org/GNOME/epiphany>                                      |
+| Code               | <https://gitlab.gnome.org/GNOME/epiphany>                                          |
 
 **Installation.** It is in the official repositories. Add the GStreamer codecs so it can play video:
 
@@ -96,16 +96,16 @@ Tor Browser solved fingerprinting, but at the cost of the Tor network: too slow 
 
 It has the same protection against fingerprinting, but without the Tor network: it is meant to be used with a trusted VPN. It is based on Firefox ESR, ships with uBlock Origin and NoScript installed, opens in private mode by default and wipes the session on close. The advantage is that it is faster than Tor; the disadvantage is that your anonymity depends on the VPN and on many people sharing the same fingerprint. Like Tor, it is not a daily driver, but for when you need to avoid fingerprinting without losing speed.
 
-| Fact          | Detail                                         |
-| ------------- | ---------------------------------------------- |
-| First release | April 3, 2023                                 |
-| Authors       | Tor Project engineers, with Mullvad VPN       |
+| Fact          | Detail                                           |
+| ------------- | ------------------------------------------------ |
+| First release | April 3, 2023                                    |
+| Authors       | Tor Project engineers, with Mullvad VPN          |
 | Base          | Firefox ESR; uBlock Origin and NoScript included |
-| Network       | Your connection or VPN                        |
-| Speed         | Normal                                        |
-| License       | MPL-2.0                                       |
-| Documentation | <https://mullvad.net/en/browser>              |
-| Code          | <https://github.com/mullvad/mullvad-browser>  |
+| Network       | Your connection or VPN                           |
+| Speed         | Normal                                           |
+| License       | MPL-2.0                                          |
+| Documentation | <https://mullvad.net/en/browser>                 |
+| Code          | <https://github.com/mullvad/mullvad-browser>     |
 
 **Installation.** From the AUR or as a Flatpak:
 
@@ -126,14 +126,14 @@ Its key features:
 
 It is the recommended daily driver in this guide. The cost is the same as any fork: it depends on its small team keeping pace with Firefox, and its first stable release came after a long alpha stage.
 
-| Fact               | Detail                                                                 |
-| ------------------ | ---------------------------------------------------------------------- |
-| First release      | July 12, 2024 (1.0.0-a.1, alpha); version 1.19b in February 2026     |
-| Authors            | Mauro (maubg) and the Zen Browser team                                 |
-| Engine and license | Gecko (Firefox fork); MPL-2.0                                          |
-| Documentation      | <https://docs.zen-browser.app>                                         |
-| Code               | <https://github.com/zen-browser/desktop>                               |
-| Website            | <https://zen-browser.app>                                              |
+| Fact               | Detail                                                           |
+| ------------------ | ---------------------------------------------------------------- |
+| First release      | July 12, 2024 (1.0.0-a.1, alpha); version 1.19b in February 2026 |
+| Authors            | Mauro (maubg) and the Zen Browser team                           |
+| Engine and license | Gecko (Firefox fork); MPL-2.0                                    |
+| Documentation      | <https://docs.zen-browser.app>                                   |
+| Code               | <https://github.com/zen-browser/desktop>                         |
+| Website            | <https://zen-browser.app>                                        |
 
 **Installation.** Zen ships as a Flatpak (the profile stays inside the sandbox) or from the AUR:
 
@@ -158,12 +158,12 @@ What it ships with:
 
 It is the complement to Zen for anything that requires a Blink engine. Keep in mind that it is still on 0.x versions, and that its reliance on Chromium means tracking that project's security patches.
 
-| Fact               | Detail                                                                                 |
-| ------------------ | -------------------------------------------------------------------------------------- |
-| Origin             | imputnet project; first releases in 2025; 0.x series (0.12.4.1 in the AUR as of 2026)  |
-| Engine and license | Chromium (based on _ungoogled-chromium_); GPL-3.0 and BSD-3-Clause                     |
-| Code               | <https://github.com/imputnet/helium-linux>                                             |
-| Documentation      | Site and release notes in the repository                                               |
+| Fact               | Detail                                                                                |
+| ------------------ | ------------------------------------------------------------------------------------- |
+| Origin             | imputnet project; first releases in 2025; 0.x series (0.12.4.1 in the AUR as of 2026) |
+| Engine and license | Chromium (based on _ungoogled-chromium_); GPL-3.0 and BSD-3-Clause                    |
+| Code               | <https://github.com/imputnet/helium-linux>                                            |
+| Documentation      | Site and release notes in the repository                                              |
 
 **Installation.** From the AUR (the `-bin` package follows the stable branch; the testing version is `helium-browser-beta-bin`):
 

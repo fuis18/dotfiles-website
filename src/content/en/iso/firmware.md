@@ -5,7 +5,7 @@ category: iso
 tags: ["uefi", "bios", "gpt", "esp", "secure-boot"]
 ---
 
-Before there is a bootloader, a kernel or a filesystem, there is a program burned into a chip on the motherboard that runs when you press the power button. That program is the firmware, and it is responsible for checking that the hardware responds, finding something bootable and handing over control. For almost thirty years it fulfilled that task with the BIOS; since the mid-2000s it does so with UEFI. The difference between the two is whether you need a special partition to boot and whether the boot can be protected with signatures.
+Before there is a bootloader, a kernel or a filesystem, there is a program burned into a chip on the motherboard that runs when you press the power button. That program is the firmware, and it is responsible for checking that the hardware responds, finding something bootable and handing over control. For almost thirty years it fulfilled that task with the BIOS; since the mid-2000s it does so with UEFI.
 
 ## BIOS: the original firmware
 
@@ -27,12 +27,12 @@ Its limits come from the era in which it was designed, and they are the reason i
 
 And above all, it inherits the limitations of the **MBR** (_Master Boot Record_), the partition scheme that accompanies it. The MBR was introduced with IBM PC DOS 2.0 in 1983 and describes the partition table in 512 bytes:
 
-| MBR limit              | Value  | Why                                       |
-| ---------------------- | ------ | --------------------------------------------- |
-| Maximum disk size      | ~2 TiB | Addresses sectors with 32 bits (2³² × 512 B) |
-| Primary partitions     | 4      | Only four 16-byte entries fit        |
-| Backup                 | No     | If the MBR is corrupted, the table is lost     |
-| Verification           | No     | No checksums for the table         |
+| MBR limit          | Value  | Why                                          |
+| ------------------ | ------ | -------------------------------------------- |
+| Maximum disk size  | ~2 TiB | Addresses sectors with 32 bits (2³² × 512 B) |
+| Primary partitions | 4      | Only four 16-byte entries fit                |
+| Backup             | No     | If the MBR is corrupted, the table is lost   |
+| Verification       | No     | No checksums for the table                   |
 
 To get past the four partitions the extended and logical partition scheme was invented, which adds a layer of indirection and more fragility. And the 2 TiB limit became a real obstacle as soon as disks exceeded it.
 
@@ -44,12 +44,12 @@ In **July 2005** Intel stopped developing it and handed it over to the **Unified
 
 The versions that mark its history:
 
-| Version     | Date                                            | What it added                                                 |
-| ---------- | ------------------------------------------------ | ---------------------------------------------------------- |
-| EFI 1.10    | Last Intel version, handed to the forum in July 2005 | Starting point of UEFI                                   |
-| UEFI 2.0    | January 31, 2006                              | Cryptography and security                                   |
-| UEFI 2.1    | January 7, 2007                               | Network authentication and user interface architecture |
-| UEFI 2.3.1  | April 6, 2011                               | **Secure Boot** and ARM support                           |
+| Version    | Date                                                 | What it added                                          |
+| ---------- | ---------------------------------------------------- | ------------------------------------------------------ |
+| EFI 1.10   | Last Intel version, handed to the forum in July 2005 | Starting point of UEFI                                 |
+| UEFI 2.0   | January 31, 2006                                     | Cryptography and security                              |
+| UEFI 2.1   | January 7, 2007                                      | Network authentication and user interface architecture |
+| UEFI 2.3.1 | April 6, 2011                                        | **Secure Boot** and ARM support                        |
 
 The reference implementation, **TianoCore EDK II**, is written in C, and the specification is platform- and language-independent.
 
@@ -69,14 +69,14 @@ Compared to the BIOS, UEFI changes the whole model:
 
 GPT (_GUID Partition Table_) replaces the MBR and solves its limits:
 
-| Feature               | MBR                   | GPT                                                      |
-| ---------------------- | --------------------- | -------------------------------------------------------- |
-| Introduced             | 1983 (IBM PC DOS 2.0) | Alongside the EFI specification, adopted by the UEFI forum |
-| Maximum disk size      | ~2 TiB                | On the order of zettabytes                                  |
-| Partitions             | 4 primary           | 128                                                      |
-| Sector addresses       | 32 bits               | 64 bits                                                  |
-| Backup                 | No                    | Header and table duplicated at the end of the disk           |
-| Verification           | No                    | Checksums (CRC)                              |
+| Feature           | MBR                   | GPT                                                        |
+| ----------------- | --------------------- | ---------------------------------------------------------- |
+| Introduced        | 1983 (IBM PC DOS 2.0) | Alongside the EFI specification, adopted by the UEFI forum |
+| Maximum disk size | ~2 TiB                | On the order of zettabytes                                 |
+| Partitions        | 4 primary             | 128                                                        |
+| Sector addresses  | 32 bits               | 64 bits                                                    |
+| Backup            | No                    | Header and table duplicated at the end of the disk         |
+| Verification      | No                    | Checksums (CRC)                                            |
 
 Two details worth knowing. GPT does not eliminate the MBR: it keeps it at the beginning of the disk as a **protective MBR**, an entry that declares the whole disk as occupied so that old tools do not misinterpret it. And since it stores a copy of the header and the table at the end of the disk, if the first one is corrupted it can be reconstructed from the second.
 
@@ -97,12 +97,12 @@ Secure Boot is the feature that version 2.3.1 of the specification added in 2011
 
 The keys live in the machine's NVRAM and there are four:
 
-| Variable | Name                 | Function                                                              |
-| -------- | ------------------ | -------------------------------------------------------------------- |
-| `PK`     | Platform Key         | Platform root key; controls who can modify the rest       |
-| `KEK`    | Key Exchange Key     | Keys authorized to update the signature lists                 |
-| `db`     | Signature Database   | Allowed certificates and hashes                                     |
-| `dbx`    | Forbidden Database   | Revoked and forbidden signatures                                        |
+| Variable | Name               | Function                                            |
+| -------- | ------------------ | --------------------------------------------------- |
+| `PK`     | Platform Key       | Platform root key; controls who can modify the rest |
+| `KEK`    | Key Exchange Key   | Keys authorized to update the signature lists       |
+| `db`     | Signature Database | Allowed certificates and hashes                     |
+| `dbx`    | Forbidden Database | Revoked and forbidden signatures                    |
 
 The firmware has two states. In **Setup Mode** there is no `PK` installed and anyone can register their own keys; in **User Mode** there is a `PK` and modifications require signing it. From the factory, most machines come in User Mode with Microsoft's keys preinstalled, which allows booting Windows and the Linux distributions that pay for a _shim_ signature.
 
@@ -140,17 +140,17 @@ findmnt /boot
 
 If `efibootmgr` answers "EFI variables are not supported", you are in BIOS mode or in the CSM legacy mode.
 
-| Data                | Detail                                                                                                                            |
-| ------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
-| BIOS                | Firmware routines present in the ecosystem since 1975; reached the IBM PC in 1981                                                 |
-| MBR                 | 1983 (IBM PC DOS 2.0); 512 bytes, 4 primary partitions, ~2 TiB limit                                                        |
-| UEFI                | Intel Boot Initiative program (1998); EFI 1.10 handed to the Unified EFI Forum in July 2005                                       |
-| Key versions        | UEFI 2.0 (January 31, 2006), 2.1 (January 7, 2007), 2.3.1 (April 6, 2011)                                               |
-| Ref. implementation | TianoCore EDK II (in C)                                                                                                            |
-| Specification       | <https://uefi.org/specifications>                                                                                                  |
+| Data                | Detail                                                                                                                               |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| BIOS                | Firmware routines present in the ecosystem since 1975; reached the IBM PC in 1981                                                    |
+| MBR                 | 1983 (IBM PC DOS 2.0); 512 bytes, 4 primary partitions, ~2 TiB limit                                                                 |
+| UEFI                | Intel Boot Initiative program (1998); EFI 1.10 handed to the Unified EFI Forum in July 2005                                          |
+| Key versions        | UEFI 2.0 (January 31, 2006), 2.1 (January 7, 2007), 2.3.1 (April 6, 2011)                                                            |
+| Ref. implementation | TianoCore EDK II (in C)                                                                                                              |
+| Specification       | <https://uefi.org/specifications>                                                                                                    |
 | Documentation       | <https://wiki.archlinux.org/title/Unified_Extensible_Firmware_Interface> and <https://wiki.archlinux.org/title/EFI_system_partition> |
-| Tools               | `efibootmgr`, `efivarfs` (mounted at `/sys/firmware/efi/efivars`)                                                                  |
-| Secure Boot         | `sbctl` <https://github.com/Foxboron/sbctl>                                                                                        |
+| Tools               | `efibootmgr`, `efivarfs` (mounted at `/sys/firmware/efi/efivars`)                                                                    |
+| Secure Boot         | `sbctl` <https://github.com/Foxboron/sbctl>                                                                                          |
 
 **Quick check.** From the live USB (see [Install Media](./install-media.md)), before partitioning anything:
 

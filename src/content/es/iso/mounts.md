@@ -5,7 +5,7 @@ category: iso
 tags: ["ext4", "btrfs", "snapshots", "particiones"]
 ---
 
-El sistema de archivos es la decisión más difícil de cambiar una vez instalado el sistema, y la que define si una mala actualización es un susto o un simple contratiempo. En una distribución rolling release como las de [Distro Base](./distro-base.md), donde cada actualización puede romper algo, no basta con que el disco guarde los datos: también debe permitir volver atrás.
+El sistema de archivos es la decisión más difícil de cambiar una vez instalado el sistema, y la que define si una mala actualización es un susto o un simple contratiempo.
 
 ## ext4
 

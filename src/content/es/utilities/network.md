@@ -7,8 +7,6 @@ tags: ["iwd", "networkmanager", "dhcpcd", "impala", "knot-resolver", "nextdns"]
 
 Conectar un equipo a Internet parece una acción única, pero en realidad son cuatro eslabones distintos: unirte a la red física (Wi‑Fi o cable), conseguir una dirección IP, traducir nombres a direcciones y decidir quién ve tus consultas DNS. Cada pieza de esta página resuelve uno de esos eslabones, y la elección correcta depende de qué tan simple quieras el sistema.
 
-Un error común es pensar que hay que instalar todo junto. En Linux conviven varias capas y puedes construir tu pila eligiendo una herramienta por capa sin superponerlas:
-
 | Capa                            | Tecnología                      |
 | ------------------------------- | ------------------------------- |
 | Herramientas de usuario         | iwctl / impala / nmtui / nmcli  |

@@ -7,8 +7,6 @@ tags: ["sudo", "doas", "privileges", "security"]
 
 On a multiuser system, some actions must be reserved to a single actor: creating accounts, modifying network routes, reinstalling packages. Allowing anyone to do them breaks the security model; denying them outright makes the system unusable. The solution is **temporary elevation**: running a specific operation as root while the rest of the work continues in the normal user context.
 
-In the Unix/Linux ecosystem there are two dominant tools for this: **sudo** and **doas**. The first is the most widespread, with decades of history and a huge module ecosystem. The second was born at OpenBSD with an opposite philosophy: keep the code as minimal as possible and trust its complexity less. Both solve the same problem, but with different philosophies.
-
 ## sudo: the widespread standard
 
 **sudo** (_superuser do_) appeared in the early 1990s, created by Bob Coggeshall and Chuck Allen, and today it is maintained by a community team that releases new versions regularly. Its model is permissive: by default it asks for your password and logs every use in detailed logs.

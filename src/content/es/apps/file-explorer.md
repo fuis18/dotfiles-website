@@ -5,7 +5,7 @@ category: apps
 tags: ["yazi", "nautilus", "spacedrive"]
 ---
 
-Moverse por los archivos es la tarea más repetida de cualquier sistema, y hay dos formas tradicionales de hacerlo: la terminal, rápida pero ciega (`ls` no te enseña la foto ni el PDF), y el explorador gráfico, cómodo pero lento y dependiente del ratón. Esta página elige tres herramientas que atacan ese equilibrio desde extremos distintos: un explorador de terminal con vistas previas, el explorador gráfico estándar de GTK y un experimento que intenta que tus archivos dejen de depender del dispositivo donde están.
+Moverse por los archivos es la tarea más repetida de cualquier sistema, y hay dos formas tradicionales de hacerlo: la terminal, rápida pero ciega (`ls` no te enseña la foto ni el PDF), y el explorador gráfico, cómodo pero lento y dependiente del ratón.
 
 ## Yazi
 
