@@ -98,7 +98,7 @@ En sistemas sin `systemd` (ver [PID](./pid.md)) los tres procesos (`pipewire`, `
 
 Los reproductores de música clásicos (Rhythmbox, Amarok y similares) son aplicaciones únicas: la ventana, la biblioteca y la reproducción viven en el mismo proceso, de modo que si cierras la ventana o se cuelga la interfaz, la música se detiene, y cada aplicación escanea y gestiona su propia biblioteca. El Music Player Daemon (MPD) toma el camino contrario, con una arquitectura de cliente y servidor. El demonio es el que reproduce, mantiene la lista de reproducción y la base de datos de tu música, y se ejecuta en segundo plano; para controlarlo usas un cliente, que puede ser una aplicación de terminal, una gráfica, un script o incluso una aplicación móvil en otra máquina de la red, hablándole por un protocolo de texto sobre TCP.
 
-Esa separación tiene consecuencias prácticas. La música sigue sonando aunque cierres cualquier cliente o se reinicie la sesión gráfica, los clientes son intercambiables (puedes cambiar de interfaz sin perder la biblioteca) y el demonio puede vivir en un servidor sin pantalla. Fue publicado en 2003, lo mantiene desde hace años Max Kellermann y está escrito en C++ con licencia GPL; la versión estable más reciente que consulté es la 0.24.12 (mayo de 2026). Incluye `mpc`, un cliente de línea de comandos sencillo.
+Esa separación tiene consecuencias prácticas. La música sigue sonando aunque cierres cualquier cliente o se reinicie la sesión gráfica, los clientes son intercambiables (puedes cambiar de interfaz sin perder la biblioteca) y el demonio puede vivir en un servidor sin pantalla. Fue publicado en 2003, lo mantiene desde hace años Max Kellermann y está escrito en C++ con licencia GPL. Incluye `mpc`, un cliente de línea de comandos sencillo.
 
 El único requisito es indicarle por dónde sacar el sonido, y es ahí donde se conecta con PipeWire, que MPD soporta como salida nativa:
 
@@ -107,7 +107,7 @@ El único requisito es indicarle por dónde sacar el sonido, y es ahí donde se 
 | Primera publicación | 2003                                                                                    |
 | Autor               | Warren Dukes (creador); mantenido por Max Kellermann                                    |
 | Lenguaje y licencia | C++; GPL                                                                                |
-| Última versión      | 0.24.12 (15 de mayo de 2026) según lo consultado                                        |
+| Última versión      | 0.24.12 (15 de mayo de 2026)                                                            |
 | Documentación       | <https://www.musicpd.org/doc/> y <https://wiki.archlinux.org/title/Music_Player_Daemon> |
 | Código              | <https://github.com/MusicPlayerDaemon/MPD>                                              |
 

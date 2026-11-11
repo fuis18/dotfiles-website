@@ -61,11 +61,41 @@ function y() {
 
 La configuración vive en `~/.config/yazi/` (`yazi.toml`, `keymap.toml`, `theme.toml` e `init.lua`).
 
+## Thunar
+
+Thunar, el explorador de XFCE, es un explorador gráfico completo (miniaturas, GVfs, papelera, red) que arranca en una fracción del tiempo y consume una fracción de la memoria. Fue escrito por Benedikt Meurer como reemplazo de `xffm`, el explorador anterior de XFCE; su desarrollo empezó en 2004, debutó con Xfce 4.4 en 2007 y llegó a la versión 1.0 en 2009. El nombre viene del dios del trueno de la mitología babilónica, un guiño al mantenerlo rápido. Sus rasgos principales:
+
+- **Acciones personalizadas:** un sistema potente de entradas de menú contextual (`uca.xml`) donde cualquier comando puede recibir el archivo seleccionado como parámetro: comprimir, subir a un servidor, convertir una imagen…
+- **Renombrado en lote** integrado, con patrones de número, fecha y metadatos de audio.
+- **Integración con GVfs y Thunar-VFS:** unidades externas, MTP y recursos de red sin configurar nada.
+- **Extensiones como paquetes aparte:** `thunar-archive-plugin` para comprimir desde el menú, `tumbler` para las miniaturas, `thunar-volman` para unidades automáticas.
+
+Su costo es el ritmo: al estar atado al calendario de XFCE, recibe novedades lentamente, y algunas funciones modernas (integración profunda con Wayland, búsqueda de contenido) no existen o dependen de herramientas externas.
+
+| Dato               | Detalle                                                                                |
+| ------------------ | -------------------------------------------------------------------------------------- |
+| Origen             | 2004 (Benedikt Meurer, proyecto XFCE); debut con Xfce 4.4 en 2007; versión 1.0 en 2009 |
+| Toolkit y licencia | GTK3; GPL-2.0                                                                          |
+| Documentación      | <https://docs.xfce.org/xfce/thunar/start> y <https://wiki.archlinux.org/title/Thunar>  |
+| Código             | <https://gitlab.xfce.org/xfce/thunar>                                                  |
+
+**Instalación.** Thunar más las extensiones que lo completan: miniaturas, acciones de archivado, gestión de unidades y GVfs para MTP y red:
+
+```bash
+sudo pacman -S thunar tumbler thunar-archive-plugin thunar-volman gvfs gvfs-mtp
+```
+
+Para abrirlo, `thunar`, y para fijarlo como explorador predeterminado de carpetas:
+
+```bash
+xdg-mime default thunar.desktop inode/directory
+```
+
 ## Nautilus
 
-La terminal no sirve para todo: arrastrar un archivo a una ventana, montar un móvil por MTP, abrir una carpeta de red o ver miniaturas de una carpeta de fotos son tareas donde un explorador gráfico gana. Nautilus (hoy llamado simplemente _Archivos_) es el gestor de GNOME, y nació en Eazel, una empresa fundada en 1999 por antiguos desarrolladores de Apple; su versión 1.0 es de 2001 y desde entonces es el explorador de referencia en GNOME.
+Thunar demuestra que un explorador puede ser ligero, pero su base GTK3 de la era X11 se nota: interfaces que no escalan con HiDPI como las modernas, integración de Wayland parcial y ninguna conexión con el resto del escritorio. Nautilus es el paso siguiente en la misma historia: el gestor de GNOME, nacido en Eazel, una empresa fundada en 1999 por antiguos desarrolladores de Apple; su versión 1.0 es de 2001 —mayor incluso que Thunar— y desde entonces es el explorador de referencia en GNOME. Lo que lo sitúa aquí no es su edad sino su generación de toolkit: desde GNOME 43 está construido con GTK4 y libadwaita (ver [Ecosistema](./ecosystem.md)).
 
-Desde GNOME 43 está construido con GTK4 y libadwaita (ver [Ecosistema](./ecosystem.md)), por lo que se ve igual que el resto de aplicaciones de esta guía. Sus rasgos principales:
+Sus rasgos principales:
 
 - **Integración con el sistema:** gracias a GVfs monta unidades externas, dispositivos MTP, recursos de red y la papelera sin configurar nada.
 - **Selector de archivos del sistema:** el portal de GNOME (ver [XDG Desktop Portals](./portals.md)) lo usa, de modo que los cuadros de «Abrir» y «Guardar» de otras aplicaciones se ven igual.

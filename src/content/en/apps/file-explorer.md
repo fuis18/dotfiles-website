@@ -61,11 +61,41 @@ function y() {
 
 The configuration lives in `~/.config/yazi/` (`yazi.toml`, `keymap.toml`, `theme.toml` and `init.lua`).
 
+## Thunar
+
+Thunar, XFCE's file explorer, is a full-featured graphical explorer (thumbnails, GVfs, trash, network) that starts in a fraction of the time and uses a fraction of the memory. It was written by Benedikt Meurer as a replacement for `xffm`, XFCE's previous explorer; its development began in 2004, it debuted with Xfce 4.4 in 2007 and reached version 1.0 in 2009. The name comes from the thunder god of Babylonian mythology, a nod to keeping it fast. Its main traits:
+
+- **Custom actions:** a powerful system of context-menu entries (`uca.xml`) where any command can take the selected file as a parameter: compress, upload to a server, convert an image…
+- **Built-in batch renaming**, with number, date and audio metadata patterns.
+- **Integration with GVfs and Thunar-VFS:** external drives, MTP and network resources without configuring anything.
+- **Extensions as separate packages:** `thunar-archive-plugin` to compress from the menu, `tumbler` for thumbnails, `thunar-volman` for automounting drives.
+
+Its cost is pace: being tied to XFCE's schedule, it gets new features slowly, and some modern ones (deep Wayland integration, content search) do not exist or depend on external tools.
+
+| Fact                | Detail                                                                                |
+| ------------------- | ------------------------------------------------------------------------------------- |
+| Origin              | 2004 (Benedikt Meurer, XFCE project); debuted with Xfce 4.4 in 2007; version 1.0 in 2009 |
+| Toolkit and license | GTK3; GPL-2.0                                                                         |
+| Documentation       | <https://docs.xfce.org/xfce/thunar/start> and <https://wiki.archlinux.org/title/Thunar> |
+| Code                | <https://gitlab.xfce.org/xfce/thunar>                                                 |
+
+**Installation.** Thunar plus the extensions that complete it: thumbnails, archive actions, drive management and GVfs for MTP and network:
+
+```bash
+sudo pacman -S thunar tumbler thunar-archive-plugin thunar-volman gvfs gvfs-mtp
+```
+
+To open it, `thunar`, and to set it as the default folder explorer:
+
+```bash
+xdg-mime default thunar.desktop inode/directory
+```
+
 ## Nautilus
 
-The terminal is not good at everything: dragging a file into a window, mounting a phone over MTP, opening a network folder or viewing thumbnails of a photo folder are tasks where a graphical explorer wins. Nautilus (today called simply _Files_) is GNOME's file manager, and was born at Eazel, a company founded in 1999 by former Apple developers; its 1.0 version dates from 2001, and since then it has been GNOME's reference explorer.
+Thunar proves a file explorer can be lightweight, but its X11-era GTK3 base shows: interfaces that do not scale to HiDPI like modern ones, partial Wayland integration and no connection to the rest of the desktop. Nautilus is the next step in the same story: GNOME's file manager, born at Eazel, a company founded in 1999 by former Apple developers; its version 1.0 dates from 2001 —older even than Thunar— and since then it has been GNOME's reference explorer. What places it here is not its age but its toolkit generation: since GNOME 43 it is built with GTK4 and libadwaita (see [Ecosystem](./ecosystem.md)).
 
-Since GNOME 43 it is built with GTK4 and libadwaita (see [Ecosystem](./ecosystem.md)), so it looks the same as the rest of the applications in this guide. Its main features:
+Its main features:
 
 - **System integration:** thanks to GVfs it mounts external drives, MTP devices, network resources and the trash without configuring anything.
 - **System file chooser:** the GNOME portal (see [XDG Desktop Portals](./portals.md)) uses it, so the "Open" and "Save" dialogs of other applications look the same.
