@@ -17,10 +17,12 @@ export const entryOrder: Record<CategoryId, readonly string[]> = {
     "privileges",
     "network",
     "package-management",
-    "greeter",
+    "graphics",
     "window-manager",
+    "greeter",
     "portals",
     "shell",
+    "terminal",
   ],
   apps: [
     "ecosystem",

@@ -1,6 +1,6 @@
 ---
 title: "XDG Desktop Portals"
-description: "XDG desktop portals with backends for Hyprland and GNOME."
+description: "Communication between applications and the desktop in Wayland"
 category: utilities
 tags: ["xdg", "portals", "wayland"]
 ---
@@ -23,11 +23,11 @@ To apply a configuration change, restart the service:
 systemctl --user restart xdg-desktop-portal
 ```
 
-| Fact          | Detail                                                                                                      |
-| ------------- | ------------------------------------------------------------------------------------------------------------ |
-| Origin        | The Flatpak project; Alexander Larsson (Red Hat) and community                                               |
+| Fact          | Detail                                                                                                         |
+| ------------- | -------------------------------------------------------------------------------------------------------------- |
+| Origin        | The Flatpak project; Alexander Larsson (Red Hat) and community                                                 |
 | Documentation | <https://flatpak.github.io/xdg-desktop-portal/docs/> and <https://wiki.archlinux.org/title/XDG_Desktop_Portal> |
-| Code          | <https://github.com/flatpak/xdg-desktop-portal>                                                              |
+| Code          | <https://github.com/flatpak/xdg-desktop-portal>                                                                |
 
 ## xdg-desktop-portal-hyprland
 
@@ -48,13 +48,13 @@ hl.on("hyprland.start", function()
 end)
 ```
 
-| Fact          | Detail                                                                                                  |
-| ------------- | -------------------------------------------------------------------------------------------------------- |
-| Origin        | The Hyprland project (hyprwm), along with the compositor                                                |
-| Interfaces    | ScreenCast, Screenshot, GlobalShortcuts (mainly)                                                        |
-| Toolkit       | Qt 6 (for the picker of what to share)                                                                  |
-| Documentation | <https://wiki.hypr.land> (utilities section) and <https://wiki.archlinux.org/title/XDG_Desktop_Portal>   |
-| Code          | <https://github.com/hyprwm/xdg-desktop-portal-hyprland>                                                 |
+| Fact          | Detail                                                                                                 |
+| ------------- | ------------------------------------------------------------------------------------------------------ |
+| Origin        | The Hyprland project (hyprwm), along with the compositor                                               |
+| Interfaces    | ScreenCast, Screenshot, GlobalShortcuts (mainly)                                                       |
+| Toolkit       | Qt 6 (for the picker of what to share)                                                                 |
+| Documentation | <https://wiki.hypr.land> (utilities section) and <https://wiki.archlinux.org/title/XDG_Desktop_Portal> |
+| Code          | <https://github.com/hyprwm/xdg-desktop-portal-hyprland>                                                |
 
 ## xdg-desktop-portal-gnome
 
@@ -73,13 +73,13 @@ org.freedesktop.impl.portal.Access=gtk
 org.freedesktop.impl.portal.Notification=gtk
 ```
 
-| Fact          | Detail                                                                                               |
-| ------------- | ----------------------------------------------------------------------------------------------------- |
-| Origin        | The GNOME project                                                                                    |
-| Toolkit       | GTK 4                                                                                                |
-| Interfaces    | Almost all: file picker, printing, accounts, settings, ScreenCast, Screenshot, RemoteDesktop…        |
-| Documentation | <https://wiki.archlinux.org/title/XDG_Desktop_Portal>                                                |
-| Code          | <https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome>                                            |
+| Fact          | Detail                                                                                        |
+| ------------- | --------------------------------------------------------------------------------------------- |
+| Origin        | The GNOME project                                                                             |
+| Toolkit       | GTK 4                                                                                         |
+| Interfaces    | Almost all: file picker, printing, accounts, settings, ScreenCast, Screenshot, RemoteDesktop… |
+| Documentation | <https://wiki.archlinux.org/title/XDG_Desktop_Portal>                                         |
+| Code          | <https://gitlab.gnome.org/GNOME/xdg-desktop-portal-gnome>                                     |
 
 To check that everything is in order, make sure the service is active and share your screen from a browser or a video call app:
 

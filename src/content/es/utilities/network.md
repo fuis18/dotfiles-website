@@ -2,7 +2,7 @@
 title: "Network"
 description: "Red: capas de gestión, iwd, NetworkManager, dhcpcd y resolución DNS."
 category: utilities
-tags: ["iwd", "networkmanager", "dhcpcd", "impala", "knot-resolver", "nextdns"]
+tags: ["iwd", "dhcpcd", "impala", "knot-resolver", "nextdns"]
 ---
 
 Conectar un equipo a Internet parece una acción única, pero en realidad son cuatro eslabones distintos: unirte a la red física (Wi‑Fi o cable), conseguir una dirección IP, traducir nombres a direcciones y decidir quién ve tus consultas DNS. Cada pieza de esta página resuelve uno de esos eslabones, y la elección correcta depende de qué tan simple quieras el sistema.

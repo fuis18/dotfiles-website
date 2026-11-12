@@ -29,7 +29,7 @@ El estado del proyecto merece una advertencia honesta: según lo reportado en 20
 | Creación            | Repositorio creado en agosto de 2020; versión 1.0.0 en 2020, al anunciar su autor que dejaba `yay` |
 | Autor               | Morganamilo (antes, segundo desarrollador de `yay`)                                                |
 | Lenguaje y licencia | Rust; GPL-3.0                                                                                      |
-| Última versión      | 2.1.0 (julio de 2025) según lo consultado                                                          |
+| Última versión      | 2.1.0 (julio de 2025)                                                                              |
 | Documentación       | <https://github.com/Morganamilo/paru> y <https://wiki.archlinux.org/title/AUR_helpers>             |
 | Código              | <https://github.com/Morganamilo/paru>                                                              |
 | AUR                 | <https://aur.archlinux.org> y <https://wiki.archlinux.org/title/Arch_User_Repository>              |

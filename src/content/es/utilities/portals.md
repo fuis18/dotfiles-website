@@ -1,6 +1,6 @@
 ---
 title: "XDG Desktop Portals"
-description: "Portales XDG del escritorio con backends para Hyprland y GNOME."
+description: "Comunicación entre aplicaciones y el escritorio en Wayland"
 category: utilities
 tags: ["xdg", "portals", "wayland"]
 ---

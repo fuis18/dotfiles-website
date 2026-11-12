@@ -2,7 +2,7 @@
 title: "Network"
 description: "Networking: management layers, iwd, NetworkManager, dhcpcd and DNS resolution."
 category: utilities
-tags: ["iwd", "networkmanager", "dhcpcd", "impala", "knot-resolver", "nextdns"]
+tags: ["iwd", "dhcpcd", "impala", "knot-resolver", "nextdns"]
 ---
 
 Connecting a machine to the Internet seems like a single action, but it is actually four distinct links: joining the physical network (Wi-Fi or cable), obtaining an IP address, translating names to addresses, and deciding who sees your DNS queries. Each piece on this page solves one of those links, and the right choice depends on how simple you want the system to be.

@@ -1,72 +1,32 @@
 ---
 title: "Shell"
-description: "Shell y terminal: Starship, Kitty vs Ghostty, zsh, fish, Nushell y coreutils con uutils."
+description: "Shells y coreutils: historia de bash, qué resolvió zsh, fish, Nushell y uutils."
 category: utilities
-tags: ["kitty", "ghostty", "zsh", "fish", "nushell", "uutils", "starship"]
+tags: ["bash", "zsh", "fish", "nushell", "uutils", "coreutils"]
 ---
 
-La terminal es donde pasarás más tiempo, y se compone de cuatro capas que se apilan: lo que ves en cada línea (el prompt), la ventana donde se dibuja (el emulador de terminal), el intérprete que entiende lo que escribes (el shell) y los programas básicos que se ejecutan por debajo (`ls`, `cp`, `rm`).
+Cuando escribes un comando, algo tiene que leerlo, entenderlo y ejecutarlo: ese intérprete es el shell. Es la capa invisible de tu terminal —el emulador solo dibuja la ventana, el prompt solo la decora— y, a la vez, un lenguaje de programación: con él se escriben los scripts de arranque del sistema y la mayoría de las automatizaciones de Unix. Por eso elegir shell importa más allá de la comodidad: define qué comandos entiendes, qué scripts puedes correr y qué tan agradable resulta dialogar con tu máquina.
 
-## Kitty vs Ghostty
+## De bash a zsh, fish y Nushell
 
-Los emuladores de terminal clásicos (xterm, o los basados en VTE como GNOME Terminal) dibujan el texto con la CPU, y se nota al mostrar mucha salida de golpe; además no entienden imágenes, ligaduras ni protocolos de teclado modernos. Kitty, creado por Kovid Goyal en 2017, fue de los primeros en resolverlo con un renderizado acelerado por GPU, un protocolo propio para mostrar imágenes dentro de la terminal, pestañas y divisiones integradas, y _kittens_, pequeños programas que extienden la terminal; se puede controlar desde scripts con su control remoto. Pero dibuja su propia interfaz en lugar de usar la del sistema, así que no se parece al resto de tus aplicaciones.
+Todo shell moderno desciende del Bourne shell (Stephen Bourne, 1977), el intérprete original de Unix que definió el estilo de scripting que aún usamos. Cuando el proyecto GNU necesitó un reemplazo libre, Brian Fox escribió bash (Bourne-Again SHell), publicado en 1989: hereda la sintaxis de Bourne, incorpora las mejoras estandarizadas por POSIX y añade comodidades como el historial de comandos. Por eso es hoy el shell por defecto en casi todas partes y el lenguaje de la mayoría de scripts del sistema: aprender bash es hablar la lengua franca de Unix. Pero bash heredó también una limitación de su época: fue pensado para ejecutar scripts, no para dialogar con una persona. Como interfaz de uso diario es austero: sin sugerencias, con un autocompletado básico y con tuberías que solo transportan texto, de modo que cada comando tiene que adivinar dónde empieza y termina cada dato.
 
-Ghostty parte de la misma base (GPU, protocolos modernos, incluido el de imágenes de Kitty) con una apuesta distinta: ser una aplicación nativa en cada plataforma. Su autor es Mitchell Hashimoto (cofundador de HashiCorp), empezó el repositorio en 2022, y la versión pública 1.0 salió el 26 de diciembre de 2024 bajo licencia MIT, tras casi dos años de pruebas privadas. Está escrito en Zig y en Linux usa GTK4 (con libadwaita), de modo que se ve y se comporta como el resto de aplicaciones de esta guía. Su configuración es un archivo de texto con buenos valores por defecto, y la biblioteca `libghostty` permite que otras aplicaciones reutilicen su motor. Desde diciembre de 2025 el proyecto tiene como patrocinador fiscal a Hack Club, una organización sin fines de lucro.
+Un año después de bash, en 1990, Paul Falstad publicó zsh: un shell que tomaba la compatibilidad como premisa (casi todo lo que escribes para bash funciona) y lo llevó al terreno de la interacción. Su sistema de autocompletado programable entiende los argumentos específicos de cada comando, no solo los nombres de archivo, y su ecosistema de temas y plugins —que la comunidad consolidaría más tarde con marcos como oh-my-zsh— popularizó la idea del prompt decorado que hoy dominan herramientas como Starship. El costo de tanto poder fue la complejidad: zsh viene casi vacío de fábrica, y sin un marco de configuración no se siente muy distinto a bash.
 
-La elección depende de lo que priorices. Ghostty encaja mejor con el ecosistema GTK de esta guía y funciona bien sin configurar. Kitty sigue siendo la mejor opción si quieres scripting y control remoto de la terminal, o si ya dependes de sus _kittens_.
+La siguiente generación cuestionó otra cosa: por qué usar un shell debía requerir configuración alguna. fish (Axel Liljencrantz, 2005) llega con todo encendido desde el primer momento: sugerencias mientras escribes, resaltado de sintaxis y un autocompletado que lee las páginas de manual. El precio de esa experiencia pulida fue romper la tradición: fish no es compatible con POSIX, así que sus scripts no son los de bash. Desde la versión 4.0 (27 de febrero de 2025) está reescrito en Rust.
 
-| Dato                | Kitty                                  | Ghostty                                                 |
-| ------------------- | -------------------------------------- | ------------------------------------------------------- |
-| Primera publicación | 2017                                   | 1.0 el 26 de diciembre de 2024 (repositorio desde 2022) |
-| Autor               | Kovid Goyal                            | Mitchell Hashimoto y comunidad                          |
-| Lenguaje            | C, Python y Go                         | Zig (GTK4 en Linux)                                     |
-| Interfaz            | Propia (no usa el toolkit del sistema) | Nativa: GTK4 + libadwaita                               |
-| Imágenes            | Protocolo gráfico propio               | Compatible con el protocolo de Kitty                    |
-| Extensibilidad      | _Kittens_, control remoto, scripting   | Configuración simple; `libghostty` para integrarlo      |
-| Licencia            | GPL-3.0                                | MIT                                                     |
-| Documentación       | <https://sw.kovidgoyal.net/kitty/>     | <https://ghostty.org/docs>                              |
-| Código              | <https://github.com/kovidgoyal/kitty>  | <https://github.com/ghostty-org/ghostty>                |
+Y la apuesta más reciente cambia la pregunta de fondo: ¿por qué los shells transportan texto plano? Nushell (2019, creado por Jonathan Turner y Yehuda Katz, entre otros) las hace transportar datos estructurados (tablas, registros), de modo que filtrar, ordenar o convertir un resultado se parece a trabajar con una hoja de cálculo. Está escrito en Rust y, hasta donde pude confirmar, sigue en versiones 0.x, con cambios que pueden romper scripts entre versiones.
 
-**Instalación.**
-
-```bash
-sudo pacman -S kitty
-sudo pacman -S ghostty
-```
-
-Configuración mínima para usar la fuente de Starship (Kitty en `~/.config/kitty/kitty.conf`, Ghostty en `~/.config/ghostty/config`):
-
-```conf
-# kitty.conf
-font_family JetBrainsMono Nerd Font
-font_size 12.0
-```
-
-```conf
-# ghostty/config
-font-family = JetBrainsMono Nerd Font
-font-size = 12
-```
-
-## zsh, fish y Nushell
-
-bash es el shell por defecto en casi todas partes y el lenguaje de la mayoría de scripts del sistema, pero como interfaz de uso diario es austero: sin sugerencias, con un autocompletado básico y con tuberías que solo transportan texto, de modo que cada comando tiene que adivinar dónde empieza y termina cada dato. Tres shells lo atacan desde ángulos distintos:
-
-- **zsh** (Paul Falstad, 1990) es el más cercano a bash: casi todo lo que escribes para bash funciona, y añade un sistema de autocompletado potente y un ecosistema enorme de plugins. El costo es que por sí solo viene casi vacío y se acaba dependiendo de marcos de configuración para tener comodidad.
-- **fish** (Axel Liljencrantz, 2005) apuesta por que todo funcione sin configurar: sugerencias mientras escribes, resaltado de sintaxis, autocompletado que lee las páginas de manual. No es compatible con POSIX, así que sus scripts no son los de bash. Desde la versión 4.0 (27 de febrero de 2025) está reescrito en Rust.
-- **Nushell** (2019, creado por Jonathan Turner y Yehuda Katz, entre otros) cambia el modelo: sus tuberías transportan datos estructurados (tablas, registros) en lugar de texto, de modo que filtrar, ordenar o convertir un resultado se parece a trabajar con una hoja de cálculo. Está escrito en Rust y, hasta donde pude confirmar, sigue en versiones 0.x, con cambios que pueden romper scripts entre versiones.
-
-La recomendación de esta guía es fish como shell interactivo, y mantener bash o sh para los scripts del sistema. Para no romper nada, en lugar de cambiar tu shell de inicio de sesión con `chsh`, haz que tu terminal lo ejecute: así los scripts de arranque y las herramientas externas siguen usando bash. Nushell se reserva para cuando trabajes con datos (JSON, CSV, resultados de comandos); zsh, para quien necesite compatibilidad con bash y sus plugins.
-
-| Dato                | zsh                                | fish                                       | Nushell                                  |
-| ------------------- | ---------------------------------- | ------------------------------------------ | ---------------------------------------- |
-| Primera publicación | 1990                               | 2005                                       | 2019                                     |
-| Autor               | Paul Falstad                       | Axel Liljencrantz                          | Jonathan Turner, Yehuda Katz y comunidad |
-| Lenguaje            | C                                  | Rust (desde 4.0, febrero de 2025)          | Rust                                     |
-| Compatible con bash | Mayormente                         | No                                         | No                                       |
-| Tuberías            | Texto                              | Texto                                      | Datos estructurados                      |
-| Documentación       | <https://zsh.sourceforge.io/Doc/>  | <https://fishshell.com/docs/current/>      | <https://www.nushell.sh/book/>           |
-| Código              | <https://github.com/zsh-users/zsh> | <https://github.com/fish-shell/fish-shell> | <https://github.com/nushell/nushell>     |
+| Dato                | bash                                         | zsh                                | fish                                       | Nushell                                  |
+| ------------------- | -------------------------------------------- | ---------------------------------- | ------------------------------------------ | ---------------------------------------- |
+| Primera publicación | 1989                                         | 1990                               | 2005                                       | 2019                                     |
+| Autor               | Brian Fox (proyecto GNU)                     | Paul Falstad                       | Axel Liljencrantz                          | Jonathan Turner, Yehuda Katz y comunidad |
+| Linaje              | Bourne shell + POSIX                         | Bourne-like                        | Propio (no POSIX)                          | Propio                                   |
+| Compatible con bash | —                                            | Mayormente                         | No                                         | No                                       |
+| Tuberías            | Texto                                        | Texto                              | Texto                                      | Datos estructurados                      |
+| Punto fuerte        | Estándar de facto para scripts               | Autocompletado y plugins           | Todo listo sin configurar                  | Datos estructurados                      |
+| Documentación       | <https://www.gnu.org/software/bash/manual/>  | <https://zsh.sourceforge.io/Doc/>  | <https://fishshell.com/docs/current/>      | <https://www.nushell.sh/book/>           |
+| Código              | <https://git.savannah.gnu.org/cgit/bash.git> | <https://github.com/zsh-users/zsh> | <https://github.com/fish-shell/fish-shell> | <https://github.com/nushell/nushell>     |
 
 **Instalación.**
 
@@ -136,43 +96,4 @@ export PATH="$HOME/.local/uubin:$PATH"
 
 # fish (~/.config/fish/config.fish)
 fish_add_path --prepend ~/.local/uubin
-```
-
-## Starship
-
-Un prompt útil muestra algo más que el directorio actual: la rama de Git, si hay cambios sin guardar, la versión del lenguaje del proyecto, el tiempo que tardó el último comando. Hacerlo tradicionalmente significaba pelear con la variable `PS1` de bash, o depender de un tema que solo funciona en un shell concreto (por ejemplo `powerlevel10k`, que es solo de zsh) y que había que reescribir al cambiar de shell.
-
-Ante ello, Matan Kushner creó Starship en 2019: un prompt mínimo, rápido y personalizable al que no le importa qué shell uses. Está escrito en Rust y compilado como un solo binario, funciona con bash, zsh, fish, Nushell y otros, y se configura con un único archivo TOML que viaja contigo de un shell a otro. Sus rasgos principales:
-
-- **Módulos contextuales:** solo muestra lo que es relevante en el directorio donde estás (la versión de Rust en un proyecto Rust, la rama en un repositorio Git).
-- **Una configuración para todos los shells:** `~/.config/starship.toml`.
-- **Presets listos** para empezar sin escribir configuración desde cero.
-- **Requiere una fuente con iconos** (_Nerd Font_) para mostrar los símbolos.
-
-| Dato                | Detalle                                |
-| ------------------- | -------------------------------------- |
-| Primera publicación | 2019                                   |
-| Autor               | Matan Kushner y comunidad              |
-| Lenguaje y licencia | Rust; ISC                              |
-| Documentación       | <https://starship.rs>                  |
-| Código              | <https://github.com/starship/starship> |
-
-**Instalación.** Instala el prompt y una fuente con iconos, aplica un preset y actívalo en tu shell:
-
-```bash
-sudo pacman -S starship ttf-jetbrains-mono-nerd
-starship preset nerd-font-symbols -o ~/.config/starship.toml
-```
-
-La activación es una línea al final del archivo de configuración de cada shell:
-
-```bash
-# bash (~/.bashrc)
-eval "$(starship init bash)"
-
-# zsh (~/.zshrc)
-eval "$(starship init zsh)"
-
-# fish (~/.config/fish/config.fish)
-starship init fish | source
 ```

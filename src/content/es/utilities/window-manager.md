@@ -2,14 +2,48 @@
 title: "Window Manager"
 description: "Gestores de ventanas para Wayland: Hyprland y Niri."
 category: utilities
-tags: ["hyprland", "niri", "wayland"]
+tags: ["sway", "hyprland", "niri", "wayland"]
 ---
 
 Después del [greeter](./greeter.md) viene el escritorio, y en Wayland el gestor de ventanas es además la compositora: el programa que dibuja la pantalla, gestiona el teclado y el ratón, y decide dónde va cada ventana. No hay un servidor gráfico aparte, así que esta elección define cómo se siente todo el sistema.
 
+## De X11 a Wayland
+
+El servidor X11, estandarizado en 1987 a partir del X Window System de 1984, lleva casi cuatro décadas definiendo cómo se dibuja en Linux. Su diseño parte de un supuesto que en los ochenta era razonable y hoy no: la red. X es un protocolo de red que envía primitivas de dibujo («dibuja esta línea aquí») a un servidor que puede estar en otra máquina, y esa decisión explica sus problemas modernos. El servidor centraliza todo y las aplicaciones se comunican con él por un canal que nadie supervisa: cualquier cliente puede capturar las pulsaciones de teclado de otra ventana, leer el contenido de la pantalla o inyectar eventos. La separación entre servidor y compositor exige dos saltos de contexto por cuadro, lo que provoca tearing y latencia que los compositores de X11 nunca resolvieron del todo. Y su especificación está congelada: para añadir algo tan básico como el escalado por monitor o las capturas de pantalla seguras, hay que apilar extensiones (XRandR, XFixes, XComposite…) que creció tanto que el mantenimiento se volvió insostenible.
+
+Wayland es la respuesta a esos tres problemas, y empezó de la forma más literal posible: como el proyecto personal de alguien cansado de esquivar X. Kristian Høgsberg, ingeniero de Intel que había trabajado en el servidor X (Xorg) y en Mesa, lo inició en 2008 como un experimento de fin de semana: «¿y si el compositor fuera el servidor?». La inversión del modelo lo resuelve todo de raíz. No hay servidor central: la compositora _es_ el servidor de pantalla, cada ventana dibuja en sus propios búferes que el kernel sincroniza (vía KMS/EGL, sin saltos de contexto), y el protocolo base es tan pequeño que las capacidades se negocian de forma segura con protocolos explícitos: una ventana solo ve lo que la compositora le concede, y capturar la pantalla o interceptar el teclado requieren permisos, no es la situación por defecto. La versión 1.0 del protocolo se publicó en 2012, y el soporte completo de GNOME y KDE llegó entre 2015 y 2022, tras años de migración por la ecología de herramientas que dependía de X (remoting, grabadores de pantalla, capturas).
+
+El paso intermedio entre ambos mundos fue **wlroots** (2017), una biblioteca de Drew DeVault y Simon Ser que implementa las partes genéricas de una compositora Wayland —entrada, salidas, renderizado, protocolos— para que construir una no signifique empezar de cero. Prácticamente todas las compositoras independientes de esta guía nacen de ella o de su sucesora conceptual, y una de ellas es la que sigue.
+
+## Sway
+
+Sway («SirCmpwn's Wayland compositor») es la compositora que demostró que la migración era posible. Creada por Drew DeVault, empezó a desarrollarse en 2014 sobre wlroots —devueltas y todas, wlroots se extrajo del propio código de Sway— con un objetivo deliberado: replicar i3, el gestor de _tiling_ de X11, tal cual, con la misma configuración, los mismos atajos y los mismos modos, pero sobre Wayland. Si venías de i3, moverte a Sway era cambiar una línea de tu archivo de arranque.
+
+Su modelo es el _tiling_ estático: como en i3, las ventanas se organizan en un árbol manual, el usuario decide si cada división es horizontal o vertical, y nada se reacomoda solo. Esa sobriedad es su rasgo definidor: sin animaciones, sin decoraciones, sin efectos. Lo que trae es solidez: la implementación de referencia de los protocolos que hoy usa toda la comunidad (layer-shell para barras y lanzadores, screencopy para grabación), y una estabilidad casi fósil —versiones 1.x desde 2019 con pocos cambios visibles—.
+
+El costo de esa pureza es doble. Para quien no viene de i3, la configuración manual del árbol de ventanas se siente rígida comparada con el _tiling_ dinámico. Y su ritmo de desarrollo ha bajado: sigue siendo sólida y mantenida, pero la innovación de los últimos años ocurre en otros lados, y algunas capacidades (animaciones, esquinas, apariencia) simplemente no existen. Sway es el fin de una línea, no el principio de otra: la muestra de que Wayland podía sustituir a X11, y la base sobre la que las siguientes opciones construyeron.
+
+| Dato                | Detalle                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------- |
+| Primera publicación | Desarrollo desde 2014; versión 1.0 el 4 de marzo de 2019                                           |
+| Autor               | Drew DeVault y comunidad (Simon Ser, mantenimiento actual)                                         |
+| Lenguaje y licencia | C (sobre wlroots); MIT                                                                             |
+| Modelo              | Tiling estático, compatible con i3                                                                 |
+| Documentación       | <https://github.com/swaywm/sway/wiki> y <https://manpages.debian.org/unstable/sway/sway.5.en.html> |
+| Código              | <https://github.com/swaywm/sway>                                                                   |
+
+**Instalación.**
+
+```bash
+sudo pacman -S sway swaybg swaylock
+sway
+```
+
+Si vienes de i3, copia tu configuración a `~/.config/sway/config` y funcionará casi sin cambios.
+
 ## Hyprland
 
-Los escritorios tradicionales (GNOME, KDE) usan ventanas flotantes: tú las colocas y las redimensionas a mano, y todo el tiempo se pierde en ordenarlas. Los gestores _tiling_ de X11, como i3 o bspwm, resolvieron eso colocando las ventanas automáticamente sin solaparse, pero a costa de una estética austera y de las limitaciones de X11. En Wayland, Sway recogió el modelo de i3 con la misma sobriedad. Ante ello, Vaxry (Vaxerski) creó Hyprland: una compositora de _dynamic tiling_ para Wayland que no sacrifica la apariencia.
+Los escritorios tradicionales (GNOME, KDE) usan ventanas flotantes: tú las colocas y las redimensionas a mano, y todo el tiempo se pierde en ordenarlas. Los gestores _tiling_ de X11, como i3 o bspwm, resolvieron eso colocando las ventanas automáticamente sin solaparse, pero a costa de una estética austera y de las limitaciones de X11. Sway llevó el modelo de i3 a Wayland, y Hyprland fue el paso siguiente: ante la sobriedad de Sway, Vaxry (Vaxerski) creó una compositora de _dynamic tiling_ para Wayland que no sacrifica la apariencia.
 
 La primera versión pública, v0.1.0beta, salió el 27 de mayo de 2022. Está escrita en C++, empezó sobre wlroots y hoy usa su propio motor de pantalla (Aquamarine), con un renderizador propio. Sus rasgos principales son:
 
@@ -27,7 +61,7 @@ Esa velocidad de cambio es también su principal costo: Hyprland sigue en versio
 | Primera publicación | 27 de mayo de 2022 (v0.1.0beta)                                                 |
 | Autor               | Vaxry (Vaxerski) y comunidad                                                    |
 | Lenguaje y licencia | C++; BSD-3-Clause                                                               |
-| Última versión      | 0.56.2 (5 de agosto de 2026) según lo consultado; Lua desde 0.55 (mayo de 2026) |
+| Última versión      | 0.56.2 (5 de agosto de 2026); Lua desde 0.55 (mayo de 2026)                     |
 | Documentación       | <https://wiki.hypr.land> y <https://wiki.archlinux.org/title/Hyprland>          |
 | Código              | <https://github.com/hyprwm/Hyprland>                                            |
 | Sitio               | <https://hypr.land>                                                             |
