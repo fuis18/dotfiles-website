@@ -149,7 +149,7 @@ sudo mkdir -p /.bootbackup
 
 ## Limine: snapshots on UEFI and BIOS
 
-**Limine** is a modern bootloader that fills the gap between GRUB and systemd-boot: it works with BIOS and UEFI, is configured with a single text file, and has a tool that allows booting snapshots on UEFI, something systemd-boot does not do natively. Developed by Mintsuki, CachyOS offers it as one of the options in its installer (see [Distro Base](./distro-base.md)).
+**Limine** is a modern bootloader that fills the gap between GRUB and systemd-boot: it works with BIOS and UEFI, is configured with a single text file, and has a tool that allows booting snapshots on UEFI, something systemd-boot does not do natively. Developed by Mintsuki, CachyOS offers it as one of the options in its installer (see [Distro Base](./distro-base/)).
 
 **Its key features:**
 
@@ -205,8 +205,8 @@ Follow the ArchWiki to configure `limine-snapper-sync` if you use snapshots.
 ### Recommended installation flow
 
 ```bash
-# 1. Partition the disk (see [Mounts](./mounts.md))
-# 2. Install the base with pacstrap (see [Install Media](./install-media.md))
+# 1. Partition the disk (see [Mounts](./mounts/))
+# 2. Install the base with pacstrap (see [Install Media](./install-media/))
 # 3. Enter the chroot: arch-chroot /mnt
 # 4. Install your chosen bootloader:
 
@@ -222,6 +222,6 @@ grub-mkconfig -o /boot/grub/grub.cfg
 pacman -S limine
 # Configure limine-snapper-sync according to ArchWiki
 
-# 5. Configure the kernel and initramfs (see [Kernel and Initramfs](./kernel-initramfs.md))
+# 5. Configure the kernel and initramfs (see [Kernel and Initramfs](./kernel-initramfs/))
 # 6. Reboot
 ```

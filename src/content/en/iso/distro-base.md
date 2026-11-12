@@ -19,7 +19,7 @@ In Linux's early days, distributions came preconfigured: a few people decided wh
 - ArchWiki, probably the best Linux documentation there is, useful even if you use another distro.
 - AUR for everything that is not in the official repositories.
 
-A rolling release means an update can break something; that is why the [Mounts](./mounts.md) section recommends Btrfs with snapshots so you can roll back.
+A rolling release means an update can break something; that is why the [Mounts](./mounts/) section recommends Btrfs with snapshots so you can roll back.
 
 | Fact          | Details                                                                  |
 | ------------- | ------------------------------------------------------------------------ |
@@ -81,11 +81,11 @@ sudo ./cachyos-repo.sh
 
 ## Artix
 
-CachyOS optimized the system, but it inherited from Arch a decision that cannot be changed: `systemd` is the only possible init, and other components (for example, complete desktop environments) depend on it ever more. With the birth and adoption of `systemd` (see [PID](./pid.md)), Arch stopped offering init alternatives, and if you prefer a smaller one or a different service model, you cannot have it without fighting the system. Artix was born in 2017 to give that freedom back.
+CachyOS optimized the system, but it inherited from Arch a decision that cannot be changed: `systemd` is the only possible init, and other components (for example, complete desktop environments) depend on it ever more. With the birth and adoption of `systemd` (see [PID](./pid/)), Arch stopped offering init alternatives, and if you prefer a smaller one or a different service model, you cannot have it without fighting the system. Artix was born in 2017 to give that freedom back.
 
 **How it solves it.** Artix keeps the Arch base (`pacman`, rolling release, KISS philosophy) but without `systemd`, and lets you choose between **OpenRC**, **runit**, **s6** and **dinit**. It has its own repositories, with packages adapted to each init, and can use Arch's repositories through the compatibility package (`artix-archlinux-support`). For what `systemd` used to provide (sessions, seat management), `elogind` is used.
 
-It is the pragmatic option: you keep almost the entire Arch ecosystem and regain init freedom. The drawback is that some packages assume `systemd` and require alternatives, which is addressed in [PID](./pid.md).
+It is the pragmatic option: you keep almost the entire Arch ecosystem and regain init freedom. The drawback is that some packages assume `systemd` and require alternatives, which is addressed in [PID](./pid/).
 
 | Fact            | Details                                                                       |
 | --------------- | ----------------------------------------------------------------------------- |
@@ -111,7 +111,7 @@ Artix gave back the freedom to choose an init, but replacing `systemd` with anot
 
 Obarun is based on Arch and replaces `systemd` with `s6` (Skarnet's supervision suite) plus `66`, its own service manager built on `s6`/`s6-rc`. Services are described in declarative files, the tool resolves the dependency tree, and every process ends up supervised. `66` is Obarun's work and also works outside it, on other Unix systems.
 
-It is the base closest to the ideal of transparency this documentation pursues, but the least conventional: its own team describes it as not intended for beginners and its community is smaller. It closes the thread toward [PID](./pid.md), where `s6` and `66` are explained in detail.
+It is the base closest to the ideal of transparency this documentation pursues, but the least conventional: its own team describes it as not intended for beginners and its community is smaller. It closes the thread toward [PID](./pid/), where `s6` and `66` are explained in detail.
 
 | Fact          | Details                                                                              |
 | ------------- | ------------------------------------------------------------------------------------ |

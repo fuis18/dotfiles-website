@@ -25,8 +25,8 @@ dm-crypt solo cifra; no sabe dónde guardar la clave ni cómo cambiar la contras
 
 Con un procesador moderno el cifrado (AES-XTS con aceleración por hardware) cuesta muy poco rendimiento. Lo que más conviene recordar sobre su uso:
 
-- **Un solo contenedor, y Btrfs dentro.** El cifrado va debajo del sistema de archivos: Btrfs, los subvolúmenes y los snapshots de [Mounts](./mounts.md) funcionan igual, pero sobre `/dev/mapper/cryptroot`.
-- **La ESP queda sin cifrar.** El firmware UEFI solo lee la partición FAT, así que el kernel y el initramfs viven en claro (ver [Bootloader y Kernel](./bootloader.md)); lo que se cifra es la raíz.
+- **Un solo contenedor, y Btrfs dentro.** El cifrado va debajo del sistema de archivos: Btrfs, los subvolúmenes y los snapshots de [Mounts](./mounts/) funcionan igual, pero sobre `/dev/mapper/cryptroot`.
+- **La ESP queda sin cifrar.** El firmware UEFI solo lee la partición FAT, así que el kernel y el initramfs viven en claro (ver [Bootloader y Kernel](./bootloader/)); lo que se cifra es la raíz.
 - **TRIM y cifrado se contradicen un poco.** Pasar los comandos TRIM a un SSD cifrado mejora su vida útil, pero revela qué bloques están libres. Es una decisión consciente, y por eso se activa de forma explícita.
 - **La cabecera es un punto único de fallo.** Si se daña, pierdes todo el disco aunque recuerdes la contraseña, así que se guarda una copia fuera del disco.
 
@@ -42,7 +42,7 @@ Con un procesador moderno el cifrado (AES-XTS con aceleración por hardware) cue
 | Documentación         | <https://wiki.archlinux.org/title/Dm-crypt> y <https://wiki.archlinux.org/title/Dm-crypt/System_configuration> |
 | Código                | <https://gitlab.com/cryptsetup/cryptsetup>                                                                     |
 
-**Instalación.** Se hace en el USB live, después de crear las particiones y antes de formatear Btrfs. El esquema de [Mounts](./mounts.md) no cambia salvo que la tercera partición pasa a ser el contenedor cifrado. Crea la ESP y el swap igual que allí, y cifra la tercera:
+**Instalación.** Se hace en el USB live, después de crear las particiones y antes de formatear Btrfs. El esquema de [Mounts](./mounts/) no cambia salvo que la tercera partición pasa a ser el contenedor cifrado. Crea la ESP y el swap igual que allí, y cifra la tercera:
 
 ```bash
 cryptsetup luksFormat --type luks2 /dev/sda3
@@ -50,7 +50,7 @@ cryptsetup open /dev/sda3 cryptroot
 mkfs.btrfs -L root /dev/mapper/cryptroot
 ```
 
-Todo lo demás es idéntico al procedimiento de [Mounts](./mounts.md), sustituyendo `/dev/sda3` por `/dev/mapper/cryptroot` al crear los subvolúmenes y montarlos:
+Todo lo demás es idéntico al procedimiento de [Mounts](./mounts/), sustituyendo `/dev/sda3` por `/dev/mapper/cryptroot` al crear los subvolúmenes y montarlos:
 
 ```bash
 mount /dev/mapper/cryptroot /mnt
@@ -70,7 +70,7 @@ cryptsetup luksHeaderBackup /dev/sda3 --header-backup-file luks-header.img
 cryptsetup luksAddKey /dev/sda3
 ```
 
-Ya dentro del `arch-chroot`, el initramfs tiene que saber desbloquear la raíz. En `/etc/mkinitcpio.conf` añade el hook `encrypt` entre `block` y `filesystems`, y comprueba que `keymap` va antes, porque es lo que permite escribir la contraseña con tu teclado (`la-latin1`, tomado de `/etc/vconsole.conf`; ver [Install Media](./install-media.md)):
+Ya dentro del `arch-chroot`, el initramfs tiene que saber desbloquear la raíz. En `/etc/mkinitcpio.conf` añade el hook `encrypt` entre `block` y `filesystems`, y comprueba que `keymap` va antes, porque es lo que permite escribir la contraseña con tu teclado (`la-latin1`, tomado de `/etc/vconsole.conf`; ver [Install Media](./install-media/)):
 
 ```bash
 # /etc/mkinitcpio.conf (hooks clásicos, también válidos en Artix y Obarun)
@@ -105,7 +105,7 @@ Si decides activar TRIM, añade `:allow-discards` al final de `cryptdevice=...` 
 
 Cifrar la raíz y dejar el swap en claro anula el esfuerzo: cuando el sistema intercambia páginas de memoria a disco, ahí caen contraseñas, claves y documentos abiertos, que quedarían legibles en la partición de swap. Hay que ocuparse del swap también.
 
-Pero "cifrar el swap" no es una sola cosa. También está **el zram como constante**: vive en RAM comprimida y nunca toca el disco, así que no necesita cifrado y no cambia entre escenarios (ver [Components Optimization](./components-optimization.md)). Lo que hay que decidir es **qué poner en disco**, y ahí solo hay tres posibilidades.
+Pero "cifrar el swap" no es una sola cosa. También está **el zram como constante**: vive en RAM comprimida y nunca toca el disco, así que no necesita cifrado y no cambia entre escenarios (ver [Components Optimization](./components-optimization/)). Lo que hay que decidir es **qué poner en disco**, y ahí solo hay tres posibilidades.
 
 |                    | **A. Nada en disco**   | **B. Swap cifrado con clave aleatoria** | **C. Swapfile dentro de la raíz cifrada**     |
 | ------------------ | ---------------------- | --------------------------------------- | --------------------------------------------- |
@@ -124,7 +124,7 @@ Sus dos límites son claros. El primero es que **no permite hibernar**: la ArchW
 
 ### B. zram + swap en disco con clave aleatoria
 
-El zram sigue siendo el swap principal (prioridad 150), y la partición de 4 GiB de [Mounts](./mounts.md) actúa como respaldo: solo se usa si el zram se llena, y evita llegar al OOM killer. Su contenido se cifra con una clave aleatoria que se genera en cada arranque y se descarta al apagar, así que lo que haya caído ahí es ilegible después.
+El zram sigue siendo el swap principal (prioridad 150), y la partición de 4 GiB de [Mounts](./mounts/) actúa como respaldo: solo se usa si el zram se llena, y evita llegar al OOM killer. Su contenido se cifra con una clave aleatoria que se genera en cada arranque y se descarta al apagar, así que lo que haya caído ahí es ilegible después.
 
 El precio de esa clave efímera es que **tampoco permite hibernar**: al apagar el equipo la clave desaparece, y al volver no habría forma de leer la imagen guardada.
 

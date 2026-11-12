@@ -20,7 +20,7 @@ Hay cuatro cosas que conviene tener claras:
 - **`vm.swappiness` regula la preferencia:** un valor bajo hace que el kernel evite el swap y descarte antes la caché de archivos; uno alto lo hace intercambiar páginas de programas con más facilidad.
 - **Es donde se guarda la memoria al hibernar**, por lo que para hibernar hace falta un swap en disco, al menos del tamaño de la RAM.
 
-Existen dos formas de tenerlo. Una partición dedicada, como la que se crea en [Mounts](./mounts.md), es lo más simple y no depende del sistema de archivos. Un archivo (`/swapfile`) permite cambiar el tamaño sin repartir el disco, pero en Btrfs exige crearlo con un comando especial (`btrfs filesystem mkswapfile`) y dentro de un subvolumen propio, para que el copy-on-write y los snapshots no interfieran.
+Existen dos formas de tenerlo. Una partición dedicada, como la que se crea en [Mounts](./mounts/), es lo más simple y no depende del sistema de archivos. Un archivo (`/swapfile`) permite cambiar el tamaño sin repartir el disco, pero en Btrfs exige crearlo con un comando especial (`btrfs filesystem mkswapfile`) y dentro de un subvolumen propio, para que el copy-on-write y los snapshots no interfieran.
 
 El problema es que el disco, incluso un SSD, es órdenes de magnitud más lento que la memoria: cuando el sistema se queda sin RAM y empieza a intercambiar, todo se congela mientras las páginas viajan, y en un SSD cada intercambio gasta ciclos de escritura. Quitar el swap tampoco es la solución, porque entonces, al agotarse la RAM, el kernel mata procesos para liberar memoria.
 
@@ -31,7 +31,7 @@ zram propone otra idea: en lugar de mandar esas páginas al disco, comprimirlas 
 La configuración que recomienda esta guía tiene tres piezas que se complementan:
 
 - **Un dispositivo zram como swap principal**, con `zstd` como algoritmo y prioridad 150, para que el kernel lo use antes que cualquier otro.
-- **La partición de swap de 4 GiB** creada en [Mounts](./mounts.md) como respaldo, con prioridad menor: solo se usa si el zram se llena.
+- **La partición de swap de 4 GiB** creada en [Mounts](./mounts/) como respaldo, con prioridad menor: solo se usa si el zram se llena.
 - **Ajustes del kernel (`sysctl`)** que lo aprovechan: `vm.swappiness=100` indica que intercambiar es barato y no hay que esperar a quedarse sin RAM, y `vm.vfs_cache_pressure=150` hace que el kernel recupere antes la caché de nombres de archivo para dejar memoria a las aplicaciones.
 
 El tamaño del zram se expresa como un factor de la RAM. Esta tabla resume los valores recomendados (la columna _Total_ es la RAM más el zram, es decir, la memoria efectiva con la que cuentas):
@@ -74,7 +74,7 @@ vm.vfs_cache_pressure=150
 | Documentación       | <https://docs.kernel.org/admin-guide/blockdev/zram.html>, <https://wiki.archlinux.org/title/Zram> y <https://wiki.archlinux.org/title/Swap> |
 | Código              | <https://github.com/systemd/zram-generator>                                                                                                 |
 
-**Instalación.** Antes de configurar zram, estos son los comandos básicos de swap. Si la partición de swap ya estaba activa al ejecutar `genfstab` durante la instalación (ver [Install Media](./install-media.md)), su entrada en `/etc/fstab` ya existe; un archivo de swap necesita su línea `/swapfile none swap defaults 0 0`:
+**Instalación.** Antes de configurar zram, estos son los comandos básicos de swap. Si la partición de swap ya estaba activa al ejecutar `genfstab` durante la instalación (ver [Install Media](./install-media/)), su entrada en `/etc/fstab` ya existe; un archivo de swap necesita su línea `/swapfile none swap defaults 0 0`:
 
 ```bash
 # Ver el swap activo y la memoria
@@ -116,7 +116,7 @@ swapon --show
 zramctl
 ```
 
-En sistemas sin `systemd` (ver [PID](./pid.md)) `zram-generator` no se puede usar, pero el mismo resultado se consigue a mano con `zramctl`, creando un servicio propio que ejecute esto al arrancar:
+En sistemas sin `systemd` (ver [PID](./pid/)) `zram-generator` no se puede usar, pero el mismo resultado se consigue a mano con `zramctl`, creando un servicio propio que ejecute esto al arrancar:
 
 ```bash
 modprobe zram
@@ -137,7 +137,7 @@ Sus rasgos principales:
 - **Vigilancia continua:** consulta la memoria disponible hasta diez veces por segundo (menos a menudo si sobra memoria), con un coste de CPU despreciable.
 - **Dos umbrales, dos señales:** por defecto actúa cuando queda menos del 10 % de memoria **y** menos del 10 % de swap (ambas condiciones a la vez), envía `SIGTERM` para permitir un cierre ordenado y, si el consumo sigue subiendo hasta la mitad de ese umbral, pasa a `SIGKILL`.
 - **Control de a quién matar:** `--prefer` y `--avoid` aceptan expresiones regulares sobre el nombre del proceso, y `-P` permite ejecutar un script antes de matar nada.
-- **Funciona sin `systemd`:** al ser un demonio independiente, se integra igual en OpenRC, runit, s6 o dinit (ver [PID](./pid.md)).
+- **Funciona sin `systemd`:** al ser un demonio independiente, se integra igual en OpenRC, runit, s6 o dinit (ver [PID](./pid/)).
 
 El detalle de que exija que **memoria y swap estén bajos a la vez** importa en esta configuración: con `vm.swappiness=100` el kernel intercambia con gusto, así que el swap se llena antes que la memoria. Si solo mirara la memoria libre, earlyoom no reaccionaría a tiempo.
 
@@ -200,7 +200,7 @@ Comprimir datos siempre tuvo un dilema: los algoritmos rápidos, como `gzip`, co
 
 Por esa combinación terminó en todas las capas de un sistema como el de esta guía:
 
-- **Btrfs:** el kernel incluye soporte de `zstd` desde la versión 4.14 (noviembre de 2017), y se activa con la opción `compress=zstd` al montar (ver [Mounts](./mounts.md)).
+- **Btrfs:** el kernel incluye soporte de `zstd` desde la versión 4.14 (noviembre de 2017), y se activa con la opción `compress=zstd` al montar (ver [Mounts](./mounts/)).
 - **zram:** como algoritmo de compresión de la memoria (ver sección anterior).
 - **Paquetes de Arch:** pacman 5.2 lo soportó en octubre de 2019, y desde enero de 2020 los paquetes de los repositorios oficiales se comprimen con `zstd` en lugar de `xz`, por eso hoy ves archivos `.pkg.tar.zst`.
 - **Initramfs:** `mkinitcpio` puede comprimirlo con `zstd` mediante `COMPRESSION="zstd"` en `/etc/mkinitcpio.conf`.

@@ -5,7 +5,7 @@ category: utilities
 tags: ["regreet", "greeter", "login"]
 ---
 
-El greeter es lo primero que ves al arrancar y lo último que sale de la [tty](./install-media.md): la pantalla donde eliges usuario, escribes la contraseña y decides qué sesión iniciar. Parece un detalle de apariencia, pero es el punto donde el sistema pasa de ser un conjunto de servicios a ser tu escritorio, y por eso conviene que sea pequeño y que no imponga nada sobre lo que viene después.
+El greeter es lo primero que ves al arrancar y lo último que sale de la [tty](./install-media/): la pantalla donde eliges usuario, escribes la contraseña y decides qué sesión iniciar. Parece un detalle de apariencia, pero es el punto donde el sistema pasa de ser un conjunto de servicios a ser tu escritorio, y por eso conviene que sea pequeño y que no imponga nada sobre lo que viene después.
 
 ## ReGreet
 
@@ -18,9 +18,9 @@ ReGreet es el greeter de esta guía: una interfaz GTK4 limpia y personalizable, 
 - **Recuerda** el último usuario y la última sesión elegidos.
 - **Detecta las sesiones** que hay instaladas leyendo `/usr/share/wayland-sessions` y `/usr/share/xsessions`, así que Hyprland y Niri aparecen solos, sin listarlos a mano.
 - **Se personaliza** con un archivo TOML (fondo, tema GTK, iconos, fuente) y con CSS propio.
-- **Corre dentro de una compositora mínima**, la que prefieras: Cage (la opción recomendada, porque solo muestra una ventana), Sway, [Hyprland o Niri](./window-manager.md), o Gamescope.
+- **Corre dentro de una compositora mínima**, la que prefieras: Cage (la opción recomendada, porque solo muestra una ventana), Sway, [Hyprland o Niri](./window-manager/), o Gamescope.
 
-Para funcionar necesita `greetd`, GTK 4.16 o superior, D-Bus (ver [dbus](./dbus.md)), AccountsService y una compositora donde ejecutarse. Está en los repositorios oficiales de Arch, así que no hace falta pasar por el AUR (ver [Package Management](./package-management.md)).
+Para funcionar necesita `greetd`, GTK 4.16 o superior, D-Bus (ver [dbus](./dbus/)), AccountsService y una compositora donde ejecutarse. Está en los repositorios oficiales de Arch, así que no hace falta pasar por el AUR (ver [Package Management](./package-management/)).
 
 Con `systemd`, `greetd` ocupa la primera consola virtual y reemplaza a `getty@tty1`; sin él, `greetd` funciona igual con el init que uses, ya que no depende de `systemd`.
 
@@ -66,4 +66,4 @@ user = "usuario"
 
 Para probarlo, reinicia o ejecuta `sudo systemctl restart greetd`. Si algo falla, cambia de consola virtual con `Ctrl+Alt+F2` (el parámetro `-s` de Cage mantiene ese cambio disponible) y revisa los registros desde la tty.
 
-En Artix y Obarun, `greetd` se instala con el paquete de servicio de tu init (ver [PID](./pid.md)).
+En Artix y Obarun, `greetd` se instala con el paquete de servicio de tu init (ver [PID](./pid/)).

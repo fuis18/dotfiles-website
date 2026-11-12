@@ -5,7 +5,7 @@ category: utilities
 tags: ["dbus", "varlink", "dbus-broker"]
 ---
 
-Casi todo lo que ocurre en un escritorio Linux moderno es una conversación entre programas: el gestor de red avisa al panel de que cambió el Wi-Fi, un portal le pide a la compositora una captura de pantalla, el greeter consulta qué sesiones existen. Esas conversaciones necesitan un canal común, y ese canal es el bus de mensajes. Es una pieza invisible, pero casi todo lo que sigue en esta sección ([Network](./network.md), [Greeter](./greeter.md), [XDG Desktop Portals](./portals.md)) depende de ella, por eso se explica primero.
+Casi todo lo que ocurre en un escritorio Linux moderno es una conversación entre programas: el gestor de red avisa al panel de que cambió el Wi-Fi, un portal le pide a la compositora una captura de pantalla, el greeter consulta qué sesiones existen. Esas conversaciones necesitan un canal común, y ese canal es el bus de mensajes. Es una pieza invisible, pero casi todo lo que sigue en esta sección ([Network](./network/), [Greeter](./greeter/), [XDG Desktop Portals](./portals/)) depende de ella, por eso se explica primero.
 
 Ese canal ha sido D-Bus durante casi dos décadas, y en el escritorio lo sigue siendo. Pero desde 2017 existe un segundo protocolo, Varlink, que `systemd` usa cada vez más para sus propias APIs. La sección va entonces en dos partes: primero D-Bus y sus dos implementaciones, que es lo que el escritorio habla de verdad; después Varlink, que es la apuesta de `systemd` para lo que viene.
 
@@ -21,7 +21,7 @@ D-Bus tiene dos implementaciones. `dbus-daemon` es la de referencia: se inició 
 
 Fedora 30 (abril de 2019) lo adoptó por defecto, y Arch tomó el mismo camino: su RFC 0025 hizo de `dbus-broker` la implementación por defecto, con `dbus-broker-units` como proveedor recomendado del paquete virtual `dbus-units` (del que ahora depende `systemd`). Pero tiene una condición decisiva para esta guía: la parte que lanza los servicios, `dbus-broker-launch`, funciona activando servicios como unidades de `systemd` y no tiene sustituto para otros inits. Los propios autores lo describen como un lanzador pensado para sistemas basados en `systemd`, y la comunidad de Artix confirma que no es un reemplazo completo allí, aunque existen scripts experimentales de terceros.
 
-La conclusión práctica es simple. Con `systemd` (Arch, CachyOS), usa `dbus-broker`. Sin `systemd` (Artix con OpenRC, runit, s6 o dinit, y Obarun; ver [PID](./pid.md)), usa `dbus-daemon`, que funciona con cualquier init.
+La conclusión práctica es simple. Con `systemd` (Arch, CachyOS), usa `dbus-broker`. Sin `systemd` (Artix con OpenRC, runit, s6 o dinit, y Obarun; ver [PID](./pid/)), usa `dbus-daemon`, que funciona con cualquier init.
 
 | Dato                | dbus-daemon                                               | dbus-broker                                               |
 | ------------------- | --------------------------------------------------------- | --------------------------------------------------------- |
@@ -51,7 +51,7 @@ busctl --user list
 
 **Ojo con `libdbus`.** Elegir `dbus-broker` no elimina el paquete `dbus`. Lo único que cambia es quién implementa el demonio y qué unidades de `systemd` lo arrancan; el paquete `dbus` sigue instalado porque es el que provee `libdbus` (`libdbus-1.so`), la biblioteca cliente contra la que enlazan cientos de paquetes del repositorio —PipeWire, CUPS, BlueZ, Avahi, `colord`, buena parte del stack de audio e impresión, por nombrar algunos— y porque trae herramientas que sirven igual con cualquiera de las dos implementaciones: `dbus-monitor`, `dbus-send`, `dbus-run-session` y `dbus-launch`. De hecho, en Arch `dbus-broker-units` depende de `dbus`. En resumen: se instalan los dos, pero solo uno corre como demonio; el binario `dbus-daemon` queda en disco sin que nadie lo arranque.
 
-En Artix y Obarun, el bus se instala como cualquier servicio del init (ver [PID](./pid.md)): paquete `dbus` más su paquete de servicio, con el patrón `dbus-<init>` en Artix y `dbus-66serv` en Obarun.
+En Artix y Obarun, el bus se instala como cualquier servicio del init (ver [PID](./pid/)): paquete `dbus` más su paquete de servicio, con el patrón `dbus-<init>` en Artix y `dbus-66serv` en Obarun.
 
 ```bash
 # Ejemplo en Artix con s6

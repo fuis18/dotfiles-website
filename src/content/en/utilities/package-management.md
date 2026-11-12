@@ -5,7 +5,7 @@ category: utilities
 tags: ["paru", "aur", "pacman"]
 ---
 
-On Arch, `pacman` installs and updates everything in the official repositories quickly and predictably: binary packages compressed with `zstd` (see [Components Optimization](./components-optimization.md)), with a single command and dependencies resolved. But no official repository can contain all the software in the world. What falls outside (a new greeter, a theme, a freshly published desktop tool) lives in the AUR, and that is where `pacman` does not reach.
+On Arch, `pacman` installs and updates everything in the official repositories quickly and predictably: binary packages compressed with `zstd` (see [Components Optimization](./components-optimization/)), with a single command and dependencies resolved. But no official repository can contain all the software in the world. What falls outside (a new greeter, a theme, a freshly published desktop tool) lives in the AUR, and that is where `pacman` does not reach.
 
 ## paru
 
@@ -20,7 +20,7 @@ Its main traits are:
 - **Build in an isolated environment** (`--chroot`), which avoids polluting the system with build dependencies.
 - **Identical interface to `pacman`:** paru works as a wrapper, so `paru -Syu` updates official and AUR packages at once.
 
-Since paru ends up installing with `pacman`, `snap-pac`'s automatic snapshots (see [Mounts](./mounts.md)) also cover AUR packages. And since many `PKGBUILD`s ship `systemd` units, on Artix and Obarun you have to look for the equivalent service for your init (see [PID](./pid.md)).
+Since paru ends up installing with `pacman`, `snap-pac`'s automatic snapshots (see [Mounts](./mounts/)) also cover AUR packages. And since many `PKGBUILD`s ship `systemd` units, on Artix and Obarun you have to look for the equivalent service for your init (see [PID](./pid/)).
 
 The project's status deserves an honest warning: as reported in 2026, paru has been on a slow maintenance pace. Its latest stable version (2.1.0) is from July 2025 and, when `pacman` bumped the `libalpm` version in late 2025, the precompiled binary package (`paru-bin`) stopped working, while rebuilding it from source (the `paru` package) did fix it. That is why this guide installs `paru` compiled on your machine, not the `-bin`. If it fails later and is not fixed, `yay` is still active (its version 13 came out in June 2026) and the syntax is almost identical.
 

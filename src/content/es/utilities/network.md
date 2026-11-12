@@ -24,7 +24,7 @@ Su diseño busca el mínimo de recursos:
 - **Sin dependencias externas:** solo necesita el kernel y la biblioteca C, y aprovecha lo que el kernel ya ofrece (nl80211, criptografía).
 - **Recuerda las redes:** guarda perfiles de redes conocidas y los reutiliza, algo que `wpa_supplicant` no hace por sí solo.
 - **Cliente de red incluido:** puede obtener su dirección IP y configurar DNS por sí mismo, sin otro programa, si se activa la opción correspondiente.
-- **Herramienta de línea de comandos propia:** `iwctl`, la misma que usaste en la instalación (ver [Install Media](./install-media.md)).
+- **Herramienta de línea de comandos propia:** `iwctl`, la misma que usaste en la instalación (ver [Install Media](./install-media/)).
 
 iwd resuelve el Wi‑Fi, pero solo el Wi‑Fi. Si mañana necesitas VPN, conexiones móviles o puentes entre interfaces, necesitarás algo más arriba.
 
@@ -116,7 +116,7 @@ sudo systemctl enable --now NetworkManager
 nmtui
 ```
 
-En Artix y Obarun los servicios se instalan con el paquete de servicio de tu init (`iwd-<init>`, `networkmanager-<init>`; ver [PID](./pid.md)).
+En Artix y Obarun los servicios se instalan con el paquete de servicio de tu init (`iwd-<init>`, `networkmanager-<init>`; ver [PID](./pid/)).
 
 ## dhcpcd: cliente DHCP independiente
 

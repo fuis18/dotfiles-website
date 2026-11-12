@@ -146,4 +146,4 @@ To make it use your mpv configuration, enable the option to read mpv configurati
 
 ## Relationship with audio
 
-All these players depend on [PipeWire](./audio.md) for audio. When you play a video, the audio is automatically routed through the system's audio server. On modern Wayland systems, PipeWire handles both the audio and the video portals that enable screen sharing in video calls.
+All these players depend on [PipeWire](./audio/) for audio. When you play a video, the audio is automatically routed through the system's audio server. On modern Wayland systems, PipeWire handles both the audio and the video portals that enable screen sharing in video calls.

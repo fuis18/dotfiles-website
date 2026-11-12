@@ -23,7 +23,7 @@ Un toolkit es la biblioteca con la que una aplicación dibuja sus ventanas, boto
 
 GTK se convirtió en la base de casi todo lo que ya usamos hoy en día. La versión actual es GTK 4, publicada el 16 de diciembre de 2020, con un renderizado acelerado por GPU y pensada para Wayland. Sobre ella se apoya libadwaita, la biblioteca de widgets de GNOME que da a las aplicaciones un estilo coherente y se adapta a pantallas de distintos tamaños. GTK 3 sigue existiendo, pero a marzo de 2026 su desarrollo se reduce a un lanzamiento por año.
 
-GTK es el toolkit de [ReGreet](./greeter.md), [Ghostty](./shell.md), el backend [xdg-desktop-portal-gnome](./portals.md), Nautilus, Epiphany, Celluloid y [AGS](./control-panel.md). Sus rasgos principales:
+GTK es el toolkit de [ReGreet](./greeter/), [Ghostty](./shell/), el backend [xdg-desktop-portal-gnome](./portals/), Nautilus, Epiphany, Celluloid y [AGS](./control-panel/). Sus rasgos principales:
 
 - **Una convención de apariencia clara:** libadwaita define estilos, tamaños y comportamiento, de modo que las aplicaciones se parecen entre sí sin configurar nada.
 - **El tema oscuro se pide por una sola vía:** el ajuste `color-scheme` se propaga a las aplicaciones a través del portal de ajustes.
@@ -52,7 +52,7 @@ gsettings set org.gnome.desktop.interface color-scheme 'prefer-dark'
 
 ## Qt: el poder en C++ (1995 - Actualidad)
 
-Qt está escrito en C++ y se complementa con QML y Qt Quick, un lenguaje declarativo para interfaces animadas, que es justo lo que usan [QuickShell](./control-panel.md) y [Vicinae](./control-panel.md) para construir paneles y lanzadores. Es también el toolkit de KDE y de aplicaciones como OBS o VLC.
+Qt está escrito en C++ y se complementa con QML y Qt Quick, un lenguaje declarativo para interfaces animadas, que es justo lo que usan [QuickShell](./control-panel/) y [Vicinae](./control-panel/) para construir paneles y lanzadores. Es también el toolkit de KDE y de aplicaciones como OBS o VLC.
 
 La empresa noruega Troll Tech publicó su primera versión pública (Qt 0.90) el 20 de mayo de 1995, creado por Haavard Nord y Eirik Chambe-Eng. Era de código abierto solo en parte, con una licencia que a la comunidad del software libre no le bastaba. Esa inquietud llevó a la creación de GNOME como alternativa, y en 1998 a la fundación KDE Free Qt Foundation, que garantiza que Qt seguirá disponible como software libre. Desde 2000 se ofrece bajo GPL y, desde la versión 4.5 (2009), también bajo LGPL. Hoy lo desarrolla The Qt Company, y su versión actual, Qt 6, salió en diciembre de 2020.
 
@@ -84,7 +84,7 @@ GTK y Qt comparten un rasgo: están escritos en C y C++, lenguajes en los que un
 
 Ese escritorio es **COSMIC**, de System76. Empezó como una versión modificada de GNOME para Pop!\_OS y se reescribió desde cero sobre iced, con una biblioteca propia, `libcosmic`, que añade widgets, un sistema de temas y integración con el escritorio: eso es lo que esta sección llama iced-cosmic. La primera alfa salió el 5 de agosto de 2024 y la versión 1.0 (_Epoch 1_), el 11 de diciembre de 2025 junto con Pop!\_OS 24.04 LTS; la 1.2.0 es de julio de 2026. Es solo para Wayland, no está atado a una distribución, y sus bibliotecas se publican bajo MPL-2.0 y sus aplicaciones bajo GPL-3.0.
 
-Dos detalles: No espera `systemd` (su documentación en Alpine lo describe como pensado para ser portable, y la versión 1.1 añadió soporte de OpenRC para Bluetooth), y su gestor de ajustes ya usa Varlink en lugar de D-Bus (ver [dbus](./dbus.md)).
+Dos detalles: No espera `systemd` (su documentación en Alpine lo describe como pensado para ser portable, y la versión 1.1 añadió soporte de OpenRC para Bluetooth), y su gestor de ajustes ya usa Varlink en lugar de D-Bus (ver [dbus](./dbus/)).
 
 **Notable:** System76 optó por desarrollar todo en Rust porque busca eliminar por completo los errores de memoria que son comunes en C y C++. No se trata solo de rendimiento, sino de **seguridad garantizada en tiempo de compilación**. El costo es la madurez: el ecosistema de aplicaciones es pequeño y, según los análisis de su lanzamiento, el pulido de las aplicaciones y la documentación todavía están en trabajo. Por eso no lo tomamos como base, pero sí recomienda probar sus aplicaciones sueltas (archivos, terminal, editor) como alternativa a las de GTK, y seguir su evolución si te interesa desarrollar en Rust.
 
@@ -102,7 +102,7 @@ Dos detalles: No espera `systemd` (su documentación en Alpine lo describe como 
 sudo pacman -S cosmic-files cosmic-term cosmic-edit
 ```
 
-Para desarrollar con libcosmic hay una plantilla de aplicación que genera un proyecto listo para compilar (requiere `rustup`, ver [Developer Environment](./dev-environment.md)):
+Para desarrollar con libcosmic hay una plantilla de aplicación que genera un proyecto listo para compilar (requiere `rustup`, ver [Developer Environment](./dev-environment/)):
 
 ```bash
 cargo install cargo-generate

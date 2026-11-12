@@ -25,8 +25,8 @@ dm-crypt only encrypts; it does not know where to store the key or how to change
 
 With a modern processor, encryption (AES-XTS with hardware acceleration) costs very little performance. The most important things to remember about using it:
 
-- **A single container, with Btrfs inside.** Encryption goes underneath the filesystem: Btrfs, the subvolumes and the snapshots of [Mounts](./mounts.md) work the same, but on top of `/dev/mapper/cryptroot`.
-- **The ESP stays unencrypted.** The UEFI firmware only reads the FAT partition, so the kernel and the initramfs live in the clear (see [Bootloader and Kernel](./bootloader.md)); what gets encrypted is the root.
+- **A single container, with Btrfs inside.** Encryption goes underneath the filesystem: Btrfs, the subvolumes and the snapshots of [Mounts](./mounts/) work the same, but on top of `/dev/mapper/cryptroot`.
+- **The ESP stays unencrypted.** The UEFI firmware only reads the FAT partition, so the kernel and the initramfs live in the clear (see [Bootloader and Kernel](./bootloader/)); what gets encrypted is the root.
 - **TRIM and encryption contradict each other a bit.** Passing TRIM commands to an encrypted SSD improves its lifespan, but reveals which blocks are free. It is a conscious decision, and that is why it is enabled explicitly.
 - **The header is a single point of failure.** If it gets damaged, you lose the whole disk even if you remember the password, so a copy is stored off the disk.
 
@@ -42,7 +42,7 @@ With a modern processor, encryption (AES-XTS with hardware acceleration) costs v
 | Documentation         | <https://wiki.archlinux.org/title/Dm-crypt> and <https://wiki.archlinux.org/title/Dm-crypt/System_configuration> |
 | Code                  | <https://gitlab.com/cryptsetup/cryptsetup>                                                                     |
 
-**Installation.** It is done on the live USB, after creating the partitions and before formatting Btrfs. The scheme in [Mounts](./mounts.md) does not change except that the third partition becomes the encrypted container. Create the ESP and the swap the same way as there, and encrypt the third:
+**Installation.** It is done on the live USB, after creating the partitions and before formatting Btrfs. The scheme in [Mounts](./mounts/) does not change except that the third partition becomes the encrypted container. Create the ESP and the swap the same way as there, and encrypt the third:
 
 ```bash
 cryptsetup luksFormat --type luks2 /dev/sda3
@@ -50,7 +50,7 @@ cryptsetup open /dev/sda3 cryptroot
 mkfs.btrfs -L root /dev/mapper/cryptroot
 ```
 
-Everything else is identical to the [Mounts](./mounts.md) procedure, replacing `/dev/sda3` with `/dev/mapper/cryptroot` when creating the subvolumes and mounting them:
+Everything else is identical to the [Mounts](./mounts/) procedure, replacing `/dev/sda3` with `/dev/mapper/cryptroot` when creating the subvolumes and mounting them:
 
 ```bash
 mount /dev/mapper/cryptroot /mnt
@@ -70,7 +70,7 @@ cryptsetup luksHeaderBackup /dev/sda3 --header-backup-file luks-header.img
 cryptsetup luksAddKey /dev/sda3
 ```
 
-Once inside the `arch-chroot`, the initramfs has to know how to unlock the root. In `/etc/mkinitcpio.conf` add the `encrypt` hook between `block` and `filesystems`, and check that `keymap` comes first, because it is what allows typing the password with your keyboard (`la-latin1`, taken from `/etc/vconsole.conf`; see [Install Media](./install-media.md)):
+Once inside the `arch-chroot`, the initramfs has to know how to unlock the root. In `/etc/mkinitcpio.conf` add the `encrypt` hook between `block` and `filesystems`, and check that `keymap` comes first, because it is what allows typing the password with your keyboard (`la-latin1`, taken from `/etc/vconsole.conf`; see [Install Media](./install-media/)):
 
 ```bash
 # /etc/mkinitcpio.conf (classic hooks, also valid on Artix and Obarun)
@@ -105,7 +105,7 @@ If you decide to enable TRIM, add `:allow-discards` at the end of `cryptdevice=.
 
 Encrypting the root and leaving swap in the clear defeats the effort: when the system swaps memory pages to disk, passwords, keys and open documents end up there, where they would be readable on the swap partition. Swap has to be taken care of too.
 
-But "encrypting swap" is not a single thing. There is also **zram as a constant**: it lives in compressed RAM and never touches the disk, so it needs no encryption and does not change between scenarios (see [Components Optimization](./components-optimization.md)). What has to be decided is **what to put on disk**, and there are only three possibilities.
+But "encrypting swap" is not a single thing. There is also **zram as a constant**: it lives in compressed RAM and never touches the disk, so it needs no encryption and does not change between scenarios (see [Components Optimization](./components-optimization/)). What has to be decided is **what to put on disk**, and there are only three possibilities.
 
 |                    | **A. Nothing on disk**   | **B. Encrypted swap with a random key** | **C. Swapfile inside the encrypted root**     |
 | ------------------ | ---------------------- | --------------------------------------- | --------------------------------------------- |
@@ -124,7 +124,7 @@ Its two limits are clear. The first is that **it does not allow hibernation**: t
 
 ### B. zram + on-disk swap with a random key
 
-zram remains the primary swap (priority 150), and the 4 GiB partition of [Mounts](./mounts.md) acts as a backup: it is only used if zram fills up, and it prevents reaching the OOM killer. Its contents are encrypted with a random key that is generated on every boot and discarded on shutdown, so whatever ended up there is unreadable afterwards.
+zram remains the primary swap (priority 150), and the 4 GiB partition of [Mounts](./mounts/) acts as a backup: it is only used if zram fills up, and it prevents reaching the OOM killer. Its contents are encrypted with a random key that is generated on every boot and discarded on shutdown, so whatever ended up there is unreadable afterwards.
 
 The price of that ephemeral key is that **it does not allow hibernation either**: when you shut down the machine the key disappears, and when it comes back there would be no way to read the saved image.
 

@@ -5,7 +5,7 @@ category: utilities
 tags: ["sway", "hyprland", "niri", "wayland"]
 ---
 
-Después del [greeter](./greeter.md) viene el escritorio, y en Wayland el gestor de ventanas es además la compositora: el programa que dibuja la pantalla, gestiona el teclado y el ratón, y decide dónde va cada ventana. No hay un servidor gráfico aparte, así que esta elección define cómo se siente todo el sistema.
+Después del [greeter](./greeter/) viene el escritorio, y en Wayland el gestor de ventanas es además la compositora: el programa que dibuja la pantalla, gestiona el teclado y el ratón, y decide dónde va cada ventana. No hay un servidor gráfico aparte, así que esta elección define cómo se siente todo el sistema.
 
 ## De X11 a Wayland
 
@@ -81,7 +81,7 @@ hl.on("hyprland.start", function()
 end)
 ```
 
-Para que los portales (captura de pantalla, selector de archivos) funcionen, el entorno de la sesión debe estar disponible para ellos; ver [XDG Desktop Portals](./portals.md).
+Para que los portales (captura de pantalla, selector de archivos) funcionen, el entorno de la sesión debe estar disponible para ellos; ver [XDG Desktop Portals](./portals/).
 
 ## Niri
 
@@ -90,7 +90,7 @@ En Hyprland, como en i3, cada ventana nueva se hace sitio reduciendo a las demá
 Niri parte de otra idea, tomada del PaperWM (una extensión de GNOME): las ventanas se organizan en columnas sobre una franja infinita que se extiende hacia la derecha, y abrir una ventana nueva nunca cambia el tamaño de las existentes. Para ver más, te desplazas por la franja. Fue creado por Ivan Molodetskikh (YaLTeR), escrito en Rust sobre el kit Smithay, y su desarrollo empezó en 2023. Entre sus rasgos principales:
 
 - **Cada monitor tiene su propia franja** y sus propios espacios de trabajo dinámicos apilados verticalmente, de modo que los monitores no se mezclan entre sí.
-- **Captura de pantalla integrada** y grabación del monitor mediante el portal de GNOME (ver [XDG Desktop Portals](./portals.md)).
+- **Captura de pantalla integrada** y grabación del monitor mediante el portal de GNOME (ver [XDG Desktop Portals](./portals/)).
 - **Configuración en KDL** (`~/.config/niri/config.kdl`) que se recarga al guardar, con `niri validate` para comprobarla antes de aplicarla.
 - **Control desde el terminal** con `niri msg`, que devuelve datos en JSON para scripts.
 
@@ -123,4 +123,4 @@ cp /usr/share/doc/niri/default-config.kdl ~/.config/niri/config.kdl
 niri validate
 ```
 
-Niri incluye archivos de servicio también para `dinit`, útiles en Artix (ver [PID](./pid.md)).
+Niri incluye archivos de servicio también para `dinit`, útiles en Artix (ver [PID](./pid/)).

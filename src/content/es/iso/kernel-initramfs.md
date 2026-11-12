@@ -5,7 +5,7 @@ category: iso
 tags: ["kernel", "dracut", "uki", "sbctl"]
 ---
 
-El gestor de arranque (ver [Bootloader](./bootloader.md)) encuentra el kernel, lo carga en memoria y le pasa el control junto con unos parámetros. Pero ahí aparece un problema que el propio kernel no puede resolver: para leer tu disco necesita el controlador de tu NVMe, el soporte de Btrfs o el contenedor cifrado, y muchos de esos elementos son módulos que viven dentro de la raíz a la que todavía no puede acceder. El initramfs rompe ese círculo, y la imagen de kernel unificada (UKI) resuelve el último cabo suelto: que nada de esa cadena pueda alterarse sin que el firmware lo note.
+El gestor de arranque (ver [Bootloader](./bootloader/)) encuentra el kernel, lo carga en memoria y le pasa el control junto con unos parámetros. Pero ahí aparece un problema que el propio kernel no puede resolver: para leer tu disco necesita el controlador de tu NVMe, el soporte de Btrfs o el contenedor cifrado, y muchos de esos elementos son módulos que viven dentro de la raíz a la que todavía no puede acceder. El initramfs rompe ese círculo, y la imagen de kernel unificada (UKI) resuelve el último cabo suelto: que nada de esa cadena pueda alterarse sin que el firmware lo note.
 
 ## Kernel: qué es y qué variantes hay
 
@@ -19,9 +19,9 @@ Arch no publica un solo kernel, sino varios en sus repositorios oficiales, cada 
 | `linux-lts`      | Rama de soporte largo, con menos cambios y más probada                                 | Servidores y quien prioriza estabilidad                   |
 | `linux-zen`      | Parches orientados a la respuesta de escritorio, mantenidos por el proyecto Zen Kernel | Equipos de uso diario                                     |
 | `linux-hardened` | Endurecimiento de seguridad, con mitigaciones y restricciones extra                    | Quien prioriza seguridad sobre rendimiento                |
-| `linux-cachyos`  | Kernel propio de CachyOS, con planificadores adicionales                               | Usuarios de CachyOS (ver [Distro Base](./distro-base.md)) |
+| `linux-cachyos`  | Kernel propio de CachyOS, con planificadores adicionales                               | Usuarios de CachyOS (ver [Distro Base](./distro-base/)) |
 
-Esta guía usa **`linux-zen`** como kernel principal y deja **`linux-lts`** instalado como respaldo. La razón es concreta: en una distribución rolling release, una actualización del kernel puede romper el arranque o un controlador. Si eso ocurre, eliges la entrada LTS en el menú del gestor de arranque y el sistema sigue funcionando con la versión anterior. Es una red de seguridad barata —ocupa unos cientos de megabytes— que complementa a los snapshots de [Mounts](./mounts.md).
+Esta guía usa **`linux-zen`** como kernel principal y deja **`linux-lts`** instalado como respaldo. La razón es concreta: en una distribución rolling release, una actualización del kernel puede romper el arranque o un controlador. Si eso ocurre, eliges la entrada LTS en el menú del gestor de arranque y el sistema sigue funcionando con la versión anterior. Es una red de seguridad barata —ocupa unos cientos de megabytes— que complementa a los snapshots de [Mounts](./mounts/).
 
 Tres detalles prácticos que conviene tener claros:
 
@@ -69,7 +69,7 @@ Hay **dos familias de hooks que no se mezclan**. La clásica, basada en BusyBox,
 
 Esto deja un problema que ninguna de las piezas anteriores resuelve. El kernel, el initramfs y los parámetros son archivos sueltos en la ESP, que no está cifrada, y cualquiera con acceso físico puede cambiarlos. El Secure Boot del firmware solo comprueba firmas de programas EFI, y un kernel con su initramfs aparte no lo es. La imagen de kernel unificada (UKI) lo corrige, y la detallo más abajo.
 
-La consecuencia práctica es sencilla: si no cifras el disco, un initramfs normal es suficiente. Si lo cifras (ver [Cifrado de disco](./encryption.md)), la UKI es la forma de proteger también el arranque.
+La consecuencia práctica es sencilla: si no cifras el disco, un initramfs normal es suficiente. Si lo cifras (ver [Cifrado de disco](./encryption/)), la UKI es la forma de proteger también el arranque.
 
 ### mkinitcpio vs dracut: dos filosofías
 
@@ -167,7 +167,7 @@ Exec = /usr/bin/mkinitcpio -P
 
 ## UKI: la imagen de kernel unificada
 
-Queda un problema que ninguna de las piezas anteriores resuelve. El kernel, el initramfs y los parámetros de arranque son **archivos sueltos** en la ESP, que no está cifrada, y cualquiera con acceso físico puede reemplazarlos. El Secure Boot del firmware (ver [Firmware](./firmware.md)) solo comprueba firmas de programas EFI, y un kernel con su initramfs aparte no lo es: no hay nada que firmar como un todo.
+Queda un problema que ninguna de las piezas anteriores resuelve. El kernel, el initramfs y los parámetros de arranque son **archivos sueltos** en la ESP, que no está cifrada, y cualquiera con acceso físico puede reemplazarlos. El Secure Boot del firmware (ver [Firmware](./firmware/)) solo comprueba firmas de programas EFI, y un kernel con su initramfs aparte no lo es: no hay nada que firmar como un todo.
 
 La **imagen de kernel unificada** (UKI, _Unified Kernel Image_) corrige eso. Definida por el grupo UAPI, es un **único archivo EFI** que empaqueta el kernel, el initramfs, el microcódigo y los parámetros de arranque en una sección `.cmdline` propia. Al ser un solo archivo, se puede firmar entero, y el firmware verifica la firma antes de ejecutarlo. `systemd-boot` las detecta solas en `EFI/Linux/`, sin necesidad de entradas `.conf`.
 
@@ -217,7 +217,7 @@ Detecta automáticamente el kernel, el initramfs y los parámetros según el ker
 
 ### Secure Boot con sbctl
 
-Para firmar las UKIs (o los archivos de arranque por separado) con tus propias claves, `sbctl` las crea, las registra en el firmware (que debe estar en **Setup Mode**, el estado sin `PK` instalada que describe [Firmware](./firmware.md)) y firma los archivos de arranque:
+Para firmar las UKIs (o los archivos de arranque por separado) con tus propias claves, `sbctl` las crea, las registra en el firmware (que debe estar en **Setup Mode**, el estado sin `PK` instalada que describe [Firmware](./firmware/)) y firma los archivos de arranque:
 
 ```bash
 sudo pacman -S sbctl

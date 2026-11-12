@@ -146,4 +146,4 @@ Para que use tu configuración de mpv, activa la opción de leer archivos de con
 
 ## Relación con el audio
 
-Todos estos reproductores dependen de [PipeWire](./audio.md) para el audio. Cuando reproduces un vídeo, el audio se enruta automáticamente a través del servidor de audio del sistema. En sistemas Wayland modernos, PipeWire maneja tanto el audio como los portales de vídeo que permiten compartir pantalla en videollamadas.
+Todos estos reproductores dependen de [PipeWire](./audio/) para el audio. Cuando reproduces un vídeo, el audio se enruta automáticamente a través del servidor de audio del sistema. En sistemas Wayland modernos, PipeWire maneja tanto el audio como los portales de vídeo que permiten compartir pantalla en videollamadas.

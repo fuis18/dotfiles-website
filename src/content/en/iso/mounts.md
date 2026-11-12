@@ -43,10 +43,10 @@ In practice it provides:
 - **Subvolumes:** independent filesystem roots within the same partition, mounted separately.
 - **Instant snapshots:** a snapshot is a subvolume that shares data with another, so it is created in a fraction of a second and takes up almost no space at first.
 - **Checksums** of data and metadata, which allow detecting corrupted blocks.
-- **Transparent compression** with `zstd` (available since kernel 4.14), already covered in [Components Optimization](./components-optimization.md).
+- **Transparent compression** with `zstd` (available since kernel 4.14), already covered in [Components Optimization](./components-optimization/).
 - `btrfs send/receive` to replicate snapshots to another disk.
 
-With snapshots, a failed update is reverted in minutes: `snap-pac` creates a snapshot before and another after each `pacman` transaction, and to roll back you restore the `@` subvolume from one of them (the ArchWiki documents the manual procedure for this scheme). It is the direct answer to the rolling release mentioned in [Distro Base](./distro-base.md), and the reason CachyOS adopted it as the default filesystem in its June 2024 release.
+With snapshots, a failed update is reverted in minutes: `snap-pac` creates a snapshot before and another after each `pacman` transaction, and to roll back you restore the `@` subvolume from one of them (the ArchWiki documents the manual procedure for this scheme). It is the direct answer to the rolling release mentioned in [Distro Base](./distro-base/), and the reason CachyOS adopted it as the default filesystem in its June 2024 release.
 
 Keep in mind that:
 
@@ -83,7 +83,7 @@ mount -a
 chmod 750 /.snapshots
 ```
 
-With `systemd`, enable automatic creation and cleanup; on systems without it (see [PID](./pid.md)) the timers must be replaced with `cron`:
+With `systemd`, enable automatic creation and cleanup; on systems without it (see [PID](./pid/)) the timers must be replaced with `cron`:
 
 ```bash
 systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
@@ -111,7 +111,7 @@ Inside the Btrfs partition these subvolumes are created:
 | `@log`       | `/var/log`    | You keep the logs to diagnose why something failed    |
 | `@cache`     | `/var/cache`  | Keeps downloaded packages from bloating the snapshots |
 
-In addition, `~/.cache` is created as an independent subvolume inside `@home`, so that application cache does not end up in your files' snapshots either. The 4 GiB swap partition remains as a fallback: zram is configured with higher priority (150) and is used first, as detailed in [Components Optimization](./components-optimization.md).
+In addition, `~/.cache` is created as an independent subvolume inside `@home`, so that application cache does not end up in your files' snapshots either. The 4 GiB swap partition remains as a fallback: zram is configured with higher priority (150) and is used first, as detailed in [Components Optimization](./components-optimization/).
 
 The ESP is mounted on `/boot` and `systemd-boot` is used, which means the kernel and initramfs live on the ESP (FAT32) and not inside `@`'s snapshots. After reverting `@`, the kernel in `/boot` may not match the restored modules in `/usr/lib/modules`; the ArchWiki describes a `pacman` hook that copies `/boot` into the snapshot on every transaction to prevent this.
 
@@ -121,7 +121,7 @@ The ESP is mounted on `/boot` and `systemd-boot` is used, which means the kernel
 | Snapper       | <https://wiki.archlinux.org/title/Snapper>                                                                  |
 | Tools         | `cfdisk` (`util-linux`), `mkfs.fat` (`dosfstools`), `mkfs.btrfs` (`btrfs-progs`)                            |
 
-**Installation.** From the live USB (see [Install Media](./install-media.md)). These commands wipe the disk; replace `/dev/sda` with your own. First create the table with `cfdisk` and format:
+**Installation.** From the live USB (see [Install Media](./install-media/)). These commands wipe the disk; replace `/dev/sda` with your own. First create the table with `cfdisk` and format:
 
 ```bash
 cfdisk /dev/sda

@@ -65,7 +65,7 @@ paru -S brave-bin
 
 ## Epiphany (2002)
 
-Epiphany, llamado hoy _GNOME Web_, es el navegador del proyecto GNOME. Nació en 2002 como una bifurcación de Galeon, un navegador GNOME anterior, y desde entonces se mantiene como el navegador sencillo y bien integrado del escritorio. Usa el motor WebKit (a través de WebKitGTK), el mismo que Safari, y una interfaz GTK4 con libadwaita (ver [Ecosistema](./ecosystem.md)), de modo que se ve y se comporta como las demás aplicaciones de esta guía.
+Epiphany, llamado hoy _GNOME Web_, es el navegador del proyecto GNOME. Nació en 2002 como una bifurcación de Galeon, un navegador GNOME anterior, y desde entonces se mantiene como el navegador sencillo y bien integrado del escritorio. Usa el motor WebKit (a través de WebKitGTK), el mismo que Safari, y una interfaz GTK4 con libadwaita (ver [Ecosistema](./ecosystem/)), de modo que se ve y se comporta como las demás aplicaciones de esta guía.
 
 Sus rasgos principales:
 
