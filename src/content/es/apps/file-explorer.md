@@ -13,7 +13,7 @@ Un explorador clásico de terminal, como `ranger` o `nnn`, resuelve la parte de 
 
 Sus rasgos principales son:
 
-- **Vistas previas inmediatas** de imágenes, vídeo, PDF, archivos comprimidos, directorios y código con resaltado, con protocolos de imagen integrados para Kitty y Ghostty (ver [Shell](./shell/)), y otros terminales mediante Sixel o Überzug++.
+- **Vistas previas inmediatas** de imágenes, vídeo, PDF, archivos comprimidos, directorios y código con resaltado, con protocolos de imagen integrados para Kitty y Ghostty (ver [Shell](../../utilities/shell/)), y otros terminales mediante Sixel o Überzug++.
 - **Navegación con teclas al estilo Vim:** pestañas, selección entre directorios, modo visual y renombrado en lote.
 - **Se integra con las herramientas de siempre:** `ripgrep`, `fd`, `fzf` y `zoxide`.
 - **Un sistema de plugins en Lua** (con gestor de paquetes propio) para añadir previsualizadores, temas y hasta cambiar la interfaz.
@@ -93,12 +93,12 @@ xdg-mime default thunar.desktop inode/directory
 
 ## Nautilus
 
-Thunar demuestra que un explorador puede ser ligero, pero su base GTK3 de la era X11 se nota: interfaces que no escalan con HiDPI como las modernas, integración de Wayland parcial y ninguna conexión con el resto del escritorio. Nautilus es el paso siguiente en la misma historia: el gestor de GNOME, nacido en Eazel, una empresa fundada en 1999 por antiguos desarrolladores de Apple; su versión 1.0 es de 2001 —mayor incluso que Thunar— y desde entonces es el explorador de referencia en GNOME. Lo que lo sitúa aquí no es su edad sino su generación de toolkit: desde GNOME 43 está construido con GTK4 y libadwaita (ver [Ecosistema](./ecosystem/)).
+Thunar demuestra que un explorador puede ser ligero, pero su base GTK3 de la era X11 se nota: interfaces que no escalan con HiDPI como las modernas, integración de Wayland parcial y ninguna conexión con el resto del escritorio. Nautilus es el paso siguiente en la misma historia: el gestor de GNOME, nacido en Eazel, una empresa fundada en 1999 por antiguos desarrolladores de Apple; su versión 1.0 es de 2001 —mayor incluso que Thunar— y desde entonces es el explorador de referencia en GNOME. Lo que lo sitúa aquí no es su edad sino su generación de toolkit: desde GNOME 43 está construido con GTK4 y libadwaita (ver [Ecosistema](../ecosystem/)).
 
 Sus rasgos principales:
 
 - **Integración con el sistema:** gracias a GVfs monta unidades externas, dispositivos MTP, recursos de red y la papelera sin configurar nada.
-- **Selector de archivos del sistema:** el portal de GNOME (ver [XDG Desktop Portals](./portals/)) lo usa, de modo que los cuadros de «Abrir» y «Guardar» de otras aplicaciones se ven igual.
+- **Selector de archivos del sistema:** el portal de GNOME (ver [XDG Desktop Portals](../../utilities/portals/)) lo usa, de modo que los cuadros de «Abrir» y «Guardar» de otras aplicaciones se ven igual.
 - **Extensible:** admite extensiones (por ejemplo, con `nautilus-python`) y vistas previas rápidas con la barra espaciadora si instalas `sushi`.
 
 En Hyprland o Niri no trae todos sus componentes por defecto: hay que añadir GVfs y las utilidades de archivos comprimidos y vistas previas.

@@ -5,7 +5,7 @@ category: iso
 tags: ["kernel", "dracut", "uki", "sbctl"]
 ---
 
-The bootloader (see [Bootloader](./bootloader/)) finds the kernel, loads it into memory and passes it control along with some parameters. But then a problem appears that the kernel itself cannot solve: to read your disk it needs your NVMe driver, the Btrfs support or the encrypted container, and many of those elements are modules that live inside the root to which it still has no access. The initramfs breaks that circle, and the Unified Kernel Image (UKI) solves the last loose end: that none of that chain can be tampered with without the firmware noticing.
+The bootloader (see [Bootloader](../bootloader/)) finds the kernel, loads it into memory and passes it control along with some parameters. But then a problem appears that the kernel itself cannot solve: to read your disk it needs your NVMe driver, the Btrfs support or the encrypted container, and many of those elements are modules that live inside the root to which it still has no access. The initramfs breaks that circle, and the Unified Kernel Image (UKI) solves the last loose end: that none of that chain can be tampered with without the firmware noticing.
 
 ## Kernel: what it is and which variants exist
 
@@ -19,9 +19,9 @@ Arch does not ship a single kernel, but several in its official repositories, ea
 | `linux-lts`      | Long-term support branch, with fewer changes and more testing                 | Servers and whoever prioritizes stability              |
 | `linux-zen`      | Patches aimed at desktop responsiveness, maintained by the Zen Kernel project | Everyday machines                                      |
 | `linux-hardened` | Security hardening, with extra mitigations and restrictions                   | Whoever prioritizes security over performance          |
-| `linux-cachyos`  | CachyOS's own kernel, with additional schedulers                              | CachyOS users (see [Distro Base](./distro-base/))    |
+| `linux-cachyos`  | CachyOS's own kernel, with additional schedulers                              | CachyOS users (see [Distro Base](../distro-base/))    |
 
-This guide uses **`linux-zen`** as the main kernel and leaves **`linux-lts`** installed as a fallback. The reason is concrete: in a rolling release distribution, a kernel update can break the boot or a driver. If that happens, you choose the LTS entry in the bootloader menu and the system keeps running with the previous version. It is a cheap safety net —it takes up a few hundred megabytes— that complements the snapshots of [Mounts](./mounts/).
+This guide uses **`linux-zen`** as the main kernel and leaves **`linux-lts`** installed as a fallback. The reason is concrete: in a rolling release distribution, a kernel update can break the boot or a driver. If that happens, you choose the LTS entry in the bootloader menu and the system keeps running with the previous version. It is a cheap safety net —it takes up a few hundred megabytes— that complements the snapshots of [Mounts](../mounts/).
 
 Three practical details worth being clear about:
 
@@ -69,7 +69,7 @@ There are **two families of hooks that do not mix**. The classic one, based on B
 
 This leaves a problem that none of the pieces above solves. The kernel, the initramfs and the parameters are loose files on the ESP, which is not encrypted, and anyone with physical access can change them. The firmware's Secure Boot only checks signatures of EFI programs, and a kernel with its initramfs separately is not one. The Unified Kernel Image (UKI) fixes that, and I detail it below.
 
-The practical consequence is simple: if you do not encrypt the disk, a normal initramfs is enough. If you do encrypt it (see [Disk Encryption](./encryption/)), the UKI is the way to protect the boot as well.
+The practical consequence is simple: if you do not encrypt the disk, a normal initramfs is enough. If you do encrypt it (see [Disk Encryption](../encryption/)), the UKI is the way to protect the boot as well.
 
 ### mkinitcpio vs dracut: two philosophies
 
@@ -167,7 +167,7 @@ Exec = /usr/bin/mkinitcpio -P
 
 ## UKI: the Unified Kernel Image
 
-There remains a problem that none of the pieces above solves. The kernel, the initramfs and the boot parameters are **loose files** on the ESP, which is not encrypted, and anyone with physical access can replace them. The firmware's Secure Boot (see [Firmware](./firmware/)) only checks signatures of EFI programs, and a kernel with its initramfs separately is not one: there is nothing to sign as a whole.
+There remains a problem that none of the pieces above solves. The kernel, the initramfs and the boot parameters are **loose files** on the ESP, which is not encrypted, and anyone with physical access can replace them. The firmware's Secure Boot (see [Firmware](../firmware/)) only checks signatures of EFI programs, and a kernel with its initramfs separately is not one: there is nothing to sign as a whole.
 
 The **Unified Kernel Image** (UKI, _Unified Kernel Image_) fixes that. Defined by the UAPI group, it is a **single EFI file** that packages the kernel, the initramfs, the microcode and the boot parameters into its own `.cmdline` section. Since it is a single file, it can be signed in full, and the firmware verifies the signature before executing it. `systemd-boot` detects them on its own in `EFI/Linux/`, with no need for `.conf` entries.
 
@@ -217,7 +217,7 @@ It automatically detects the kernel, the initramfs and the parameters based on t
 
 ### Secure Boot with sbctl
 
-To sign the UKIs (or the boot files separately) with your own keys, `sbctl` creates them, registers them in the firmware (which must be in **Setup Mode**, the state without an installed `PK` described in [Firmware](./firmware/)) and signs the boot files:
+To sign the UKIs (or the boot files separately) with your own keys, `sbctl` creates them, registers them in the firmware (which must be in **Setup Mode**, the state without an installed `PK` described in [Firmware](../firmware/)) and signs the boot files:
 
 ```bash
 sudo pacman -S sbctl

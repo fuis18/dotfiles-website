@@ -5,11 +5,11 @@ category: apps
 tags: ["fnm", "rustup", "zed", "lazyvim", "neovim", "vscode", "sublime-text"]
 ---
 
-Con `pacman` (ver [Package Management](./package-management/)) instalas una versión de cada lenguaje, atada al ritmo de actualización del sistema. Eso sirve para ejecutar programas, pero no para desarrollar: un proyecto necesita Node 20, otro Node 24, uno exige una versión concreta de Rust y otro, la versión nocturna. La solución es gestionar los lenguajes por usuario, fuera del sistema, con un administrador de versiones para cada uno, y reservar `pacman` para el sistema.
+Con `pacman` (ver [Package Management](../../utilities/package-management/)) instalas una versión de cada lenguaje, atada al ritmo de actualización del sistema. Eso sirve para ejecutar programas, pero no para desarrollar: un proyecto necesita Node 20, otro Node 24, uno exige una versión concreta de Rust y otro, la versión nocturna. La solución es gestionar los lenguajes por usuario, fuera del sistema, con un administrador de versiones para cada uno, y reservar `pacman` para el sistema.
 
 ## fnm: gestor de versiones para Node.js
 
-Node.js es el caso típico: la versión del repositorio de la distribución suele estar una o dos versiones por detrás, y solo hay una a la vez. El administrador clásico, `nvm`, es un conjunto de scripts de shell, y por eso tarda en cargar cada vez que abres una terminal, y no funciona de forma nativa en fish (ver [Shell](./shell/)). **fnm** (_Fast Node Manager_) lo reescribe como un solo binario en Rust, creado por Gal Schlezinger (Schniz) hacia 2019, con el mismo objetivo y mucha más velocidad.
+Node.js es el caso típico: la versión del repositorio de la distribución suele estar una o dos versiones por detrás, y solo hay una a la vez. El administrador clásico, `nvm`, es un conjunto de scripts de shell, y por eso tarda en cargar cada vez que abres una terminal, y no funciona de forma nativa en fish (ver [Shell](../../utilities/shell/)). **fnm** (_Fast Node Manager_) lo reescribe como un solo binario en Rust, creado por Gal Schlezinger (Schniz) hacia 2019, con el mismo objetivo y mucha más velocidad.
 
 Sus rasgos principales:
 

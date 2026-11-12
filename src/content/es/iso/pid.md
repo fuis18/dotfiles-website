@@ -16,7 +16,7 @@ En los inicios de Linux el init era `SysV`: una colección de scripts de shell e
 - Rastreo de procesos con cgroups: al detener un servicio se detienen también todos sus hijos.
 - Un solo conjunto de herramientas y registros (`systemctl`, `journalctl`) para servicios, sesiones, montajes y temporizadores.
 
-Es el init por defecto en Arch y CachyOS (ver [Distro Base](./distro-base/)) y el que asumen la mayoría de paquetes, incluidos muchos del AUR y entornos de escritorio completos. Eso lo convierte en la opción de menor fricción.
+Es el init por defecto en Arch y CachyOS (ver [Distro Base](../distro-base/)) y el que asumen la mayoría de paquetes, incluidos muchos del AUR y entornos de escritorio completos. Eso lo convierte en la opción de menor fricción.
 
 | Dato                | Detalle                                                                         |
 | ------------------- | ------------------------------------------------------------------------------- |
@@ -75,7 +75,7 @@ Es la base técnica de Artix (como una de sus opciones de init) y de Obarun. En 
 | Código              | <https://github.com/skarnet/s6> (espejo; repositorio original en `git://git.skarnet.org/s6`) |
 | Comunidad           | Lista de correo `supervision` en <https://skarnet.org/lists/supervision/>                    |
 
-En Artix, instala la base de `s6` al crear el sistema (ver [Distro Base](./distro-base/)):
+En Artix, instala la base de `s6` al crear el sistema (ver [Distro Base](../distro-base/)):
 
 ```bash
 basestrap /mnt base base-devel s6-base elogind-s6 linux-zen linux-zen-firmware
@@ -126,7 +126,7 @@ Es el punto donde se unen la supervisión robusta de `s6` y la comodidad de un f
 | Código              | <https://git.obarun.org/Obarun/66>                                                    |
 | Noticias            | <https://news.obarun.org>                                                             |
 
-Lo más directo es Obarun, que ya lo incluye: descarga el ISO desde <https://web.obarun.org> (ver [Distro Base](./distro-base/)). En un sistema Obarun existente, las herramientas se instalan con `pacman`:
+Lo más directo es Obarun, que ya lo incluye: descarga el ISO desde <https://web.obarun.org> (ver [Distro Base](../distro-base/)). En un sistema Obarun existente, las herramientas se instalan con `pacman`:
 
 ```bash
 sudo pacman -S 66 66-tools oblibs

@@ -13,7 +13,7 @@ A classic terminal explorer, like `ranger` or `nnn`, solves navigation, but it p
 
 Its main features are:
 
-- **Immediate previews** of images, video, PDF, compressed files, directories and syntax-highlighted code, with built-in image protocols for Kitty and Ghostty (see [Shell](./shell/)) and other terminals via Sixel or Überzug++.
+- **Immediate previews** of images, video, PDF, compressed files, directories and syntax-highlighted code, with built-in image protocols for Kitty and Ghostty (see [Shell](../../utilities/shell/)) and other terminals via Sixel or Überzug++.
 - **Vim-style keyboard navigation:** tabs, cross-directory selection, visual mode and batch renaming.
 - **Integrates with the usual tools:** `ripgrep`, `fd`, `fzf` and `zoxide`.
 - **A plugin system in Lua** (with its own package manager) to add previews, themes and even replace the interface.
@@ -93,12 +93,12 @@ xdg-mime default thunar.desktop inode/directory
 
 ## Nautilus
 
-Thunar proves a file explorer can be lightweight, but its X11-era GTK3 base shows: interfaces that do not scale to HiDPI like modern ones, partial Wayland integration and no connection to the rest of the desktop. Nautilus is the next step in the same story: GNOME's file manager, born at Eazel, a company founded in 1999 by former Apple developers; its version 1.0 dates from 2001 —older even than Thunar— and since then it has been GNOME's reference explorer. What places it here is not its age but its toolkit generation: since GNOME 43 it is built with GTK4 and libadwaita (see [Ecosystem](./ecosystem/)).
+Thunar proves a file explorer can be lightweight, but its X11-era GTK3 base shows: interfaces that do not scale to HiDPI like modern ones, partial Wayland integration and no connection to the rest of the desktop. Nautilus is the next step in the same story: GNOME's file manager, born at Eazel, a company founded in 1999 by former Apple developers; its version 1.0 dates from 2001 —older even than Thunar— and since then it has been GNOME's reference explorer. What places it here is not its age but its toolkit generation: since GNOME 43 it is built with GTK4 and libadwaita (see [Ecosystem](../ecosystem/)).
 
 Its main features:
 
 - **System integration:** thanks to GVfs it mounts external drives, MTP devices, network resources and the trash without configuring anything.
-- **System file chooser:** the GNOME portal (see [XDG Desktop Portals](./portals/)) uses it, so the "Open" and "Save" dialogs of other applications look the same.
+- **System file chooser:** the GNOME portal (see [XDG Desktop Portals](../../utilities/portals/)) uses it, so the "Open" and "Save" dialogs of other applications look the same.
 - **Extensible:** it supports extensions (for example, with `nautilus-python`) and quick previews with the spacebar if you install `sushi`.
 
 On Hyprland or Niri it does not ship with all of its components by default: you have to add GVfs and the archive and preview utilities.

@@ -5,7 +5,7 @@ category: utilities
 tags: ["sway", "hyprland", "niri", "wayland"]
 ---
 
-After the [greeter](./greeter/) comes the desktop, and on Wayland the window manager is also the compositor: the program that draws the screen, manages the keyboard and mouse, and decides where each window goes. There is no separate graphics server, so this choice defines how the whole system feels.
+After the [greeter](../greeter/) comes the desktop, and on Wayland the window manager is also the compositor: the program that draws the screen, manages the keyboard and mouse, and decides where each window goes. There is no separate graphics server, so this choice defines how the whole system feels.
 
 ## From X11 to Wayland
 
@@ -81,7 +81,7 @@ hl.on("hyprland.start", function()
 end)
 ```
 
-For the portals (screenshot, file picker) to work, the session environment must be available to them; see [XDG Desktop Portals](./portals/).
+For the portals (screenshot, file picker) to work, the session environment must be available to them; see [XDG Desktop Portals](../portals/).
 
 ## Niri
 
@@ -90,7 +90,7 @@ In Hyprland, as in i3, each new window makes room by shrinking the others: open 
 Niri starts from a different idea, taken from PaperWM (a GNOME extension): windows are arranged in columns on an infinite strip extending to the right, and opening a new window never changes the size of the existing ones. To see more, you scroll along the strip. It was created by Ivan Molodetskikh (YaLTeR), written in Rust on the Smithay toolkit, and its development began in 2023. Among its main traits:
 
 - **Each monitor has its own strip** and its own workspaces stacked vertically, so monitors do not mix with each other.
-- **Built-in screenshot** and monitor recording through the GNOME portal (see [XDG Desktop Portals](./portals/)).
+- **Built-in screenshot** and monitor recording through the GNOME portal (see [XDG Desktop Portals](../portals/)).
 - **KDL configuration** (`~/.config/niri/config.kdl`) that reloads on save, with `niri validate` to check it before applying.
 - **Terminal control** with `niri msg`, which returns data as JSON for scripts.
 
@@ -123,4 +123,4 @@ cp /usr/share/doc/niri/default-config.kdl ~/.config/niri/config.kdl
 niri validate
 ```
 
-Niri also includes service files for `dinit`, useful on Artix (see [PID](./pid/)).
+Niri also includes service files for `dinit`, useful on Artix (see [PID](../../iso/pid/)).

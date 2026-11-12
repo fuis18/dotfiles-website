@@ -94,8 +94,8 @@ En la práctica: **`gpt` es el estándar moderno y la opción correcta en casi t
 UEFI no ejecuta código desde un sector de arranque, sino desde **archivos** dentro de una partición. Esa partición es la **ESP** (_EFI System Partition_), y sus reglas son las que condicionan el esquema de particiones de toda la guía:
 
 - **Formato FAT.** La especificación admite FAT12, FAT16 y FAT32, pero en la práctica se usa **FAT32**. La razón es que el firmware solo sabe leer FAT de forma nativa: no entiende ext4 ni Btrfs, así que el gestor de arranque, el kernel y el initramfs deben estar en un sistema de archivos que el firmware pueda leer.
-- **Tamaño.** 512 MiB a 1 GiB es lo habitual. El tamaño importa porque en la ESP viven el gestor de arranque, el kernel, el initramfs y el microcódigo; si además arrancas snapshots, cada uno copia su kernel y su initramfs (ver [Bootloader](./bootloader/)).
-- **Punto de montaje.** Se monta en `/boot` o en `/efi`, según dónde quieras que vivan el kernel y el initramfs. Esta decisión afecta a si el kernel entra o no en los snapshots de Btrfs, como se explica en [Mounts](./mounts/).
+- **Tamaño.** 512 MiB a 1 GiB es lo habitual. El tamaño importa porque en la ESP viven el gestor de arranque, el kernel, el initramfs y el microcódigo; si además arrancas snapshots, cada uno copia su kernel y su initramfs (ver [Bootloader](../bootloader/)).
+- **Punto de montaje.** Se monta en `/boot` o en `/efi`, según dónde quieras que vivan el kernel y el initramfs. Esta decisión afecta a si el kernel entra o no en los snapshots de Btrfs, como se explica en [Mounts](../mounts/).
 - **Tipo de partición.** En GPT se marca con el tipo «EFI System»; es la única partición que el firmware reconoce por su tipo.
 
 En un disco con BIOS y MBR no existe ESP: el equivalente es una partición «BIOS boot» de 2 MB, que solo reserva el espacio donde GRUB graba su segunda etapa.
@@ -115,7 +115,7 @@ Las claves viven en la NVRAM del equipo y son cuatro:
 
 El firmware tiene dos estados. En **Setup Mode** no hay `PK` instalada y cualquiera puede registrar sus propias claves; en **User Mode** hay `PK` y las modificaciones requieren firmarla. De fábrica, la mayoría de equipos vienen en User Mode con las claves de Microsoft preinstaladas, lo que permite arrancar Windows y las distribuciones de Linux que pagan por una firma de _shim_.
 
-La alternativa es generar tus propias claves, registrarlas y firmar tú mismo el gestor de arranque, el kernel y el initramfs. En Arch eso se hace con `sbctl`, y es la razón por la que existe la imagen de kernel unificada (UKI): Secure Boot firma archivos EFI, y un kernel con su initramfs aparte no lo es. El procedimiento completo está en [Kernel e Initramfs](./kernel-initramfs/).
+La alternativa es generar tus propias claves, registrarlas y firmar tú mismo el gestor de arranque, el kernel y el initramfs. En Arch eso se hace con `sbctl`, y es la razón por la que existe la imagen de kernel unificada (UKI): Secure Boot firma archivos EFI, y un kernel con su initramfs aparte no lo es. El procedimiento completo está en [Kernel e Initramfs](../kernel-initramfs/).
 
 Conviene saber que Secure Boot no protege contra todo. Verifica que el código que se ejecuta esté firmado, pero no comprueba que los parámetros del kernel sean los que tú pusiste, ni que el initramfs sea el tuyo, a menos que uses una UKI firmada. Y en muchos equipos hay que conservar las claves de Microsoft (`sbctl enroll-keys -m`), porque el firmware de la tarjeta gráfica también está firmado con ellas.
 
@@ -161,7 +161,7 @@ Si `efibootmgr` responde «EFI variables are not supported», estás en modo BIO
 | Herramientas        | `efibootmgr`, `efivarfs` (montado en `/sys/firmware/efi/efivars`)                                                                  |
 | Secure Boot         | `sbctl` <https://github.com/Foxboron/sbctl>                                                                                        |
 
-**Comprobación rápida.** Desde el USB live (ver [Install Media](./install-media/)), antes de particionar nada:
+**Comprobación rápida.** Desde el USB live (ver [Install Media](../install-media/)), antes de particionar nada:
 
 ```bash
 # Debe imprimir 64 si arrancaste en UEFI; si da error, estás en BIOS

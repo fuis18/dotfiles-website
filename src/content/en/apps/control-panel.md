@@ -5,7 +5,7 @@ category: apps
 tags: ["ags", "ironbar", "anyrun"]
 ---
 
-A compositor like [Hyprland or Niri](./window-manager/) draws windows, but brings nothing else: no bar with the clock and workspaces, no quick volume or network settings, no way to launch programs. In a full desktop like GNOME or Plasma all of that is included and hard to change; here you have to assemble it yourself, and in return you decide every piece.
+A compositor like [Hyprland or Niri](../../utilities/window-manager/) draws windows, but brings nothing else: no bar with the clock and workspaces, no quick volume or network settings, no way to launch programs. In a full desktop like GNOME or Plasma all of that is included and hard to change; here you have to assemble it yourself, and in return you decide every piece.
 
 ## Rofi and Wofi (2012, 2020)
 
@@ -60,7 +60,7 @@ cp /etc/xdg/waybar/config.jsonc /etc/xdg/waybar/style.css ~/.config/waybar/
 waybar
 ```
 
-To launch it with Hyprland, add it to the startup of your configuration (see [Window Manager](./window-manager/)):
+To launch it with Hyprland, add it to the startup of your configuration (see [Window Manager](../../utilities/window-manager/)):
 
 ```lua
 wl.on("startup", function()
@@ -193,7 +193,7 @@ The last piece of a menu-less desktop is the launcher: a search box that opens w
 
 **Vicinae** takes the opposite direction: it is a native launcher in **C++ and Qt**, with many built-in modules, that runs as a background server (so it opens instantly) and is compatible with Raycast extensions through a compatibility layer. If you come from macOS or like Raycast-style launchers, it is the most complete option.
 
-The choice depends on how much integration you want. Anyrun is lightweight, GTK4-only and fully modular, and it is the option consistent with this guide's ecosystem. Vicinae comes with much more done, at the cost of dragging in Qt (see [Ecosystem](./ecosystem/)).
+The choice depends on how much integration you want. Anyrun is lightweight, GTK4-only and fully modular, and it is the option consistent with this guide's ecosystem. Vicinae comes with much more done, at the cost of dragging in Qt (see [Ecosystem](../ecosystem/)).
 
 | Fact                 | Anyrun                                 | Vicinae                                     |
 | -------------------- | -------------------------------------- | ------------------------------------------- |

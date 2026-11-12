@@ -43,10 +43,10 @@ En la práctica aporta:
 - **Subvolúmenes:** raíces de sistema de archivos independientes dentro de una misma partición, que se montan por separado.
 - **Snapshots instantáneos:** un snapshot es un subvolumen que comparte datos con otro, así que se crea en una fracción de segundo y casi no ocupa espacio al inicio.
 - **Checksums** de datos y metadatos, que permiten detectar bloques corruptos.
-- **Compresión transparente** con `zstd` (disponible desde el kernel 4.14), ya cubierta en [Components Optimization](./components-optimization/).
+- **Compresión transparente** con `zstd` (disponible desde el kernel 4.14), ya cubierta en [Components Optimization](../components-optimization/).
 - `btrfs send/receive` para replicar snapshots a otro disco.
 
-Con snapshots, una actualización fallida se revierte en minutos: `snap-pac` crea un snapshot antes y otro después de cada transacción de `pacman`, y para volver atrás se restaura el subvolumen `@` desde uno de ellos (la ArchWiki documenta el procedimiento manual para este esquema). Es la respuesta directa a la rolling release que mencionaba [Distro Base](./distro-base/), y la razón por la que CachyOS lo adoptó como sistema de archivos por defecto en su release de junio de 2024.
+Con snapshots, una actualización fallida se revierte en minutos: `snap-pac` crea un snapshot antes y otro después de cada transacción de `pacman`, y para volver atrás se restaura el subvolumen `@` desde uno de ellos (la ArchWiki documenta el procedimiento manual para este esquema). Es la respuesta directa a la rolling release que mencionaba [Distro Base](../distro-base/), y la razón por la que CachyOS lo adoptó como sistema de archivos por defecto en su release de junio de 2024.
 
 Conviene tener presente que:
 
@@ -83,7 +83,7 @@ mount -a
 chmod 750 /.snapshots
 ```
 
-Con `systemd`, activa la creación y limpieza automáticas; en sistemas sin él (ver [PID](./pid/)) hay que sustituir los temporizadores por `cron`:
+Con `systemd`, activa la creación y limpieza automáticas; en sistemas sin él (ver [PID](../pid/)) hay que sustituir los temporizadores por `cron`:
 
 ```bash
 systemctl enable --now snapper-timeline.timer snapper-cleanup.timer
@@ -111,7 +111,7 @@ Dentro de la partición Btrfs se crean estos subvolúmenes:
 | `@log`       | `/var/log`    | Conservas los registros para diagnosticar por qué falló algo |
 | `@cache`     | `/var/cache`  | Evita inflar los snapshots con paquetes descargados          |
 
-Además, `~/.cache` se crea como un subvolumen independiente dentro de `@home`, para que la caché de las aplicaciones tampoco entre en los snapshots de tus archivos. La partición de swap de 4 GiB queda como respaldo: el zram se configura con prioridad mayor (150) y se usa primero, como se detalla en [Components Optimization](./components-optimization/).
+Además, `~/.cache` se crea como un subvolumen independiente dentro de `@home`, para que la caché de las aplicaciones tampoco entre en los snapshots de tus archivos. La partición de swap de 4 GiB queda como respaldo: el zram se configura con prioridad mayor (150) y se usa primero, como se detalla en [Components Optimization](../components-optimization/).
 
 La ESP se monta en `/boot` y se usa `systemd-boot`, lo que implica que el kernel y el initramfs viven en la ESP (FAT32) y no dentro de los snapshots de `@`. Tras revertir `@` es posible que el kernel de `/boot` no coincida con los módulos de `/usr/lib/modules` restaurados; la ArchWiki describe un hook de `pacman` que copia `/boot` dentro del snapshot en cada transacción para evitarlo.
 
@@ -121,7 +121,7 @@ La ESP se monta en `/boot` y se usa `systemd-boot`, lo que implica que el kernel
 | Snapper       | <https://wiki.archlinux.org/title/Snapper>                                                                |
 | Herramientas  | `cfdisk` (`util-linux`), `mkfs.fat` (`dosfstools`), `mkfs.btrfs` (`btrfs-progs`)                          |
 
-**Instalación.** Desde el USB live (ver [Install Media](./install-media/)). Estos comandos borran el disco; sustituye `/dev/sda` por el tuyo. Primero crea la tabla con `cfdisk` y formatea:
+**Instalación.** Desde el USB live (ver [Install Media](../install-media/)). Estos comandos borran el disco; sustituye `/dev/sda` por el tuyo. Primero crea la tabla con `cfdisk` y formatea:
 
 ```bash
 cfdisk /dev/sda

@@ -19,7 +19,7 @@ En los inicios de Linux, las distribuciones ya venían preconfiguradas: unos poc
 - ArchWiki, probablemente la mejor documentación de Linux que existe, útil incluso si usas otra distro.
 - AUR para todo lo que no está en los repositorios oficiales.
 
-Rolling release implica que una actualización puede romper algo; por eso la sección de [Mounts](./mounts/) recomienda Btrfs con snapshots para poder volver atrás.
+Rolling release implica que una actualización puede romper algo; por eso la sección de [Mounts](../mounts/) recomienda Btrfs con snapshots para poder volver atrás.
 
 | Dato                | Detalle                                                                              |
 | ------------------- | ------------------------------------------------------------------------------------ |
@@ -81,11 +81,11 @@ sudo ./cachyos-repo.sh
 
 ## Artix
 
-CachyOS optimizó el sistema, pero heredó de Arch una decisión que no se puede cambiar: `systemd` es el único init posible, y otros componentes (por ejemplo, entornos de escritorio completos) dependen de él cada vez más. Con el nacimiento y la adopción de `systemd` (ver [PID](./pid/)), Arch dejó de ofrecer alternativas de init, y si prefieres uno más pequeño o con otro modelo de servicios, no puedes tenerlo sin pelear contra el sistema. Artix nació en 2017 para devolver esa libertad.
+CachyOS optimizó el sistema, pero heredó de Arch una decisión que no se puede cambiar: `systemd` es el único init posible, y otros componentes (por ejemplo, entornos de escritorio completos) dependen de él cada vez más. Con el nacimiento y la adopción de `systemd` (ver [PID](../pid/)), Arch dejó de ofrecer alternativas de init, y si prefieres uno más pequeño o con otro modelo de servicios, no puedes tenerlo sin pelear contra el sistema. Artix nació en 2017 para devolver esa libertad.
 
 **Cómo lo resuelve.** Artix mantiene la base de Arch (`pacman`, rolling release, filosofía KISS) pero sin `systemd` y te deja elegir entre **OpenRC**, **runit**, **s6** y **dinit**. Tiene sus propios repositorios, con paquetes adaptados a cada init, y puede usar los repositorios de Arch mediante el paquete de compatibilidad (`artix-archlinux-support`). Para lo que antes aportaba `systemd` (sesiones, seat management) se usa `elogind`.
 
-Es la opción pragmática: conservas casi todo el ecosistema Arch y recuperas la libertad de init. El inconveniente es que algunos paquetes asumen `systemd` y requieren alternativas, algo que se trata en [PID](./pid/).
+Es la opción pragmática: conservas casi todo el ecosistema Arch y recuperas la libertad de init. El inconveniente es que algunos paquetes asumen `systemd` y requieren alternativas, algo que se trata en [PID](../pid/).
 
 | Dato              | Detalle                                                                        |
 | ----------------- | ------------------------------------------------------------------------------ |
@@ -111,7 +111,7 @@ Artix devolvió la libertad de elegir init, pero sustituir `systemd` por otro no
 
 Obarun está basada en Arch y reemplaza `systemd` por `s6` (la suite de supervisión de Skarnet) más `66`, un gestor de servicios propio construido sobre `s6`/`s6-rc`. Los servicios se describen en archivos declarativos, el árbol de dependencias lo resuelve la herramienta y cada proceso queda supervisado. `66` es obra de Obarun y funciona también fuera de ella, en otros sistemas Unix.
 
-Es la base más cercana al ideal de transparencia que persigue la documentación, pero la menos convencional: su propio equipo la describe como no pensada para principiantes y su comunidad es más pequeña. Cierra el hilo hacia [PID](./pid/), donde `s6` y `66` se explican en detalle.
+Es la base más cercana al ideal de transparencia que persigue la documentación, pero la menos convencional: su propio equipo la describe como no pensada para principiantes y su comunidad es más pequeña. Cierra el hilo hacia [PID](../pid/), donde `s6` y `66` se explican en detalle.
 
 | Dato          | Detalle                                                                                |
 | ------------- | -------------------------------------------------------------------------------------- |

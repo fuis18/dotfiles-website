@@ -5,7 +5,7 @@ category: apps
 tags: ["ags", "ironbar", "anyrun"]
 ---
 
-Una compositora como [Hyprland o Niri](./window-manager/) dibuja ventanas, pero no trae nada más: ni barra con el reloj y los espacios de trabajo, ni ajustes rápidos de volumen o red, ni forma de lanzar programas. En un escritorio completo como GNOME o Plasma todo eso viene incluido y es difícil de cambiar; aquí te toca ensamblarlo, y a cambio decides cada pieza.
+Una compositora como [Hyprland o Niri](../../utilities/window-manager/) dibuja ventanas, pero no trae nada más: ni barra con el reloj y los espacios de trabajo, ni ajustes rápidos de volumen o red, ni forma de lanzar programas. En un escritorio completo como GNOME o Plasma todo eso viene incluido y es difícil de cambiar; aquí te toca ensamblarlo, y a cambio decides cada pieza.
 
 ## Rofi y Wofi (2012, 2020)
 
@@ -60,7 +60,7 @@ cp /etc/xdg/waybar/config.jsonc /etc/xdg/waybar/style.css ~/.config/waybar/
 waybar
 ```
 
-Para lanzarla con Hyprland, añádela al arranque de tu configuración (ver [Window Manager](./window-manager/)):
+Para lanzarla con Hyprland, añádela al arranque de tu configuración (ver [Window Manager](../../utilities/window-manager/)):
 
 ```lua
 wl.on("startup", function()
@@ -193,7 +193,7 @@ El último elemento de un escritorio sin menús es el lanzador: una caja de bús
 
 **Vicinae** toma la dirección contraria: es un lanzador nativo en **C++ y Qt**, con muchos módulos integrados, que se ejecuta como servidor en segundo plano (de modo que se abre al instante) y que es compatible con extensiones de Raycast mediante una capa de compatibilidad. Si vienes de macOS o te gustan los lanzadores tipo Raycast, es la opción más completa.
 
-La elección depende de cuánto quieras integrar. Anyrun es ligero, solo GTK4 y totalmente modular, y es la opción coherente con el ecosistema de esta guía. Vicinae trae mucho más hecho, a cambio de arrastrar Qt (ver [Ecosistema](./ecosystem/)).
+La elección depende de cuánto quieras integrar. Anyrun es ligero, solo GTK4 y totalmente modular, y es la opción coherente con el ecosistema de esta guía. Vicinae trae mucho más hecho, a cambio de arrastrar Qt (ver [Ecosistema](../ecosystem/)).
 
 | Dato               | Anyrun                                 | Vicinae                                     |
 | ------------------ | -------------------------------------- | ------------------------------------------- |

@@ -94,8 +94,8 @@ In practice: **`gpt` is the modern standard and the right choice in almost every
 UEFI does not execute code from a boot sector, but from **files** inside a partition. That partition is the **ESP** (_EFI System Partition_), and its rules are what condition the partition scheme of the whole guide:
 
 - **FAT format.** The specification allows FAT12, FAT16 and FAT32, but in practice **FAT32** is used. The reason is that the firmware only knows how to read FAT natively: it does not understand ext4 or Btrfs, so the bootloader, the kernel and the initramfs must be on a filesystem the firmware can read.
-- **Size.** 512 MiB to 1 GiB is the usual range. Size matters because the bootloader, the kernel, the initramfs and the microcode live on the ESP; if you also boot snapshots, each one copies its kernel and its initramfs (see [Bootloader](./bootloader/)).
-- **Mount point.** It is mounted at `/boot` or at `/efi`, depending on where you want the kernel and the initramfs to live. This decision affects whether the kernel goes into the Btrfs snapshots or not, as explained in [Mounts](./mounts/).
+- **Size.** 512 MiB to 1 GiB is the usual range. Size matters because the bootloader, the kernel, the initramfs and the microcode live on the ESP; if you also boot snapshots, each one copies its kernel and its initramfs (see [Bootloader](../bootloader/)).
+- **Mount point.** It is mounted at `/boot` or at `/efi`, depending on where you want the kernel and the initramfs to live. This decision affects whether the kernel goes into the Btrfs snapshots or not, as explained in [Mounts](../mounts/).
 - **Partition type.** On GPT it is marked with the type "EFI System"; it is the only partition the firmware recognizes by its type.
 
 On a disk with BIOS and MBR there is no ESP: the equivalent is a 2 MB "BIOS boot" partition, which only reserves the space where GRUB writes its second stage.
@@ -115,7 +115,7 @@ The keys live in the machine's NVRAM and there are four:
 
 The firmware has two states. In **Setup Mode** there is no `PK` installed and anyone can register their own keys; in **User Mode** there is a `PK` and modifications require signing it. From the factory, most machines come in User Mode with Microsoft's keys preinstalled, which allows booting Windows and the Linux distributions that pay for a _shim_ signature.
 
-The alternative is to generate your own keys, register them and sign the bootloader, the kernel and the initramfs yourself. On Arch that is done with `sbctl`, and it is the reason the Unified Kernel Image (UKI) exists: Secure Boot signs EFI files, and a kernel with its initramfs separately is not one. The full procedure is in [Kernel and Initramfs](./kernel-initramfs/).
+The alternative is to generate your own keys, register them and sign the bootloader, the kernel and the initramfs yourself. On Arch that is done with `sbctl`, and it is the reason the Unified Kernel Image (UKI) exists: Secure Boot signs EFI files, and a kernel with its initramfs separately is not one. The full procedure is in [Kernel and Initramfs](../kernel-initramfs/).
 
 It is worth knowing that Secure Boot does not protect against everything. It verifies that the code being executed is signed, but it does not check that the kernel parameters are the ones you set, nor that the initramfs is yours, unless you use a signed UKI. And on many machines you have to keep Microsoft's keys (`sbctl enroll-keys -m`), because the graphics card firmware is also signed with them.
 
@@ -161,7 +161,7 @@ If `efibootmgr` answers "EFI variables are not supported", you are in BIOS mode 
 | Tools               | `efibootmgr`, `efivarfs` (mounted at `/sys/firmware/efi/efivars`)                                                                    |
 | Secure Boot         | `sbctl` <https://github.com/Foxboron/sbctl>                                                                                          |
 
-**Quick check.** From the live USB (see [Install Media](./install-media/)), before partitioning anything:
+**Quick check.** From the live USB (see [Install Media](../install-media/)), before partitioning anything:
 
 ```bash
 # Should print 64 if you booted in UEFI; if it errors, you are in BIOS

@@ -5,7 +5,7 @@ category: utilities
 tags: ["xdg", "portals", "wayland"]
 ---
 
-In the old X11 world, any application could read the whole screen, capture the keyboard, and list the other applications' windows without asking permission. Wayland fixed that lack of isolation, but at a cost: an application can no longer simply take a screenshot, or open the system file picker, or share your screen in a video call. Someone has to do it for them, asking you first. That someone is the portals, and since they run over D-Bus (see [dbus](./dbus/)), they depend on it.
+In the old X11 world, any application could read the whole screen, capture the keyboard, and list the other applications' windows without asking permission. Wayland fixed that lack of isolation, but at a cost: an application can no longer simply take a screenshot, or open the system file picker, or share your screen in a video call. Someone has to do it for them, asking you first. That someone is the portals, and since they run over D-Bus (see [dbus](../dbus/)), they depend on it.
 
 The portals were born in the Flatpak project, courtesy of Alexander Larsson (Red Hat), so that applications isolated in a container could access resources outside it in a controlled way, but today they serve any application. They work in two layers. The first, `xdg-desktop-portal`, is a service that receives requests from applications. The second are the _backends_, programs that know your compositor and know how to fulfill the request: capture a screen, show the file picker, ask for your confirmation. Each backend declares which interfaces it implements and for which desktops, and a `portals.conf` file chooses which one to use for each.
 

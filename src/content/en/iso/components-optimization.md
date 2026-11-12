@@ -20,7 +20,7 @@ There are four things worth keeping clear:
 - **`vm.swappiness` controls the preference:** a low value makes the kernel avoid swap and evict the file cache first; a high value makes it swap out program pages more readily.
 - **It is where memory is stored when hibernating**, so hibernating requires a swap on disk, at least as large as the RAM.
 
-There are two ways to have one. A dedicated partition, like the one created in [Mounts](./mounts/), is the simplest and does not depend on the filesystem. A file (`/swapfile`) lets you change the size without repartitioning the disk, but on Btrfs it requires creating it with a special command (`btrfs filesystem mkswapfile`) and inside its own subvolume, so that copy-on-write and snapshots do not interfere.
+There are two ways to have one. A dedicated partition, like the one created in [Mounts](../mounts/), is the simplest and does not depend on the filesystem. A file (`/swapfile`) lets you change the size without repartitioning the disk, but on Btrfs it requires creating it with a special command (`btrfs filesystem mkswapfile`) and inside its own subvolume, so that copy-on-write and snapshots do not interfere.
 
 The problem is that the disk, even an SSD, is orders of magnitude slower than memory: when the system runs out of RAM and starts swapping, everything freezes while the pages travel, and on an SSD every swap burns write cycles. Removing swap is not the solution either, because then, when RAM runs out, the kernel kills processes to free memory.
 
@@ -31,7 +31,7 @@ zram proposes a different idea: instead of sending those pages to disk, compress
 The configuration this guide recommends has three complementary pieces:
 
 - **A zram device as the primary swap**, with `zstd` as the algorithm and priority 150, so the kernel uses it before any other.
-- **The 4 GiB swap partition** created in [Mounts](./mounts/) as a fallback, with lower priority: it is only used if zram fills up.
+- **The 4 GiB swap partition** created in [Mounts](../mounts/) as a fallback, with lower priority: it is only used if zram fills up.
 - **Kernel tunables (`sysctl`)** that take advantage of it: `vm.swappiness=100` means swapping is cheap and there is no need to wait until RAM runs out, and `vm.vfs_cache_pressure=150` makes the kernel reclaim the file name cache sooner to free memory for applications.
 
 The size of zram is expressed as a factor of the RAM. This table summarizes the recommended values (the _Total_ column is the RAM plus the zram, that is, the effective memory you get):
@@ -74,7 +74,7 @@ vm.vfs_cache_pressure=150
 | Documentation       | <https://docs.kernel.org/admin-guide/blockdev/zram.html>, <https://wiki.archlinux.org/title/Zram> and <https://wiki.archlinux.org/title/Swap> |
 | Source              | <https://github.com/systemd/zram-generator>                                                                                               |
 
-**Installation.** Before configuring zram, here are the basic swap commands. If the swap partition was already active when `genfstab` was run during installation (see [Install Media](./install-media/)), its entry in `/etc/fstab` already exists; a swap file needs its line `/swapfile none swap defaults 0 0`:
+**Installation.** Before configuring zram, here are the basic swap commands. If the swap partition was already active when `genfstab` was run during installation (see [Install Media](../install-media/)), its entry in `/etc/fstab` already exists; a swap file needs its line `/swapfile none swap defaults 0 0`:
 
 ```bash
 # Show active swap and memory
@@ -116,7 +116,7 @@ swapon --show
 zramctl
 ```
 
-On systems without `systemd` (see [PID](./pid/)) `zram-generator` cannot be used, but the same result can be achieved by hand with `zramctl`, creating your own service that runs this at boot:
+On systems without `systemd` (see [PID](../pid/)) `zram-generator` cannot be used, but the same result can be achieved by hand with `zramctl`, creating your own service that runs this at boot:
 
 ```bash
 modprobe zram
@@ -137,7 +137,7 @@ Its main features:
 - **Continuous monitoring:** it checks available memory up to ten times per second (less often if memory is plentiful), at a negligible CPU cost.
 - **Two thresholds, two signals:** by default it acts when less than 10% of memory **and** less than 10% of swap remain (both conditions at once), sends `SIGTERM` to allow a graceful shutdown and, if usage keeps climbing to half of that threshold, escalates to `SIGKILL`.
 - **Control over whom to kill:** `--prefer` and `--avoid` accept regular expressions on the process name, and `-P` lets you run a script before killing anything.
-- **Works without `systemd`:** as a standalone daemon, it integrates the same way in OpenRC, runit, s6 or dinit (see [PID](./pid/)).
+- **Works without `systemd`:** as a standalone daemon, it integrates the same way in OpenRC, runit, s6 or dinit (see [PID](../pid/)).
 
 The detail that it requires **both memory and swap to be low at the same time** matters in this configuration: with `vm.swappiness=100` the kernel happily swaps, so swap fills up before memory does. If it only looked at free memory, earlyoom would not react in time.
 
@@ -200,7 +200,7 @@ Compressing data always had a dilemma: fast algorithms, like `gzip`, compress li
 
 Because of that combination it ended up in every layer of a system like the one in this guide:
 
-- **Btrfs:** the kernel has included `zstd` support since version 4.14 (November 2017), and it is enabled with the `compress=zstd` mount option (see [Mounts](./mounts/)).
+- **Btrfs:** the kernel has included `zstd` support since version 4.14 (November 2017), and it is enabled with the `compress=zstd` mount option (see [Mounts](../mounts/)).
 - **zram:** as the memory compression algorithm (see previous section).
 - **Arch packages:** pacman 5.2 supported it in October 2019, and since January 2020 packages from the official repositories are compressed with `zstd` instead of `xz`, which is why you see `.pkg.tar.zst` files today.
 - **Initramfs:** `mkinitcpio` can compress it with `zstd` using `COMPRESSION="zstd"` in `/etc/mkinitcpio.conf`.

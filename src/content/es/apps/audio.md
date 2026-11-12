@@ -55,7 +55,7 @@ Su idea central era que audio y vídeo, y el mundo de escritorio y el profesiona
 
 - **Compatibilidad con los tres mundos anteriores:** `pipewire-alsa`, `pipewire-pulse` (un servidor PulseAudio de reemplazo) y `pipewire-jack` (una biblioteca JACK de reemplazo) hacen que las aplicaciones existentes funcionen sin cambios.
 - **Un gestor de sesión aparte, WirePlumber,** que decide cómo se enlazan los flujos y activa dispositivos ALSA, Bluetooth y cámaras; es modular y se programa con scripts.
-- **Vídeo y pantalla:** los portales (ver [XDG Desktop Portals](./portals/)) le piden a PipeWire el flujo de vídeo cuando compartes pantalla en una videollamada.
+- **Vídeo y pantalla:** los portales (ver [XDG Desktop Portals](../../utilities/portals/)) le piden a PipeWire el flujo de vídeo cuando compartes pantalla en una videollamada.
 - **Latencia baja para audio profesional,** con herramientas gráficas de conexión como Helvum o qpwgraph.
 
 Fedora 34 (abril de 2021) fue la primera distribución en usarlo para el audio por defecto, y después lo adoptaron Pop!\_OS, Ubuntu y Debian. El costo es que es una pieza grande y relativamente joven, y todavía hay aplicaciones antiguas que asumen PulseAudio y dependen de la capa de compatibilidad.
@@ -92,7 +92,7 @@ Si prefieres un control gráfico, `pavucontrol` y, para conectar flujos a mano, 
 sudo pacman -S pavucontrol qpwgraph
 ```
 
-En sistemas sin `systemd` (ver [PID](./pid/)) los tres procesos (`pipewire`, `pipewire-pulse` y `wireplumber`) se lanzan desde el arranque de la sesión de usuario, o con los paquetes de servicio de tu init.
+En sistemas sin `systemd` (ver [PID](../../iso/pid/)) los tres procesos (`pipewire`, `pipewire-pulse` y `wireplumber`) se lanzan desde el arranque de la sesión de usuario, o con los paquetes de servicio de tu init.
 
 ## mpd: el reproductor de música por daemon
 
@@ -142,7 +142,7 @@ Sin `systemd`, basta ejecutar `mpd` al iniciar la sesión (se pone en segundo pl
 
 ## ncmpcpp: el cliente de terminal
 
-MPD no tiene interfaz propia, y eso exige elegir un cliente. Los gráficos suelen ser vistosos pero pesados, y los más simples, como `mpc`, solo sirven para comandos sueltos. **ncmpcpp** es el cliente de terminal más completo: una interfaz de texto (basada en ncurses) inspirada en `ncmpc`, escrita por Andrzej Rybczak, pensada para quien ya vive en la terminal (ver [Shell](./shell/)) y quiere gestionar toda su música con el teclado.
+MPD no tiene interfaz propia, y eso exige elegir un cliente. Los gráficos suelen ser vistosos pero pesados, y los más simples, como `mpc`, solo sirven para comandos sueltos. **ncmpcpp** es el cliente de terminal más completo: una interfaz de texto (basada en ncurses) inspirada en `ncmpc`, escrita por Andrzej Rybczak, pensada para quien ya vive en la terminal (ver [Shell](../../utilities/shell/)) y quiere gestionar toda su música con el teclado.
 
 Sus rasgos principales:
 
@@ -191,4 +191,4 @@ visualizer_type = spectrum
 
 ## Relación con el vídeo
 
-El audio que aquí gestionas afecta también al vídeo: cuando reproduces un video con [mpv](./video/), el audio pasa por PipeWire. Del mismo modo, las capturas de pantalla en Videollamandas usan PipeWire para transportar tanto el audio como el vídeo con los mismos mecanismos de seguridad.
+El audio que aquí gestionas afecta también al vídeo: cuando reproduces un video con [mpv](../video/), el audio pasa por PipeWire. Del mismo modo, las capturas de pantalla en Videollamandas usan PipeWire para transportar tanto el audio como el vídeo con los mismos mecanismos de seguridad.

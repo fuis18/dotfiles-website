@@ -65,7 +65,7 @@ paru -S brave-bin
 
 ## Epiphany (2002)
 
-Epiphany, known today as _GNOME Web_, is the GNOME project's browser. It was born in 2002 as a fork of Galeon, an earlier GNOME browser, and has since stayed the desktop's simple, well-integrated browser. It uses the WebKit engine (through WebKitGTK), the same as Safari, and a GTK4 interface with libadwaita (see [Ecosystem](./ecosystem/)), so it looks and behaves like the other applications in this guide.
+Epiphany, known today as _GNOME Web_, is the GNOME project's browser. It was born in 2002 as a fork of Galeon, an earlier GNOME browser, and has since stayed the desktop's simple, well-integrated browser. It uses the WebKit engine (through WebKitGTK), the same as Safari, and a GTK4 interface with libadwaita (see [Ecosystem](../ecosystem/)), so it looks and behaves like the other applications in this guide.
 
 Its key features:
 

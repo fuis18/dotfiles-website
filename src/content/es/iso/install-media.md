@@ -11,7 +11,7 @@ Un instalador gráfico de «siguiente, siguiente» es cómodo, pero te entrega u
 
 Un sistema instalado no puede particionarse ni reemplazarse a sí mismo mientras corre. Antes se arrancaba desde disquetes y CDs, lentos, frágiles y de un solo uso. El USB live resuelve eso: arranca un Linux completo desde un pendrive, lo carga en RAM y deja los discos del equipo libres para particionar, formatear y montar sin que nada los esté usando.
 
-Para Arch y CachyOS (ver [Distro Base](./distro-base/)) la ISO la genera `archiso` y se publica una nueva cada mes. El procedimiento es el mismo para cualquier distro: descargar, verificar y escribir.
+Para Arch y CachyOS (ver [Distro Base](../distro-base/)) la ISO la genera `archiso` y se publica una nueva cada mes. El procedimiento es el mismo para cualquier distro: descargar, verificar y escribir.
 
 Descarga la ISO desde <https://archlinux.org/download/>, comprueba su firma y escríbela con `dd` al pendrive.
 
@@ -39,7 +39,7 @@ ip link
 iwctl
 ```
 
-Para Wi-Fi, dentro de `iwctl` (el mismo `iwd` que quedará instalado en el sistema final, ver [Network](./network/)):
+Para Wi-Fi, dentro de `iwctl` (el mismo `iwd` que quedará instalado en el sistema final, ver [Network](../../utilities/network/)):
 
 ```bash
 device list
@@ -61,7 +61,7 @@ pacman-key --populate archlinux
 pacman -Sy archlinux-keyring
 ```
 
-A partir de aquí se particiona y monta el disco (ver [Mounts](./mounts/)), y recién entonces se pasa al siguiente paso.
+A partir de aquí se particiona y monta el disco (ver [Mounts](../mounts/)), y recién entonces se pasa al siguiente paso.
 
 | Dato          | Detalle                                                             |
 | ------------- | ------------------------------------------------------------------- |
@@ -93,7 +93,7 @@ Según tu procesador, instala también el microcódigo (`lscpu` te dice cuál ti
 | --------------------------- | ------------------------- |
 | `pacstrap /mnt intel-ucode` | `pacstrap /mnt amd-ucode` |
 
-Si usas Btrfs, añade también `btrfs-progs` (ver [Mounts](./mounts/)). Luego, el teclado de la consola y el `fstab`:
+Si usas Btrfs, añade también `btrfs-progs` (ver [Mounts](../mounts/)). Luego, el teclado de la consola y el `fstab`:
 
 ```bash
 cat > /mnt/etc/vconsole.conf <<EOF
@@ -136,7 +136,7 @@ EDITOR=nvim visudo
 # Descomenta: %wheel ALL=(ALL:ALL) ALL
 ```
 
-Habilita los servicios (`timedatectl set-ntp true` no funciona aquí porque necesita `systemd` corriendo, así que se habilita `systemd-timesyncd` para que sincronice la hora desde el primer arranque; los demás se explican en [Network](./network/)):
+Habilita los servicios (`timedatectl set-ntp true` no funciona aquí porque necesita `systemd` corriendo, así que se habilita `systemd-timesyncd` para que sincronice la hora desde el primer arranque; los demás se explican en [Network](../../utilities/network/)):
 
 ```bash
 systemctl enable iwd knot-resolver systemd-timesyncd
@@ -158,7 +158,7 @@ EOF
 blkid -s UUID -o value /dev/sda3
 ```
 
-Crea `/boot/loader/entries/arch.conf` con ese UUID (ajusta `intel-ucode` o `amd-ucode` y quita esa línea si no usas microcódigo). En ext4 las `options` son estas; en Btrfs hay que añadir `rootflags=subvol=@`, como se explica en [Mounts](./mounts/):
+Crea `/boot/loader/entries/arch.conf` con ese UUID (ajusta `intel-ucode` o `amd-ucode` y quita esa línea si no usas microcódigo). En ext4 las `options` son estas; en Btrfs hay que añadir `rootflags=subvol=@`, como se explica en [Mounts](../mounts/):
 
 ```conf
 title   Arch Linux
@@ -199,7 +199,7 @@ Si algo falla y necesitas volver a entrar, arranca otra vez el USB live, monta l
 | Herramienta       | `arch-chroot` y `pacstrap` forman parte de `arch-install-scripts`                                                   |
 | Documentación     | <https://wiki.archlinux.org/title/Chroot> y <https://wiki.archlinux.org/title/Installation_guide>                   |
 | Código            | <https://gitlab.archlinux.org/archlinux/arch-install-scripts>                                                       |
-| Equivalente Artix | `basestrap` en lugar de `pacstrap` y `artix-chroot` en lugar de `arch-chroot` (ver [Distro Base](./distro-base/)) |
+| Equivalente Artix | `basestrap` en lugar de `pacstrap` y `artix-chroot` en lugar de `arch-chroot` (ver [Distro Base](../distro-base/)) |
 
 **Instalación.** Las herramientas ya vienen en la ISO. En un Arch ya instalado se obtienen con:
 
@@ -218,7 +218,7 @@ Lo que conviene saber para trabajar cómodo:
 - **Teclado:** `loadkeys la-latin1` lo cambia en la sesión; para que sea permanente se escribe `KEYMAP=la-latin1` en `/etc/vconsole.conf`.
 - **Fuente:** en pantallas de alta resolución el texto sale diminuto; `setfont ter-132b` (Terminus, incluida en la ISO) lo agranda. Para dejarlo fijo, se añade `FONT=ter-132b` a `/etc/vconsole.conf`.
 - **Escribir menos y pegar más:** en el USB live puedes ejecutar `passwd` para ponerle contraseña a root y conectarte desde otro equipo con `ssh root@IP` (si el servicio no está activo, `systemctl start sshd`), lo que permite copiar y pegar los comandos de esta guía en lugar de teclearlos.
-- **Desde la tty se arranca todo lo demás:** el greeter (ver [Greeter](./greeter/)) y el gestor de ventanas (ver [Window Manager](./window-manager/)) se lanzan desde aquí.
+- **Desde la tty se arranca todo lo demás:** el greeter (ver [Greeter](../../utilities/greeter/)) y el gestor de ventanas (ver [Window Manager](../../utilities/window-manager/)) se lanzan desde aquí.
 
 ```bash
 # Cambiar de consola virtual
