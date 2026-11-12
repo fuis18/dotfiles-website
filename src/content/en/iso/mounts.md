@@ -2,7 +2,7 @@
 title: "Mounts"
 description: "Filesystem and partitioning: ext4, Btrfs with snapshots and partition scheme."
 category: iso
-tags: ["ext4", "btrfs", "snapshots", "partitions"]
+tags: ["ext4", "btrfs", "snapshots", "subvolumes"]
 ---
 
 The filesystem is the hardest decision to change once the system is installed, and the one that defines whether a bad update is a scare or a mere inconvenience.

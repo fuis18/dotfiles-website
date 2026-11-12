@@ -2,7 +2,7 @@
 title: "Kernel e Initramfs"
 description: "Variantes de kernel, generadores de initramfs (mkinitcpio, dracut) y UKI."
 category: iso
-tags: ["kernel", "initramfs", "mkinitcpio", "dracut", "uki", "sbctl"]
+tags: ["kernel", "dracut", "uki", "sbctl"]
 ---
 
 El gestor de arranque (ver [Bootloader](./bootloader.md)) encuentra el kernel, lo carga en memoria y le pasa el control junto con unos parámetros. Pero ahí aparece un problema que el propio kernel no puede resolver: para leer tu disco necesita el controlador de tu NVMe, el soporte de Btrfs o el contenedor cifrado, y muchos de esos elementos son módulos que viven dentro de la raíz a la que todavía no puede acceder. El initramfs rompe ese círculo, y la imagen de kernel unificada (UKI) resuelve el último cabo suelto: que nada de esa cadena pueda alterarse sin que el firmware lo note.

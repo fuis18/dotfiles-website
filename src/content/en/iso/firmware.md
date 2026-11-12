@@ -65,7 +65,7 @@ Compared to the BIOS, UEFI changes the whole model:
 - **Stores the boot entries in NVRAM**, the non-volatile memory of the board, instead of relying on a disk sector. They are managed with `efibootmgr`.
 - **Uses GPT**, the partition scheme that Intel developed alongside the EFI specification.
 
-### GPT: the modern partition scheme
+### GPT or DOS: the partition scheme
 
 GPT (_GUID Partition Table_) replaces the MBR and solves its limits:
 
@@ -79,6 +79,15 @@ GPT (_GUID Partition Table_) replaces the MBR and solves its limits:
 | Verification      | No                    | Checksums (CRC)                                            |
 
 Two details worth knowing. GPT does not eliminate the MBR: it keeps it at the beginning of the disk as a **protective MBR**, an entry that declares the whole disk as occupied so that old tools do not misinterpret it. And since it stores a copy of the header and the table at the end of the disk, if the first one is corrupted it can be reconstructed from the second.
+
+When it comes time to partition, the tools (`fdisk`, `cfdisk`, `parted`) ask you to create a table, and at that point two names appear: `gpt` and `dos` (that is what they call the MBR). The choice is dictated by the firmware your machine boots with:
+
+| Machine boot                  | Table | Reason                                |
+| ----------------------------- | ----- | ------------------------------------- |
+| UEFI (any modern machine)     | `gpt` | It is mandatory to boot with UEFI     |
+| Traditional BIOS / Legacy mode | `dos` | It is what a BIOS knows how to read   |
+
+In practice: **`gpt` is the modern standard and the right choice in almost every case**, because the vast majority of computers manufactured since ~2012 boot with UEFI. **Reserve `dos` for very old machines with a traditional BIOS** (or a Legacy mode in the firmware) or for old operating systems that do not understand GPT, accepting 1983's limits in exchange: ~2 TiB, four primary partitions and an unbacked table. There are mixed combinations —GPT with BIOS boot requires tricks like the "BIOS boot" partition where GRUB writes its code— but they only add friction: the simple rule is **UEFI → `gpt`, BIOS → `dos`**, with no mixes.
 
 ### The EFI System Partition (ESP)
 

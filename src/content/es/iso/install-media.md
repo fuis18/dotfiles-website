@@ -1,6 +1,6 @@
 ---
 title: "Medios y Entornos de Instalación"
-description: "Medios de arranque y entornos de instalación: USB live, chroot y tty."
+description: "Estados de instalación: USB live, chroot y tty."
 category: iso
 tags: ["usb-live", "chroot", "tty"]
 ---

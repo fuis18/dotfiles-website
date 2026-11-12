@@ -2,7 +2,7 @@
 title: "Kernel and Initramfs"
 description: "Kernel variants, initramfs generators (mkinitcpio, dracut) and UKI."
 category: iso
-tags: ["kernel", "initramfs", "mkinitcpio", "dracut", "uki", "sbctl"]
+tags: ["kernel", "dracut", "uki", "sbctl"]
 ---
 
 The bootloader (see [Bootloader](./bootloader.md)) finds the kernel, loads it into memory and passes it control along with some parameters. But then a problem appears that the kernel itself cannot solve: to read your disk it needs your NVMe driver, the Btrfs support or the encrypted container, and many of those elements are modules that live inside the root to which it still has no access. The initramfs breaks that circle, and the Unified Kernel Image (UKI) solves the last loose end: that none of that chain can be tampered with without the firmware noticing.
@@ -13,13 +13,13 @@ The kernel is the core of the system: the program that talks to the hardware, di
 
 Arch does not ship a single kernel, but several in its official repositories, each one designed for a use:
 
-| Package          | What it is                                                                                 | Who it is for                                                |
-| ---------------- | -------------------------------------------------------------------------------------- | --------------------------------------------------------- |
-| `linux`          | The vanilla kernel, without added patches                                                | Whoever wants exactly what the Linux project publishes |
-| `linux-lts`      | Long-term support branch, with fewer changes and more testing                                 | Servers and whoever prioritizes stability                   |
-| `linux-zen`      | Patches aimed at desktop responsiveness, maintained by the Zen Kernel project | Everyday machines                                     |
-| `linux-hardened` | Security hardening, with extra mitigations and restrictions                    | Whoever prioritizes security over performance                |
-| `linux-cachyos`  | CachyOS's own kernel, with additional schedulers                               | CachyOS users (see [Distro Base](./distro-base.md)) |
+| Package          | What it is                                                                    | Who it is for                                          |
+| ---------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------ |
+| `linux`          | The vanilla kernel, without added patches                                     | Whoever wants exactly what the Linux project publishes |
+| `linux-lts`      | Long-term support branch, with fewer changes and more testing                 | Servers and whoever prioritizes stability              |
+| `linux-zen`      | Patches aimed at desktop responsiveness, maintained by the Zen Kernel project | Everyday machines                                      |
+| `linux-hardened` | Security hardening, with extra mitigations and restrictions                   | Whoever prioritizes security over performance          |
+| `linux-cachyos`  | CachyOS's own kernel, with additional schedulers                              | CachyOS users (see [Distro Base](./distro-base.md))    |
 
 This guide uses **`linux-zen`** as the main kernel and leaves **`linux-lts`** installed as a fallback. The reason is concrete: in a rolling release distribution, a kernel update can break the boot or a driver. If that happens, you choose the LTS entry in the bootloader menu and the system keeps running with the previous version. It is a cheap safety net —it takes up a few hundred megabytes— that complements the snapshots of [Mounts](./mounts.md).
 
@@ -29,16 +29,16 @@ Three practical details worth being clear about:
 - **The firmware is a single package**, `linux-firmware`, shared by all kernels. There are no variants per kernel: they are the files that the hardware itself needs to work, and they are installed once.
 - **The processor microcode** (`intel-ucode` or `amd-ucode`) is loaded as the **first** `initrd` in each bootloader entry, before the initramfs. It fixes processor errata from boot, and that is why it goes first.
 
-| Data              | Detail                                                                      |
-| ----------------- | ---------------------------------------------------------------------------- |
-| Origin            | Linux 0.01 announced in September 1991; version 1.0 in March 1994     |
-| Author            | Linus Torvalds and the kernel community                                     |
-| License           | GPL-2.0                                                                      |
-| Arch variants     | `linux`, `linux-lts`, `linux-zen`, `linux-hardened` (official repositories) |
-| Firmware          | `linux-firmware` (shared by all kernels)                          |
-| Microcode         | `intel-ucode` or `amd-ucode`, as the first `initrd`                            |
-| Documentation     | <https://wiki.archlinux.org/title/Kernel> and <https://docs.kernel.org>        |
-| Zen Kernel        | <https://github.com/zen-kernel/zen-kernel>                                   |
+| Data          | Detail                                                                      |
+| ------------- | --------------------------------------------------------------------------- |
+| Origin        | Linux 0.01 announced in September 1991; version 1.0 in March 1994           |
+| Author        | Linus Torvalds and the kernel community                                     |
+| License       | GPL-2.0                                                                     |
+| Arch variants | `linux`, `linux-lts`, `linux-zen`, `linux-hardened` (official repositories) |
+| Firmware      | `linux-firmware` (shared by all kernels)                                    |
+| Microcode     | `intel-ucode` or `amd-ucode`, as the first `initrd`                         |
+| Documentation | <https://wiki.archlinux.org/title/Kernel> and <https://docs.kernel.org>     |
+| Zen Kernel    | <https://github.com/zen-kernel/zen-kernel>                                  |
 
 **Installation.**
 
@@ -54,16 +54,16 @@ The idea is not new. **initrd** appeared in Linux 1.1 (1994) and stabilized in 1
 
 On Arch it is generated by **`mkinitcpio`**, which builds the image from a list of _hooks_ in `/etc/mkinitcpio.conf`. Each hook adds a specific function to the boot:
 
-| Hook                 | What it does                                                                          |
-| -------------------- | --------------------------------------------------------------------------------- |
-| `base`               | Installs the minimal skeleton and the `init` script                                    |
-| `udev`               | Detects the hardware and loads the modules that are needed                           |
-| `microcode`          | Includes the processor microcode in the image                                |
+| Hook                 | What it does                                                  |
+| -------------------- | ------------------------------------------------------------- |
+| `base`               | Installs the minimal skeleton and the `init` script           |
+| `udev`               | Detects the hardware and loads the modules that are needed    |
+| `microcode`          | Includes the processor microcode in the image                 |
 | `keyboard`, `keymap` | Keyboard available at boot (needed to type the LUKS password) |
-| `block`              | Disk drivers (NVMe, SATA, USB)                                          |
-| `encrypt`            | Unlocks the LUKS container                                                     |
-| `filesystems`        | Adds the filesystem support of the root                               |
-| `fsck`               | Checks the filesystem before mounting it                                |
+| `block`              | Disk drivers (NVMe, SATA, USB)                                |
+| `encrypt`            | Unlocks the LUKS container                                    |
+| `filesystems`        | Adds the filesystem support of the root                       |
+| `fsck`               | Checks the filesystem before mounting it                      |
 
 There are **two families of hooks that do not mix**. The classic one, based on BusyBox, uses `udev` and `encrypt`; the one based on systemd uses `systemd` and `sd-encrypt`. Choosing one and sticking to it matters: combining hooks from both produces images that do not boot or that behave unpredictably. **dracut**, created by Harald Hoyer at Red Hat (first version in July 2009), is the alternative, with a modular design based on systemd but agnostic to the init of the final system.
 
@@ -77,16 +77,16 @@ Both generate an initramfs, but with different approaches. **mkinitcpio** is the
 
 **dracut** is more generic: designed to work on any distribution, it automatically detects which modules it needs based on the kernel parameters and the loaded modules. It is "more opinionated", but also more robust in certain scenarios, especially with UKI and Secure Boot. It does not depend on systemd to work, although systemd components can be included in the initramfs if required. Instead of hooks it uses **modules** that are added or removed with `--add` and `--omit`, and its configuration lives in `/etc/dracut.conf.d/`. It is the default generator of Fedora, RHEL and openSUSE and, after the transition started with Ubuntu 25.10 and consolidated in 26.04 LTS, also of Ubuntu (which had been using `initramfs-tools`). Since October 2021, after Hoyer's departure from Red Hat, it is maintained by the community.
 
-| Data             | mkinitcpio                                                             | dracut                                                                    |
-| ---------------- | ---------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| Origin           | Arch Linux project; written in Bash, hook-based                  | July 2009, by Harald Hoyer and others (Red Hat); module-based      |
-| Maintenance      | Arch Linux team                                                   | Community since October 2021                                           |
-| Configuration    | `/etc/mkinitcpio.conf` (list of `HOOKS`)                              | `/etc/dracut.conf.d/*.conf` (`--add`, `--omit`)                           |
-| Hook family      | - BusyBox (`udev`, `encrypt`)<br />- systemd (`systemd`, `sd-encrypt`) | Modular design based on systemd and udev                                  |
-| Adoption         | Arch, EndeavourOS, Manjaro, CachyOS, Garuda                            | Fedora, RHEL, openSUSE, Ubuntu (plan announced in February 2025)        |
-| License          | GPL-2.0                                                                | GPL-2.0 or later (LGPL-2.1+ parts)                                    |
-| Documentation    | <https://wiki.archlinux.org/title/Mkinitcpio>                          | <https://dracut-ng.github.io> and <https://wiki.archlinux.org/title/Dracut> |
-| Code             | <https://gitlab.archlinux.org/archlinux/mkinitcpio/mkinitcpio>         | <https://github.com/dracut-ng/dracut-ng>                                  |
+| Data          | mkinitcpio                                                             | dracut                                                                      |
+| ------------- | ---------------------------------------------------------------------- | --------------------------------------------------------------------------- |
+| Origin        | Arch Linux project; written in Bash, hook-based                        | July 2009, by Harald Hoyer and others (Red Hat); module-based               |
+| Maintenance   | Arch Linux team                                                        | Community since October 2021                                                |
+| Configuration | `/etc/mkinitcpio.conf` (list of `HOOKS`)                               | `/etc/dracut.conf.d/*.conf` (`--add`, `--omit`)                             |
+| Hook family   | - BusyBox (`udev`, `encrypt`)<br />- systemd (`systemd`, `sd-encrypt`) | Modular design based on systemd and udev                                    |
+| Adoption      | Arch, EndeavourOS, Manjaro, CachyOS, Garuda                            | Fedora, RHEL, openSUSE, Ubuntu (plan announced in February 2025)            |
+| License       | GPL-2.0                                                                | GPL-2.0 or later (LGPL-2.1+ parts)                                          |
+| Documentation | <https://wiki.archlinux.org/title/Mkinitcpio>                          | <https://dracut-ng.github.io> and <https://wiki.archlinux.org/title/Dracut> |
+| Code          | <https://gitlab.archlinux.org/archlinux/mkinitcpio/mkinitcpio>         | <https://github.com/dracut-ng/dracut-ng>                                    |
 
 ### mkinitcpio with classic hooks (BusyBox)
 
@@ -177,12 +177,12 @@ The cost is that setting up your own Secure Boot keys is a manual process that v
 
 | Data          | mkinitcpio                                                     | UKI                                                                 |
 | ------------- | -------------------------------------------------------------- | ------------------------------------------------------------------- |
-| What it is    | Arch's initramfs generator, with hooks                      | An EFI file with kernel, initramfs, microcode and parameters      |
-| Defined by    | Arch Linux project                                            | UAPI group (<https://uapi-group.org>)                               |
-| Detection     | —                                                              | `systemd-boot` detects them in `EFI/Linux/`                          |
-| Signing       | —                                                              | `sbctl` (automatic hook on every kernel update)           |
+| What it is    | Arch's initramfs generator, with hooks                         | An EFI file with kernel, initramfs, microcode and parameters        |
+| Defined by    | Arch Linux project                                             | UAPI group (<https://uapi-group.org>)                               |
+| Detection     | —                                                              | `systemd-boot` detects them in `EFI/Linux/`                         |
+| Signing       | —                                                              | `sbctl` (automatic hook on every kernel update)                     |
 | Documentation | <https://wiki.archlinux.org/title/Mkinitcpio>                  | <https://uapi-group.org/specifications/specs/unified_kernel_image/> |
-| Code          | <https://gitlab.archlinux.org/archlinux/mkinitcpio/mkinitcpio> | <https://github.com/Foxboron/sbctl> (signing)                         |
+| Code          | <https://gitlab.archlinux.org/archlinux/mkinitcpio/mkinitcpio> | <https://github.com/Foxboron/sbctl> (signing)                       |
 
 ### With mkinitcpio + ukify
 

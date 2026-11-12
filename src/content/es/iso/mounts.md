@@ -2,7 +2,7 @@
 title: "Mounts"
 description: "Sistema de archivos y particionado: ext4, Btrfs con snapshots y esquema de particiones."
 category: iso
-tags: ["ext4", "btrfs", "snapshots", "particiones"]
+tags: ["ext4", "btrfs", "snapshots"]
 ---
 
 El sistema de archivos es la decisión más difícil de cambiar una vez instalado el sistema, y la que define si una mala actualización es un susto o un simple contratiempo.
