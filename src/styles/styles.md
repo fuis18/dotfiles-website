@@ -54,8 +54,8 @@ matches the theme.
 | --- | --- | --- | --- |
 | `--color-text` | Primary text: headings, main content, card titles. | `--ctp-mocha-text` (`#cdd6f4`) | `--ctp-latte-text` (`#4c4f69`) |
 | `--color-text-dim` | Secondary/dimmed text: descriptions, footer, chips, dropdown options, blockquotes. | `--ctp-mocha-subtext0` (`#a6adc8`) | `--ctp-latte-subtext0` (`#6c6f85`) |
-| `--color-text-muted` | Muted body text: prose paragraphs, lists, category descriptions, keyboard keys. | `--ctp-mocha-subtext1` (`#bac2de`) | `--ctp-latte-subtext1` (`#5c5f77`) |
-| `--color-text-faint` | Faintest text/decoration: icons, input placeholders, list markers, brand separator, status text. | `--ctp-mocha-overlay0` (`#6c7086`) | `--ctp-latte-overlay0` (`#9ca0b0`) |
+| `--color-text-muted` | Muted body text: prose paragraphs, lists, category descriptions, keyboard keys, search modal status and placeholder. | `--ctp-mocha-subtext1` (`#bac2de`) | `--ctp-latte-subtext1` (`#5c5f77`) |
+| `--color-text-faint` | Faintest text/decoration: icons, list markers, brand separator, tags label. Not for body/status text (below 4.5:1). | `--ctp-mocha-overlay0` (`#6c7086`) | `--ctp-latte-overlay0` (`#9ca0b0`) |
 
 ### Borders
 
