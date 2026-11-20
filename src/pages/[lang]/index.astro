@@ -1,6 +1,5 @@
 ---
 import Layout from '@/layouts/Layout.astro';
-import SearchBar from '@/components/SearchBar.astro';
 import Categories from '@/components/Categories.astro';
 import Card from '@/components/Card.astro';
 
@@ -19,7 +18,6 @@ const sections = await getSections(lang);
 ---
 
 <Layout lang={lang} title={title} description={description}>
-  <SearchBar lang={lang} />
 
   {sections.map((section) => (
     <Categories id={section.id} title={section.title} description={section.description}>

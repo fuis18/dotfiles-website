@@ -1,0 +1,564 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+
+<button
+  class="icon-container"
+  type="button"
+  data-search-open
+  aria-haspopup="dialog"
+  aria-label={t(lang, 'search.open')}
+  title={t(lang, 'search.open')}
+>
+  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <circle cx="11" cy="11" r="8" />
+    <path d="m21 21-4.3-4.3" />
+  </svg>
+</button>
+
+<dialog
+  class="search-modal"
+  id="search-modal"
+  aria-label={t(lang, 'search.title')}
+  data-no-results={t(lang, 'search.noResults')}
+  data-count-label={t(lang, 'search.resultsCount')}
+  data-dev-notice={t(lang, 'search.devNotice')}
+>
+  <div class="search-modal-inner">
+    <div class="search-modal-input-wrap">
+      <svg class="search-modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="11" cy="11" r="8" />
+        <path d="m21 21-4.3-4.3" />
+      </svg>
+      <label class="sr-only" for="pagefind-input">{t(lang, 'nav.search')}</label>
+      <input
+        type="search"
+        id="pagefind-input"
+        class="search-modal-input"
+        placeholder={t(lang, 'search.placeholder')}
+        autocomplete="off"
+        spellcheck="false"
+        role="combobox"
+        aria-expanded="false"
+        aria-autocomplete="list"
+        aria-controls="pagefind-output"
+      />
+      <span class="kbd search-modal-kbd" aria-hidden="true">esc</span>
+    </div>
+    <!-- The live region must exist before its content changes, or screen
+         readers won't announce it. The <ul> is created on demand instead. -->
+    <div id="pagefind-output" class="search-modal-output">
+      <p
+        class="search-modal-status"
+        id="pagefind-status"
+        role="status"
+        aria-live="polite"
+        aria-atomic="true"
+      ></p>
+    </div>
+  </div>
+</dialog>
+
+<script>
+  interface PagefindSubResult {
+    title?: string;
+    url: string;
+    excerpt?: string;
+  }
+
+  interface PagefindResultData {
+    url: string;
+    excerpt?: string;
+    meta?: { title?: string };
+    sub_results?: PagefindSubResult[];
+  }
+
+  interface PagefindResultStub {
+    id: string;
+    data(): Promise<PagefindResultData>;
+  }
+
+  interface PagefindSearchResponse {
+    results: PagefindResultStub[];
+  }
+
+  interface PagefindApi {
+    init(): Promise<void>;
+    destroy?(): Promise<void>;
+    preload(query: string): void;
+    search(query: string, options?: Record<string, unknown>): Promise<PagefindSearchResponse>;
+    debouncedSearch(
+      query: string,
+      options?: Record<string, unknown>,
+      timeout?: number
+    ): Promise<PagefindSearchResponse | null>;
+  }
+
+  const getModal = (): HTMLDialogElement | null =>
+    document.getElementById('search-modal') as HTMLDialogElement | null;
+  const getInput = (): HTMLInputElement | null =>
+    document.getElementById('pagefind-input') as HTMLInputElement | null;
+  const getStatus = (): HTMLElement | null => document.getElementById('pagefind-status');
+  const getOutput = (): HTMLElement | null => document.getElementById('pagefind-output');
+  const getResults = (): HTMLElement | null => document.getElementById('pagefind-results');
+
+  // The <ul> is created only when there are results to show.
+  function ensureResults(): HTMLElement | null {
+    const output = getOutput();
+    if (!output) return null;
+    let list = getResults();
+    if (!list) {
+      list = document.createElement('ul');
+      list.id = 'pagefind-results';
+      list.className = 'search-modal-results';
+      output.append(list);
+    }
+    return list;
+  }
+
+  // The status node is never created or removed: only its text changes, so
+  // the live region already exists when the announcement happens.
+  function showStatus(text: string): void {
+    const status = getStatus();
+    if (status) status.textContent = text;
+  }
+
+  function setExpanded(expanded: boolean): void {
+    getInput()?.setAttribute('aria-expanded', String(expanded));
+  }
+
+  function clearOutput(): void {
+    // Drop aria-activedescendant before the nodes it points at disappear.
+    setActive(-1);
+    getResults()?.remove();
+    showStatus('');
+    setExpanded(false);
+  }
+
+  let pagefindPromise: Promise<PagefindApi | null> | null = null;
+  let pagefindLang = '';
+  let searchSeq = 0;
+  let activeIndex = -1;
+
+  /** Pagefind URLs are root-relative to dist/; the site may be served under a base path. */
+  function withBase(url: string): string {
+    const base = import.meta.env.BASE_URL;
+    if (!base || base === '/') return url;
+    return url.startsWith(base) ? url : `${base.replace(/\/$/, '')}${url}`;
+  }
+
+  async function loadPagefind(): Promise<PagefindApi | null> {
+    const lang = document.documentElement.lang;
+    // The index is per-language; re-init when a client-side navigation changes it.
+    if (pagefindPromise && lang !== pagefindLang) {
+      const previous = await pagefindPromise;
+      if (previous?.destroy) await previous.destroy();
+      pagefindPromise = null;
+    }
+    if (!pagefindPromise) {
+      pagefindLang = lang;
+      const base = import.meta.env.BASE_URL;
+      const prefix = base.endsWith('/') ? base : `${base}/`;
+      pagefindPromise = import(/* @vite-ignore */ `${prefix}pagefind/pagefind.js`)
+        .then(async (mod) => {
+          const api = mod as PagefindApi;
+          await api.init();
+          return api;
+        })
+        // No bundle in `astro dev` (or a failed build): fall back to the notice.
+        .catch(() => null);
+    }
+    return pagefindPromise;
+  }
+
+  function buildTitle(text: string): HTMLSpanElement {
+    const span = document.createElement('span');
+    span.className = 'search-result-title';
+    span.textContent = text;
+    return span;
+  }
+
+  function buildExcerpt(html?: string): HTMLSpanElement {
+    const span = document.createElement('span');
+    span.className = 'search-result-excerpt';
+    // Pagefind entity-encodes excerpts before adding <mark>: safe as innerHTML.
+    span.innerHTML = html ?? '';
+    return span;
+  }
+
+  function renderResults(items: PagefindResultData[]): void {
+    const container = ensureResults();
+    if (!container) return;
+    setActive(-1);
+    container.innerHTML = '';
+
+    for (const item of items) {
+      const li = document.createElement('li');
+      li.className = 'search-result';
+
+      const pageLink = document.createElement('a');
+      pageLink.className = 'search-result-page';
+      pageLink.href = withBase(item.url);
+      pageLink.append(buildTitle(item.meta?.title ?? item.url), buildExcerpt(item.excerpt));
+      li.append(pageLink);
+
+      // Only sections whose excerpt actually contains the match: the exact fragment.
+      const anchors = (item.sub_results ?? []).filter(
+        (sub) => sub.url !== item.url && (sub.excerpt ?? '').includes('<mark>')
+      );
+      if (anchors.length > 0) {
+        const subList = document.createElement('ul');
+        subList.className = 'search-result-anchors';
+        for (const sub of anchors.slice(0, 6)) {
+          const subLi = document.createElement('li');
+          const subLink = document.createElement('a');
+          subLink.className = 'search-result-anchor';
+          subLink.href = withBase(sub.url);
+          subLink.append(buildTitle(sub.title ?? sub.url), buildExcerpt(sub.excerpt));
+          subLi.append(subLink);
+          subList.append(subLi);
+        }
+        li.append(subList);
+      }
+
+      container.append(li);
+    }
+
+    // aria-activedescendant needs a stable id per link.
+    resultLinks().forEach((link, i) => {
+      link.id = `search-link-${i}`;
+    });
+    setActive(-1);
+  }
+
+  function resultLinks(): HTMLAnchorElement[] {
+    const container = getResults();
+    return container ? Array.from(container.querySelectorAll('a')) : [];
+  }
+
+  function setActive(index: number): void {
+    const links = resultLinks();
+    const input = getInput();
+
+    links.forEach((link) => {
+      link.classList.remove('is-active');
+      link.removeAttribute('aria-current');
+    });
+
+    if (links.length === 0 || index < 0) {
+      activeIndex = -1;
+      input?.removeAttribute('aria-activedescendant');
+      return;
+    }
+
+    activeIndex = Math.min(index, links.length - 1);
+    const active = links[activeIndex];
+    active.classList.add('is-active');
+    active.setAttribute('aria-current', 'true');
+    input?.setAttribute('aria-activedescendant', active.id);
+    active.scrollIntoView({ block: 'nearest' });
+  }
+
+  async function runSearch(query: string): Promise<void> {
+    const seq = ++searchSeq;
+    const modal = getModal();
+    if (!modal) return;
+
+    if (query === '') {
+      clearOutput();
+      return;
+    }
+
+    try {
+      const api = await loadPagefind();
+      if (seq !== searchSeq) return;
+      if (!api) {
+        clearOutput();
+        showStatus(modal.dataset.devNotice ?? '');
+        return;
+      }
+
+      api.preload(query);
+      const search = await api.debouncedSearch(query, {}, 150);
+      if (!search || seq !== searchSeq) return;
+
+      if (search.results.length === 0) {
+        clearOutput();
+        showStatus(modal.dataset.noResults ?? '');
+        return;
+      }
+
+      const items = await Promise.all(search.results.slice(0, 10).map((r) => r.data()));
+      if (seq !== searchSeq) return;
+
+      renderResults(items);
+      showStatus(`${search.results.length} ${modal.dataset.countLabel ?? ''}`);
+      setExpanded(true);
+    } catch {
+      if (seq === searchSeq) {
+        clearOutput();
+        showStatus(modal.dataset.devNotice ?? '');
+      }
+    }
+  }
+
+  function openModal(): void {
+    const modal = getModal();
+    if (!modal) return;
+    const input = getInput();
+    if (input) input.value = '';
+    clearOutput();
+    if (!modal.open) modal.showModal();
+    input?.focus();
+    // Warm up the index while the user types.
+    void loadPagefind();
+  }
+
+  // Delegated on document: the ClientRouter swaps the body on navigation, while
+  // this bundled module and its document-level listeners survive.
+  document.addEventListener('click', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (!target) return;
+    if (target.closest('[data-search-open]')) {
+      event.preventDefault();
+      openModal();
+      return;
+    }
+    const modal = getModal();
+    if (modal?.open && target === modal) modal.close();
+  });
+
+  document.addEventListener('input', (event) => {
+    const target = event.target as HTMLElement | null;
+    if (target?.id !== 'pagefind-input') return;
+    void runSearch((target as HTMLInputElement).value.trim());
+  });
+
+  document.addEventListener('keydown', (event) => {
+    const target = event.target as HTMLElement | null;
+    const modal = getModal();
+    const isTyping =
+      target?.tagName === 'INPUT' ||
+      target?.tagName === 'TEXTAREA' ||
+      target?.isContentEditable === true;
+
+    if (event.key === '/' && !isTyping) {
+      if (modal && !modal.open) {
+        event.preventDefault();
+        openModal();
+      } else if (modal?.open) {
+        event.preventDefault();
+        getInput()?.focus();
+      }
+      return;
+    }
+
+    if (!modal?.open) return;
+    const inInput = target?.id === 'pagefind-input';
+    if (!inInput) return;
+
+    if (event.key === 'Escape') {
+      event.preventDefault();
+      modal.close();
+      return;
+    }
+
+    if (event.key === 'ArrowDown' || event.key === 'ArrowUp') {
+      event.preventDefault();
+      const links = resultLinks();
+      if (links.length === 0) return;
+      const delta = event.key === 'ArrowDown' ? 1 : -1;
+      const next = activeIndex === -1 ? (delta > 0 ? 0 : links.length - 1) : activeIndex + delta;
+      setActive(next);
+      return;
+    }
+
+    if (event.key === 'Enter') {
+      const links = resultLinks();
+      const link = links[activeIndex >= 0 ? activeIndex : 0];
+      if (link) {
+        event.preventDefault();
+        link.click();
+      }
+    }
+  });
+</script>
+
+<style>
+  .search-modal {
+    border: 1px solid var(--color-border-strong);
+    border-radius: 0.75rem;
+    background: var(--color-bg);
+    color: var(--color-text);
+    padding: 0;
+    width: min(36rem, calc(100vw - 2rem));
+    max-height: min(70vh, 36rem);
+    overflow: hidden;
+    justify-self: center;
+    margin-top: 5rem
+  }
+
+  .search-modal::backdrop {
+    background: rgba(0, 0, 0, 0.55);
+    backdrop-filter: blur(2px);
+  }
+
+  .search-modal-inner {
+    display: flex;
+    flex-direction: column;
+    max-height: min(70vh, 36rem);
+  }
+
+  .search-modal-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+    flex-shrink: 0;
+    border-bottom: 1px solid var(--color-border);
+  }
+
+  .search-modal-icon {
+    position: absolute;
+    left: 1rem;
+    width: 1rem;
+    height: 1rem;
+    color: var(--color-text-faint);
+    pointer-events: none;
+  }
+
+  .search-modal-input {
+    width: 100%;
+    padding: 0.9rem 4rem 0.9rem 2.6rem;
+    background: transparent;
+    border: none;
+    color: var(--color-text);
+    font-family: var(--font-title);
+    font-size: 1rem;
+    background: var(--color-bg-alt);
+  }
+
+  .search-modal-input:focus {
+    outline: none;
+  }
+
+  .search-modal-input::placeholder {
+    color: var(--color-text-muted);
+  }
+
+  .search-modal-input::-webkit-search-cancel-button {
+    filter: grayscale(1) opacity(0.5);
+  }
+
+  .search-modal-kbd {
+    position: absolute;
+    right: 1rem;
+  }
+
+  /* The "esc" hint only exists on keyboards. */
+  @media (hover: none), (pointer: coarse) {
+    .search-modal-kbd {
+      display: none;
+    }
+  }
+
+  .search-modal-output {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+  }
+
+  .search-modal-status {
+    margin: 0;
+    padding: 0.4rem 1rem 0;
+    flex-shrink: 0;
+    font-family: var(--font-title);
+    font-size: 0.72rem;
+    color: var(--color-text-muted);
+  }
+
+  /* Empty = 0px tall, but the node stays in the accessibility tree. */
+  .search-modal-status:empty {
+    padding: 0;
+  }
+
+  /* The <ul> is created at runtime, so it and its children need :global(). */
+  .search-modal-output :global(.search-modal-results) {
+    list-style: none;
+    margin: 0;
+    padding: 0.4rem;
+    overflow-y: auto;
+    flex: 1 1 auto;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-page),
+  .search-modal-output :global(.search-modal-results .search-result-anchor) {
+    display: block;
+    padding: 0.55rem 0.7rem;
+    border-radius: 0.45rem;
+    color: var(--color-text);
+    text-decoration: none;
+  }
+
+  .search-modal-output :global(.search-modal-results a:hover),
+  .search-modal-output :global(.search-modal-results a.is-active) {
+    background: var(--color-accent-dim);
+    text-decoration: none;
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-title) {
+    display: block;
+    font-family: var(--font-title);
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: var(--color-heading-accent);
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-excerpt) {
+    display: block;
+    margin-top: 0.15rem;
+    font-size: 0.8rem;
+    line-height: 1.5;
+    color: var(--color-text-dim);
+    overflow-wrap: break-word;
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-excerpt mark) {
+    background: var(--color-accent-dim);
+    color: var(--color-accent);
+    padding: 0 0.1em;
+    border-radius: 0.2em;
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-anchors) {
+    list-style: none;
+    margin: 0.15rem 0 0.35rem;
+    padding: 0 0 0 0.9rem;
+    border-left: 2px solid var(--color-border);
+    display: flex;
+    flex-direction: column;
+    gap: 0.1rem;
+  }
+
+  .search-modal-output :global(.search-modal-results .search-result-anchor) {
+    padding: 0.35rem 0.6rem;
+  }
+
+  .search-modal-output
+    :global(.search-modal-results .search-result-anchor .search-result-title) {
+    font-size: 0.85rem;
+    font-weight: 500;
+    color: var(--color-text);
+  }
+</style>

@@ -1,13 +1,13 @@
 {
   "name": "dotfiles-website",
   "type": "module",
-  "version": "1.0.0",
+  "version": "1.2.0",
   "description": "Dotfiles documentation",
   "author": "Fuis18",
   "license": "MIT",
   "scripts": {
     "dev": "astro dev",
-    "build": "astro build",
+    "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
     "check": "astro check",
     "sync": "astro sync",
@@ -27,6 +27,7 @@
   "devDependencies": {
     "@astrojs/check": "0.9.12",
     "@types/node": "26.6.6",
+    "pagefind": "1.6.0",
     "typescript": "6.0.3"
   }
 }
