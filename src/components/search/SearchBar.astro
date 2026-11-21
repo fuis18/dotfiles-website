@@ -1,0 +1,40 @@
+---
+import './search.css';
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import SearchIcon from './SearchIcon.astro';
+
+interface Props {
+  lang: Locale;
+  /** id of the input; also wired to the sr-only label. */
+  id?: string;
+  /** 'modal' renders the flat field used inside the search dialog. */
+  variant?: 'bar' | 'modal';
+  /** Keyboard hint, defaults to 'esc' in the modal and '/' otherwise. */
+  kbd?: string;
+  /** aria-controls target of the combobox (the results list). */
+  controls?: string;
+}
+
+const { lang, id = 'search-bar-input', variant = 'bar', kbd, controls } = Astro.props;
+const isModal = variant === 'modal';
+const hint = kbd ?? (isModal ? 'esc' : '/');
+---
+<div class:list={['search-bar', isModal && 'search-bar--modal']}>
+  <SearchIcon size="1rem" />
+  <label class="search-sr-only" for={id}>{t(lang, 'nav.search')}</label>
+  <input
+    type="search"
+    id={id}
+    class="search-bar-input"
+    placeholder={t(lang, 'search.placeholder')}
+    autocomplete="off"
+    spellcheck="false"
+    data-search-input
+    role={isModal ? 'combobox' : undefined}
+    aria-expanded={isModal ? 'false' : undefined}
+    aria-autocomplete={isModal ? 'list' : undefined}
+    aria-controls={isModal ? controls : undefined}
+  />
+  <span class="search-kbd search-bar-kbd" aria-hidden="true">{hint}</span>
+</div>

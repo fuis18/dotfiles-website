@@ -1,0 +1,245 @@
+/*
+ * All styles for the /search components, in one plain (unscoped) stylesheet.
+ * Importing it from each component keeps the folder self-contained: no Astro
+ * scoped styles, no :global() and no dependency on the host's global.css.
+ */
+
+/* Visually hidden, but present for assistive technology. */
+.search-sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
+}
+
+.search-kbd {
+  font-family: var(--font-infra);
+  font-size: 0.75rem;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border-strong);
+  border-bottom-width: 2px;
+  border-radius: 0.3rem;
+  padding: 0.05rem 0.4rem;
+  color: var(--color-text-muted);
+}
+
+/* --- Icon ---------------------------------------------------------------- */
+
+/* Pinned to the left of the field, both in the bar and inside the modal.
+   Scoped to .search-bar so the modal's trigger button icon is untouched. */
+.search-bar .search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--color-text-faint);
+  pointer-events: none;
+}
+
+/* --- Search bar ---------------------------------------------------------- */
+
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: min(36rem, calc(100vw - 2rem));
+  min-height: 2.95rem;
+  margin-inline: auto;
+  margin-bottom: 2rem;
+}
+
+.search-bar-input {
+  width: 100%;
+  padding: 0.7rem 3rem 0.7rem 2.6rem;
+  background: var(--color-bg-alt);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.5rem;
+  color: var(--color-text);
+  font-family: var(--font-title);
+  font-size: 0.95rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+}
+
+.search-bar-input::placeholder {
+  color: var(--color-text-faint);
+}
+
+.search-bar-input:focus {
+  outline: none;
+  border-color: var(--color-accent);
+  box-shadow: 0 0 0 3px var(--color-accent-dim);
+}
+
+.search-bar-input::-webkit-search-cancel-button {
+  filter: grayscale(1) opacity(0.5);
+}
+
+.search-bar-kbd {
+  position: absolute;
+  right: 0.8rem;
+}
+
+/* The "/" or "esc" hint only exists on keyboards. */
+@media (hover: none), (pointer: coarse) {
+  .search-bar-kbd {
+    display: none;
+  }
+}
+
+/* --- Search bar, inside the modal ---------------------------------------- */
+
+.search-bar--modal {
+  width: 100%;
+  min-height: 0;
+  margin: 0;
+  flex-shrink: 0;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.search-bar--modal .search-bar-input {
+  padding: 0.9rem 4rem 0.9rem 2.6rem;
+  border: none;
+  border-radius: 0;
+  font-size: 1rem;
+}
+
+.search-bar--modal .search-bar-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+/* No focus ring inside the dialog: the field is the first thing focused. */
+.search-bar--modal .search-bar-input:focus {
+  box-shadow: none;
+}
+
+.search-bar--modal .search-bar-kbd {
+  right: 1rem;
+}
+
+/* --- Modal --------------------------------------------------------------- */
+
+.search-modal {
+  border: 1px solid var(--color-border-strong);
+  border-radius: 0.75rem;
+  background: var(--color-bg);
+  color: var(--color-text);
+  padding: 0;
+  width: min(36rem, calc(100vw - 2rem));
+  max-height: min(70vh, 36rem);
+  overflow: hidden;
+  justify-self: center;
+  margin-top: 5rem;
+}
+
+.search-modal::backdrop {
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+}
+
+.search-modal-inner {
+  display: flex;
+  flex-direction: column;
+  max-height: min(70vh, 36rem);
+}
+
+.search-modal-output {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  min-height: 0;
+}
+
+.search-modal-status {
+  margin: 0;
+  padding: 0.4rem 1rem 0;
+  flex-shrink: 0;
+  font-family: var(--font-title);
+  font-size: 0.72rem;
+  color: var(--color-text-muted);
+}
+
+/* Empty = 0px tall, but the node stays in the accessibility tree. */
+.search-modal-status:empty {
+  padding: 0;
+}
+
+/* --- Results (list markup is static, items are filled at runtime) -------- */
+
+.search-modal-results {
+  list-style: none;
+  margin: 0;
+  padding: 0.4rem;
+  overflow-y: auto;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+/* Nothing to show: collapse, but keep the node in the DOM. */
+.search-modal-results:empty {
+  display: none;
+}
+
+.search-modal-results .search-result-page,
+.search-modal-results .search-result-anchor {
+  display: block;
+  padding: 0.55rem 0.7rem;
+  border-radius: 0.45rem;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.search-modal-results a:hover,
+.search-modal-results a.is-active {
+  background: var(--color-accent-dim);
+  text-decoration: none;
+}
+
+.search-modal-results .search-result-title {
+  display: block;
+  font-family: var(--font-title);
+  font-size: 0.9rem;
+  font-weight: 600;
+  color: var(--color-heading-accent);
+}
+
+.search-modal-results .search-result-excerpt {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 0.8rem;
+  line-height: 1.5;
+  color: var(--color-text-dim);
+  overflow-wrap: break-word;
+}
+
+.search-modal-results .search-result-excerpt mark {
+  background: var(--color-accent-dim);
+  color: var(--color-accent);
+  padding: 0 0.1em;
+  border-radius: 0.2em;
+}
+
+.search-modal-results .search-result-anchors {
+  list-style: none;
+  margin: 0.15rem 0 0.35rem;
+  padding: 0 0 0 0.9rem;
+  border-left: 2px solid var(--color-border);
+  display: flex;
+  flex-direction: column;
+  gap: 0.1rem;
+}
+
+.search-modal-results .search-result-anchor {
+  padding: 0.35rem 0.6rem;
+}
+
+.search-modal-results .search-result-anchor .search-result-title {
+  font-size: 0.85rem;
+  font-weight: 500;
+  color: var(--color-text);
+}

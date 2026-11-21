@@ -1,6 +1,9 @@
 ---
+import './search.css';
 import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
+import SearchIcon from './SearchIcon.astro';
+import SearchBar from './SearchBar.astro';
 
 interface Props {
   lang: Locale;
@@ -8,19 +11,15 @@ interface Props {
 
 const { lang } = Astro.props;
 ---
-
 <button
-  class="icon-container"
-  type="button"
-  data-search-open
-  aria-haspopup="dialog"
-  aria-label={t(lang, 'search.open')}
-  title={t(lang, 'search.open')}
+class="icon-container"
+type="button"
+data-search-open
+aria-haspopup="dialog"
+aria-label={t(lang, 'search.open')}
+title={t(lang, 'search.open')}
 >
-  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-    <circle cx="11" cy="11" r="8" />
-    <path d="m21 21-4.3-4.3" />
-  </svg>
+  <SearchIcon size="1.2rem" />
 </button>
 
 <dialog
@@ -32,28 +31,9 @@ const { lang } = Astro.props;
   data-dev-notice={t(lang, 'search.devNotice')}
 >
   <div class="search-modal-inner">
-    <div class="search-modal-input-wrap">
-      <svg class="search-modal-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-        <circle cx="11" cy="11" r="8" />
-        <path d="m21 21-4.3-4.3" />
-      </svg>
-      <label class="sr-only" for="pagefind-input">{t(lang, 'nav.search')}</label>
-      <input
-        type="search"
-        id="pagefind-input"
-        class="search-modal-input"
-        placeholder={t(lang, 'search.placeholder')}
-        autocomplete="off"
-        spellcheck="false"
-        role="combobox"
-        aria-expanded="false"
-        aria-autocomplete="list"
-        aria-controls="pagefind-output"
-      />
-      <span class="kbd search-modal-kbd" aria-hidden="true">esc</span>
-    </div>
-    <!-- The live region must exist before its content changes, or screen
-         readers won't announce it. The <ul> is created on demand instead. -->
+
+    <SearchBar lang={lang} variant="modal" controls="pagefind-output" />
+
     <div id="pagefind-output" class="search-modal-output">
       <p
         class="search-modal-status"
@@ -62,6 +42,7 @@ const { lang } = Astro.props;
         aria-live="polite"
         aria-atomic="true"
       ></p>
+      <ul id="pagefind-results" class="search-modal-results"></ul>
     </div>
   </div>
 </dialog>
@@ -103,25 +84,11 @@ const { lang } = Astro.props;
 
   const getModal = (): HTMLDialogElement | null =>
     document.getElementById('search-modal') as HTMLDialogElement | null;
+  // The field is owned by <SearchBar variant="modal">: no hardcoded id.
   const getInput = (): HTMLInputElement | null =>
-    document.getElementById('pagefind-input') as HTMLInputElement | null;
+    document.querySelector<HTMLInputElement>('#search-modal [data-search-input]');
   const getStatus = (): HTMLElement | null => document.getElementById('pagefind-status');
-  const getOutput = (): HTMLElement | null => document.getElementById('pagefind-output');
   const getResults = (): HTMLElement | null => document.getElementById('pagefind-results');
-
-  // The <ul> is created only when there are results to show.
-  function ensureResults(): HTMLElement | null {
-    const output = getOutput();
-    if (!output) return null;
-    let list = getResults();
-    if (!list) {
-      list = document.createElement('ul');
-      list.id = 'pagefind-results';
-      list.className = 'search-modal-results';
-      output.append(list);
-    }
-    return list;
-  }
 
   // The status node is never created or removed: only its text changes, so
   // the live region already exists when the announcement happens.
@@ -137,7 +104,8 @@ const { lang } = Astro.props;
   function clearOutput(): void {
     // Drop aria-activedescendant before the nodes it points at disappear.
     setActive(-1);
-    getResults()?.remove();
+    const results = getResults();
+    if (results) results.innerHTML = '';
     showStatus('');
     setExpanded(false);
   }
@@ -194,7 +162,7 @@ const { lang } = Astro.props;
   }
 
   function renderResults(items: PagefindResultData[]): void {
-    const container = ensureResults();
+    const container = getResults();
     if (!container) return;
     setActive(-1);
     container.innerHTML = '';
@@ -337,7 +305,8 @@ const { lang } = Astro.props;
 
   document.addEventListener('input', (event) => {
     const target = event.target as HTMLElement | null;
-    if (target?.id !== 'pagefind-input') return;
+    if (!target?.closest('#search-modal')) return;
+    if (!target.matches('[data-search-input]')) return;
     void runSearch((target as HTMLInputElement).value.trim());
   });
 
@@ -361,8 +330,7 @@ const { lang } = Astro.props;
     }
 
     if (!modal?.open) return;
-    const inInput = target?.id === 'pagefind-input';
-    if (!inInput) return;
+    if (target !== getInput()) return;
 
     if (event.key === 'Escape') {
       event.preventDefault();
@@ -391,174 +359,3 @@ const { lang } = Astro.props;
   });
 </script>
 
-<style>
-  .search-modal {
-    border: 1px solid var(--color-border-strong);
-    border-radius: 0.75rem;
-    background: var(--color-bg);
-    color: var(--color-text);
-    padding: 0;
-    width: min(36rem, calc(100vw - 2rem));
-    max-height: min(70vh, 36rem);
-    overflow: hidden;
-    justify-self: center;
-    margin-top: 5rem
-  }
-
-  .search-modal::backdrop {
-    background: rgba(0, 0, 0, 0.55);
-    backdrop-filter: blur(2px);
-  }
-
-  .search-modal-inner {
-    display: flex;
-    flex-direction: column;
-    max-height: min(70vh, 36rem);
-  }
-
-  .search-modal-input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-    flex-shrink: 0;
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  .search-modal-icon {
-    position: absolute;
-    left: 1rem;
-    width: 1rem;
-    height: 1rem;
-    color: var(--color-text-faint);
-    pointer-events: none;
-  }
-
-  .search-modal-input {
-    width: 100%;
-    padding: 0.9rem 4rem 0.9rem 2.6rem;
-    background: transparent;
-    border: none;
-    color: var(--color-text);
-    font-family: var(--font-title);
-    font-size: 1rem;
-    background: var(--color-bg-alt);
-  }
-
-  .search-modal-input:focus {
-    outline: none;
-  }
-
-  .search-modal-input::placeholder {
-    color: var(--color-text-muted);
-  }
-
-  .search-modal-input::-webkit-search-cancel-button {
-    filter: grayscale(1) opacity(0.5);
-  }
-
-  .search-modal-kbd {
-    position: absolute;
-    right: 1rem;
-  }
-
-  /* The "esc" hint only exists on keyboards. */
-  @media (hover: none), (pointer: coarse) {
-    .search-modal-kbd {
-      display: none;
-    }
-  }
-
-  .search-modal-output {
-    display: flex;
-    flex-direction: column;
-    flex: 1 1 auto;
-    min-height: 0;
-  }
-
-  .search-modal-status {
-    margin: 0;
-    padding: 0.4rem 1rem 0;
-    flex-shrink: 0;
-    font-family: var(--font-title);
-    font-size: 0.72rem;
-    color: var(--color-text-muted);
-  }
-
-  /* Empty = 0px tall, but the node stays in the accessibility tree. */
-  .search-modal-status:empty {
-    padding: 0;
-  }
-
-  /* The <ul> is created at runtime, so it and its children need :global(). */
-  .search-modal-output :global(.search-modal-results) {
-    list-style: none;
-    margin: 0;
-    padding: 0.4rem;
-    overflow-y: auto;
-    flex: 1 1 auto;
-    min-height: 0;
-    display: flex;
-    flex-direction: column;
-    gap: 0.15rem;
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-page),
-  .search-modal-output :global(.search-modal-results .search-result-anchor) {
-    display: block;
-    padding: 0.55rem 0.7rem;
-    border-radius: 0.45rem;
-    color: var(--color-text);
-    text-decoration: none;
-  }
-
-  .search-modal-output :global(.search-modal-results a:hover),
-  .search-modal-output :global(.search-modal-results a.is-active) {
-    background: var(--color-accent-dim);
-    text-decoration: none;
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-title) {
-    display: block;
-    font-family: var(--font-title);
-    font-size: 0.9rem;
-    font-weight: 600;
-    color: var(--color-heading-accent);
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-excerpt) {
-    display: block;
-    margin-top: 0.15rem;
-    font-size: 0.8rem;
-    line-height: 1.5;
-    color: var(--color-text-dim);
-    overflow-wrap: break-word;
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-excerpt mark) {
-    background: var(--color-accent-dim);
-    color: var(--color-accent);
-    padding: 0 0.1em;
-    border-radius: 0.2em;
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-anchors) {
-    list-style: none;
-    margin: 0.15rem 0 0.35rem;
-    padding: 0 0 0 0.9rem;
-    border-left: 2px solid var(--color-border);
-    display: flex;
-    flex-direction: column;
-    gap: 0.1rem;
-  }
-
-  .search-modal-output :global(.search-modal-results .search-result-anchor) {
-    padding: 0.35rem 0.6rem;
-  }
-
-  .search-modal-output
-    :global(.search-modal-results .search-result-anchor .search-result-title) {
-    font-size: 0.85rem;
-    font-weight: 500;
-    color: var(--color-text);
-  }
-</style>
