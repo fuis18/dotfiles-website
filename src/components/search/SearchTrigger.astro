@@ -1,0 +1,23 @@
+---
+import { t } from '@/i18n/utils';
+import type { Locale } from '@/i18n/config';
+import SearchIcon from './SearchIcon.astro';
+
+interface Props {
+  lang: Locale;
+}
+
+const { lang } = Astro.props;
+---
+<button
+  class="icon-container search-modal-trigger"
+  type="button"
+  data-search-open
+  aria-haspopup="dialog"
+  aria-controls="search-modal"
+  aria-expanded="false"
+  aria-label={t(lang, 'search.open')}
+  title={t(lang, 'search.open')}
+>
+  <SearchIcon size="1.2rem" />
+</button>

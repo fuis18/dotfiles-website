@@ -1,38 +1,45 @@
 ---
-import './search.css';
+import '@/styles/search.css';
 import { t } from '@/i18n/utils';
 import type { Locale } from '@/i18n/config';
 import SearchIcon from './SearchIcon.astro';
 
 interface Props {
   lang: Locale;
-  /** id of the input; also wired to the sr-only label. */
   id?: string;
-  /** 'modal' renders the flat field used inside the search dialog. */
-  variant?: 'bar' | 'modal';
-  /** Keyboard hint, defaults to 'esc' in the modal and '/' otherwise. */
+  variant?: 'bar' | 'header' | 'modal';
   kbd?: string;
-  /** aria-controls target of the combobox (the results list). */
   controls?: string;
 }
 
-const { lang, id = 'search-bar-input', variant = 'bar', kbd, controls } = Astro.props;
+const { lang, id, variant = 'bar', kbd, controls } = Astro.props;
 const isModal = variant === 'modal';
+const isTrigger = !isModal;
 const hint = kbd ?? (isModal ? 'esc' : '/');
+const inputId = id ?? (isModal ? 'search-modal-input' : 'search-bar-input');
 ---
-<div class:list={['search-bar', isModal && 'search-bar--modal']}>
+<div
+  class:list={[
+    'search-bar',
+    isModal && 'search-bar--modal',
+    variant === 'header' && 'search-bar--header',
+  ]}
+>
   <SearchIcon size="1rem" />
-  <label class="search-sr-only" for={id}>{t(lang, 'nav.search')}</label>
+  <label class="search-sr-only" for={inputId}>{t(lang, 'nav.search')}</label>
   <input
     type="search"
-    id={id}
+    id={inputId}
     class="search-bar-input"
     placeholder={t(lang, 'search.placeholder')}
     autocomplete="off"
     spellcheck="false"
-    data-search-input
+    data-search-input={isModal ? '' : undefined}
+    data-search-open={isTrigger ? '' : undefined}
+    data-search-trigger={isTrigger ? '' : undefined}
+    aria-haspopup={isTrigger ? 'dialog' : undefined}
+    aria-expanded={isModal || isTrigger ? 'false' : undefined}
     role={isModal ? 'combobox' : undefined}
-    aria-expanded={isModal ? 'false' : undefined}
     aria-autocomplete={isModal ? 'list' : undefined}
     aria-controls={isModal ? controls : undefined}
   />

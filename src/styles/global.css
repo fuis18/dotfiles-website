@@ -101,7 +101,6 @@ html {
 
 body {
   min-height: 100vh;
-  min-height: 100dvh;
   display: grid;
   grid-template-rows: auto 1fr auto;
   color: var(--color-text);
@@ -355,7 +354,7 @@ main {
   .icon-btn,
   .icon-link,
   .lang-toggle {
-    min-height: 2.5rem;
+    min-height: 2rem;
   }
 
   .icon-btn,

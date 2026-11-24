@@ -54,13 +54,15 @@
 .search-bar-input {
   width: 100%;
   padding: 0.7rem 3rem 0.7rem 2.6rem;
-  background: var(--color-bg-alt);
+  background: transparent;
   border: 1px solid var(--color-border-strong);
   border-radius: 0.5rem;
   color: var(--color-text);
   font-family: var(--font-title);
   font-size: 0.95rem;
-  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
 }
 
 .search-bar-input::placeholder {
@@ -96,14 +98,23 @@
   min-height: 0;
   margin: 0;
   flex-shrink: 0;
-  border-bottom: 1px solid var(--color-border);
+  /* Anchor of the entrance FLIP: the field scales out of the header launcher. */
+  transform-origin: top left;
 }
 
 .search-bar--modal .search-bar-input {
-  padding: 0.9rem 4rem 0.9rem 2.6rem;
+  /* Mobile-first: no badge, so the field runs to the edge. */
+  padding: 0.9rem 1rem 0.9rem 2.6rem;
   border: none;
   border-radius: 0;
   font-size: 1rem;
+}
+
+/* Fine pointer: room on the right for the "esc" badge. */
+@media (hover: hover) and (pointer: fine) {
+  .search-bar--modal .search-bar-input {
+    padding-right: 4rem;
+  }
 }
 
 .search-bar--modal .search-bar-input::placeholder {
@@ -119,30 +130,88 @@
   right: 1rem;
 }
 
+/* --- Search bar, in the site header --------------------------------------- */
+
+.search-bar--header {
+  width: auto;
+  min-height: 0;
+  margin: 0 auto;
+  margin-bottom: 0;
+}
+
+.search-bar--header .search-bar-input {
+  padding: 0.55rem 3rem 0.55rem 2.4rem;
+  font-size: 0.9rem;
+}
+
+/* The page behind the sheet must not scroll while it is open. `overflow: hidden`
+   on body propagates to the viewport (html sets no overflow of its own). */
+body.search-modal-open {
+  overflow: hidden;
+}
+
+/* While the modal is open the launcher steps aside: the morph owns its spot. */
+body.search-modal-open .search-bar--header {
+  visibility: hidden;
+}
+
+/* --- Trigger button: only shown where the header field is not ------------- */
+
+.icon-container.search-modal-trigger {
+  display: none;
+}
+
+/* Situación 1 (desktop): the header field. Situación 2 (mobile/touch): button. */
+@media (max-width: 768px), (hover: none), (pointer: coarse) {
+  .search-bar--header {
+    display: none;
+  }
+
+  .icon-container.search-modal-trigger {
+    display: inline-flex;
+  }
+}
+
 /* --- Modal --------------------------------------------------------------- */
 
+/* Full-screen layer: backdrop, centreing and click-to-close target. */
+.search-modal-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  padding-top: 5rem;
+  background: rgba(0, 0, 0, 0.55);
+  backdrop-filter: blur(2px);
+  /* Rubber-banding the sheet must not chain into the page behind it. */
+  overscroll-behavior: contain;
+  /* Sized by inset: 0 — an explicit height would fight the keyboard on mobile. */
+}
+
+/* Author styles win over the UA rule for [hidden]: spell it out. */
+.search-modal-overlay[hidden] {
+  display: none;
+}
+
 .search-modal {
+  width: min(36rem, calc(100vw - 2rem));
+  /* dvh tracks the viewport the on-screen keyboard leaves visible. */
+  max-height: min(70dvh, 36rem);
+  /* Visible, so the field can fly in from beyond the sheet's bounds. */
+  overflow: visible;
   border: 1px solid var(--color-border-strong);
   border-radius: 0.75rem;
   background: var(--color-bg);
   color: var(--color-text);
   padding: 0;
-  width: min(36rem, calc(100vw - 2rem));
-  max-height: min(70vh, 36rem);
-  overflow: hidden;
-  justify-self: center;
-  margin-top: 5rem;
-}
-
-.search-modal::backdrop {
-  background: rgba(0, 0, 0, 0.55);
-  backdrop-filter: blur(2px);
 }
 
 .search-modal-inner {
   display: flex;
   flex-direction: column;
-  max-height: min(70vh, 36rem);
+  max-height: min(70dvh, 36rem);
 }
 
 .search-modal-output {
