@@ -9,13 +9,40 @@ El navegador es la aplicación que más usas y la que más sabe de ti, así que 
 
 ## Chrome y Firefox: los dos polos
 
-Netscape Navigator, el navegador dominante de los años noventa, vio cómo su reinado declinaba hasta que Mozilla liberó su código fuente en 1998 tras perder la batalla comercial frente a Internet Explorer. De ese código derivó Mozilla Suite, un conjunto pesado de aplicaciones que llevó a Dave Hyatt y Blake Ross a iniciar en 2002 el proyecto Phoenix dentro de Mozilla: un navegador independiente, enfocado únicamente en la navegación y ligero. Tras varios conflictos de marca que lo llevaron a llamarse temporalmente Firebird, el navegador fue bautizado definitivamente como Firefox y lanzó su versión 1.0 el 9 de noviembre de 2004, bajo el resguardo de la Mozilla Foundation (creada en 2003 con Mitchell Baker al frente) y de la Mozilla Corporation (fundada en 2005 para su desarrollo y comercialización mediante acuerdos de motores de búsqueda).
+Netscape Navigator, el navegador dominante de los años noventa, vio cómo su reinado declinaba hasta que Mozilla liberó su código fuente en 1998 tras perder la batalla comercial frente a Internet Explorer. De ese código derivó Mozilla Suite, un conjunto pesado de aplicaciones que llevó a Dave Hyatt y Blake Ross a iniciar en 2002 el proyecto Phoenix dentro de Mozilla: un navegador independiente, enfocado únicamente en la navegación y ligero. Tras varios conflictos de marca que lo llevaron a llamarse temporalmente Firebird, pero finalmente el navegador fue bautizado definitivamente como Firefox y lanzó su versión 1.0 el 9 de noviembre de 2004, bajo el resguardo de la Mozilla Foundation (creada en 2003 con Mitchell Baker al frente) y de la Mozilla Corporation (fundada en 2005 para su desarrollo y comercialización mediante acuerdos de motores de búsqueda).
 
 En ese escenario de dominio por parte de Internet Explorer, Google irrumpió en el mercado en septiembre de 2008 anunciando su propio navegador mediante un cómic ilustrado por Scott McCloud publicado un día antes del lanzamiento. Detrás del proyecto destacaban Lars Bak, el ingeniero danés creador de la máquina virtual de JavaScript V8, y Linus Upson. En sus inicios, Chrome utilizó el motor de renderizado WebKit de Safari, hasta que en 2013 Google decidió bifurcarlo para crear su propio motor, Blink.
 
 Por su parte, el motor de Firefox, Gecko, atravesó dos grandes reescrituras técnicas para mantenerse competitivo frente a Chrome: **Electrolysis** (2015-2016), que introdujo la arquitectura multiproceso al separar las pestañas en procesos independientes, y **Quantum** (Firefox 57, noviembre de 2017), que integró tecnología del proyecto de investigación Servo —desarrollado en el lenguaje Rust— para multiplicar drásticamente su velocidad.
 
 De esta evolución, Firefox dejó abiertos dos frentes: una interfaz heredada de los años dos mil y un enfoque de privacidad que resulta insuficiente ante amenazas avanzadas. Chrome, por su parte, planteó un compromiso aún más profundo: ser un producto nativo del ecosistema de Google, con telemetría, publicidad y servicios integrados que el usuario acepta en favor del rendimiento de su motor.
+
+## Epiphany (2002 & 2009)
+
+Epiphany, llamado hoy GNOME Web, es el navegador del proyecto GNOME. Nació en 2002 como una bifurcación de Galeon, un navegador GNOME anterior, y durante sus primeros años usó el motor Gecko; los problemas de sincronizar sus ciclos de versiones con los de Mozilla lo llevaron a migrar a WebKit, migración que culminó con la versión de GNOME 2.28 (septiembre de 2009). Las versiones actuales usan WebKitGTK, el mismo motor que Safari, y una interfaz GTK4 con libadwaita (ver [Ecosistema](../ecosystem/)).
+
+Sus rasgos principales:
+
+- **Ligero y bien integrado:** comparte las bibliotecas GTK ya instaladas, y se abre sin arrastrar un motor adicional.
+- **Privacidad básica incluida:** bloqueo de anuncios y prevención de rastreo inteligente.
+- **Aplicaciones web:** permite instalar un sitio como una aplicación independiente que se abre en su propia ventana.
+- **Sincronización con Firefox** para marcadores, historial y contraseñas.
+
+Su limitación es el ecosistema: las extensiones son muchas menos que en Firefox o Chromium, y WebKitGTK tiene menos compatibilidad con algunos sitios complejos. Es una buena opción para un uso ligero o para aplicaciones web, y una mala para trabajar a diario con extensiones.
+
+| Dato            | Detalle                                                                          |
+| --------------- | -------------------------------------------------------------------------------- |
+| Origen          | 2002, bifurcación de Galeon; navegador del proyecto GNOME                        |
+| Motor y toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                            |
+| Licencia        | GPL-3.0 o posterior                                                              |
+| Documentación   | <https://wiki.gnome.org/Apps/Web> y <https://wiki.archlinux.org/title/GNOME/Web> |
+| Código          | <https://gitlab.gnome.org/GNOME/epiphany>                                        |
+
+**Instalación.** Está en los repositorios oficiales. Añade los códecs de GStreamer para que reproduzca vídeo:
+
+```bash
+sudo pacman -S epiphany gst-plugins-good gst-libav
+```
 
 ## Tor browser (~2011)
 
@@ -61,33 +88,6 @@ Su propuesta es bloquear anuncios y rastreadores por defecto, sin extensión ni 
 
 ```bash
 paru -S brave-bin
-```
-
-## Epiphany (2002)
-
-Epiphany, llamado hoy _GNOME Web_, es el navegador del proyecto GNOME. Nació en 2002 como una bifurcación de Galeon, un navegador GNOME anterior, y desde entonces se mantiene como el navegador sencillo y bien integrado del escritorio. Usa el motor WebKit (a través de WebKitGTK), el mismo que Safari, y una interfaz GTK4 con libadwaita (ver [Ecosistema](../ecosystem/)), de modo que se ve y se comporta como las demás aplicaciones de esta guía.
-
-Sus rasgos principales:
-
-- **Ligero y bien integrado:** comparte las bibliotecas GTK ya instaladas, y se abre sin arrastrar un motor adicional.
-- **Privacidad básica incluida:** bloqueo de anuncios y prevención de rastreo inteligente.
-- **Aplicaciones web:** permite instalar un sitio como una aplicación independiente que se abre en su propia ventana.
-- **Sincronización con Firefox** para marcadores, historial y contraseñas.
-
-Su limitación es el ecosistema: las extensiones son muchas menos que en Firefox o Chromium, y WebKitGTK tiene menos compatibilidad con algunos sitios complejos. Es una buena opción para un uso ligero o para aplicaciones web, y una mala para trabajar a diario con extensiones.
-
-| Dato            | Detalle                                                                          |
-| --------------- | -------------------------------------------------------------------------------- |
-| Origen          | 2002, bifurcación de Galeon; navegador del proyecto GNOME                        |
-| Motor y toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                            |
-| Licencia        | GPL-3.0 o posterior                                                              |
-| Documentación   | <https://wiki.gnome.org/Apps/Web> y <https://wiki.archlinux.org/title/GNOME/Web> |
-| Código          | <https://gitlab.gnome.org/GNOME/epiphany>                                        |
-
-**Instalación.** Está en los repositorios oficiales. Añade los códecs de GStreamer para que reproduzca vídeo:
-
-```bash
-sudo pacman -S epiphany gst-plugins-good gst-libav
 ```
 
 ## Mullvad Browser (3 de abril de 2023)

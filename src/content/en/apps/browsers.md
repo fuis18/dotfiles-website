@@ -9,13 +9,40 @@ The browser is the app you use the most and the one that knows the most about yo
 
 ## Chrome and Firefox: the two poles
 
-Netscape Navigator, the dominant browser of the nineties, watched its reign decline until Mozilla released its source code in 1998, after losing the commercial battle against Internet Explorer. Mozilla Suite, a heavy suite of applications, came out of that code and led Dave Hyatt and Blake Ross to start the Phoenix project inside Mozilla in 2002: a standalone browser, focused purely on browsing and lightweight. After several naming conflicts that had it temporarily called Firebird, the browser was finally named Firefox and shipped version 1.0 on November 9, 2004, under the aegis of the Mozilla Foundation (created in 2003 with Mitchell Baker at the helm) and the Mozilla Corporation (founded in 2005 to develop and commercialize it through search engine deals).
+Netscape Navigator, the dominant browser of the nineties, watched its reign decline until Mozilla released its source code in 1998, after losing the commercial battle against Internet Explorer. Mozilla Suite, a heavy suite of applications, came out of that code and led Dave Hyatt and Blake Ross to start the Phoenix project inside Mozilla in 2002: a standalone browser, focused purely on browsing and lightweight. After several naming conflicts that had it temporarily called Firebird, but finally the browser was named Firefox and shipped version 1.0 on November 9, 2004, under the aegis of the Mozilla Foundation (created in 2003 with Mitchell Baker at the helm) and the Mozilla Corporation (founded in 2005 to develop and commercialize it through search engine deals).
 
 Against that backdrop of Internet Explorer dominance, Google burst into the market in September 2008 by announcing its own browser through a comic illustrated by Scott McCloud, published a day before the launch. Behind the project stood Lars Bak, the Danish engineer who created the V8 JavaScript virtual machine, and Linus Upson. In its early days, Chrome used Safari's WebKit rendering engine, until in 2013 Google decided to fork it and create its own engine, Blink.
 
 Firefox's engine, Gecko, went through two major technical rewrites to stay competitive against Chrome: **Electrolysis** (2015-2016), which introduced the multiprocess architecture by splitting tabs into independent processes, and **Quantum** (Firefox 57, November 2017), which integrated technology from the Servo research project —written in the Rust language— to multiply its speed dramatically.
 
 Out of that evolution, Firefox left two fronts open: an interface inherited from the 2000s and a privacy stance that falls short against advanced threats. Chrome, for its part, struck an even deeper bargain: to be a product native to Google's ecosystem, with telemetry, advertising and integrated services that the user accepts in exchange for its engine's performance.
+
+## Epiphany (2002 & 2009)
+
+Epiphany, known today as _GNOME Web_, is the GNOME project's browser. It originated in 2002 as a fork of Galeon, an earlier GNOME browser, and initially used the Gecko engine. Difficulties in synchronizing its release cycles with those of Mozilla led to a migration to WebKit, a transition that was completed with the release of GNOME 2.28 (September 2009). Current versions use WebKitGTK, the same engine as Safari, along with a GTK4 interface built using libadwaita (see [Ecosystem](../ecosystem/)).
+
+Its key features:
+
+- **Lightweight and well integrated:** it shares the GTK libraries already installed and opens without dragging in an extra engine.
+- **Basic privacy included:** ad blocking and intelligent tracking prevention.
+- **Web apps:** lets you install a site as a standalone application that opens in its own window.
+- **Firefox sync** for bookmarks, history and passwords.
+
+Its limitation is the ecosystem: far fewer extensions than Firefox or Chromium, and WebKitGTK has weaker compatibility with some complex sites. It is a good choice for light use or for web apps, and a bad one for daily work with extensions.
+
+| Fact               | Detail                                                                             |
+| ------------------ | ---------------------------------------------------------------------------------- |
+| Origin             | 2002, fork of Galeon; the GNOME project's browser                                  |
+| Engine and toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                              |
+| License            | GPL-3.0 or later                                                                   |
+| Documentation      | <https://wiki.gnome.org/Apps/Web> and <https://wiki.archlinux.org/title/GNOME/Web> |
+| Code               | <https://gitlab.gnome.org/GNOME/epiphany>                                          |
+
+**Installation.** It is in the official repositories. Add the GStreamer codecs so it can play video:
+
+```bash
+sudo pacman -S epiphany gst-plugins-good gst-libav
+```
 
 ## Tor Browser (~2011)
 
@@ -61,33 +88,6 @@ Its proposal is to block ads and trackers by default, with no extension or setup
 
 ```bash
 paru -S brave-bin
-```
-
-## Epiphany (2002)
-
-Epiphany, known today as _GNOME Web_, is the GNOME project's browser. It was born in 2002 as a fork of Galeon, an earlier GNOME browser, and has since stayed the desktop's simple, well-integrated browser. It uses the WebKit engine (through WebKitGTK), the same as Safari, and a GTK4 interface with libadwaita (see [Ecosystem](../ecosystem/)), so it looks and behaves like the other applications in this guide.
-
-Its key features:
-
-- **Lightweight and well integrated:** it shares the GTK libraries already installed and opens without dragging in an extra engine.
-- **Basic privacy included:** ad blocking and intelligent tracking prevention.
-- **Web apps:** lets you install a site as a standalone application that opens in its own window.
-- **Firefox sync** for bookmarks, history and passwords.
-
-Its limitation is the ecosystem: far fewer extensions than Firefox or Chromium, and WebKitGTK has weaker compatibility with some complex sites. It is a good choice for light use or for web apps, and a bad one for daily work with extensions.
-
-| Fact               | Detail                                                                             |
-| ------------------ | ---------------------------------------------------------------------------------- |
-| Origin             | 2002, fork of Galeon; the GNOME project's browser                                  |
-| Engine and toolkit | WebKit (WebKitGTK); GTK4 + libadwaita                                              |
-| License            | GPL-3.0 or later                                                                   |
-| Documentation      | <https://wiki.gnome.org/Apps/Web> and <https://wiki.archlinux.org/title/GNOME/Web> |
-| Code               | <https://gitlab.gnome.org/GNOME/epiphany>                                          |
-
-**Installation.** It is in the official repositories. Add the GStreamer codecs so it can play video:
-
-```bash
-sudo pacman -S epiphany gst-plugins-good gst-libav
 ```
 
 ## Mullvad Browser (April 3, 2023)
