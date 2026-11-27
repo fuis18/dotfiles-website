@@ -8,9 +8,12 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
-    "preview": "astro preview",
+    "preview": "ASTRO_PREVIEW_BACKGROUND=1 astro preview",
     "check": "astro check",
     "sync": "astro sync",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "test:e2e": "playwright test",
     "astro": "astro"
   },
   "keywords": [],
@@ -26,8 +29,11 @@
   },
   "devDependencies": {
     "@astrojs/check": "0.9.12",
+    "@playwright/test": "1.65.1",
     "@types/node": "26.6.6",
+    "jsdom": "31.0.1",
     "pagefind": "1.6.0",
-    "typescript": "6.0.3"
+    "typescript": "6.0.3",
+    "vitest": "5.1.1"
   }
 }
